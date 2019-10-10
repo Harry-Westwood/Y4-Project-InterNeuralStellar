@@ -24,6 +24,25 @@ Independent radius estimates of stars in NGC 6791 based on the distance determin
 Undoubtedly one of the highlights of the Kepler asteroseismology program has been the detection of oscillations in giants belonging to the open clusters NGC 6791, NGC 6819 (see Figure 7), and NGC 6811 (which has far fewer detections).
  Basu et al. (2011) estimated the age, mass, and distance of RGB stars belonging to the old open clusters NGC 6791 and NGC 6819
 
+############################################
+Following it data paper we found:
+4. D. Stello et. al 2016 THE K2 M67 STUDY: REVISITING OLD FRIENDS WITH K2 REVEALS OSCILLATING RED GIANTS IN THE OPEN CLUSTER M67
+Presents age of 33 individual red giants (around 2-5 Gyr) of the open cluster M67 determined by asteroseismic methods
+Ages have uncertainties ranging from 20% to 100%
+includes del nu, nu max, Teff
 
+5. SA. Barnes et. al. 2016 ROTATION PERIODS FOR COOL STARS IN THE 4 Gyr OLD OPEN CLUSTER M67, THE SOLAR-STELLAR CONNECTION, AND THE APPLICABILITY OF GYROCHRONOLOGY TO AT LEAST SOLAR AGE
+Presents age of 20 individual stars (3.4<Age<5.3 except one star) of open cluster M67 through Gyrochornology
+Cannot find the actual age data in the paper
+
+6. R. Handberg et al. 2017 NGC6819: testing the asteroseismic mass scale, mass loss and evidence for products of non-standard evolution
+Presents astroseismic results (del nu, nu max and Teff and other stuff) and M and R for around 50 red giants in open cluster NGC6819
+No age presented, but can work out from astroseismic results
+
+7. T. Kallinger et al. 2018 Non-linear seismic scaling relations
+Said they did asteroseismology on around 60 stars from NGC6819 and NGC6791 from the RGB and RC, but no individual star results were found in the paper
+might need to look deeper into the paper to see if they offer the data somewhere else (or taken from another study)
+
+Unable to find any asteroseismologic result on Ruprecht 147
 
 
