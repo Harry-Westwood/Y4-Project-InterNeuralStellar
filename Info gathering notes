@@ -30,6 +30,22 @@ Following it data paper we found:
 Presents age of 33 individual red giants (around 2-5 Gyr) of the open cluster M67 determined by asteroseismic methods
 Ages have uncertainties ranging from 20% to 100%
 includes del nu, nu max, Teff
+About the data and its methods:
+For stars with nu max < around 10 μHz, we expect the uncertainty in del nu to be relatively large
+Using the method by Huber et al. (2009) to analyze the power spectra
+We were, however, able to measure the signal for another two such ‘super-Nyquist’ stars (see Yu et al. 2016, for a similar technique applied to field giants).
+To get Teff:
+We used two sources for Teff. Our main source came from applying the Infrared Flux Method (IRFM) methodology by Casagrande et al. (2010) on 31 stars in our seismic sample for which optical (Tycho2 and/or APASS) plus 2MASS photometry was available.
+assumed [Fe/H] = 0,
+E(B − V ) = 0.03 (e.g. Casagrande & VandenBerg 2014, and references therein)
+seismic log g obtained from nu max and an initial Teff
+For comparison we also adopted spectroscopically-determined Teff values from SDSS-DR12 (Alam et al. 2015, FPARAM), for the 27-star subset for which Teff was available from both sources
+Getting M, R and Age:
+To get M and R, use standard scaling relationsns, then used the "public correction softward by Sharma et al. 2016" to give a corrected M and R.
+SDSS-DR12 Teff values are on average 90K hotter than or main IRFM-based values, shifting R, M and log g to larger values
+Model for age: BASTA with gird of BaSTI isochrones including both RGB and RC.
+To avoid biases arising from the del nu-scaling we correct the del nu values in our BaSTI models applying the prescription of Serenelli
+adopt the average composition from Pace et al. (2008) ([Fe/H] = 0.03 ± 0.04 dex)
 
 5. SA. Barnes et. al. 2016 ROTATION PERIODS FOR COOL STARS IN THE 4 Gyr OLD OPEN CLUSTER M67, THE SOLAR-STELLAR CONNECTION, AND THE APPLICABILITY OF GYROCHRONOLOGY TO AT LEAST SOLAR AGE
 Presents age of 20 individual stars (3.4<Age<5.3 except one star) of open cluster M67 through Gyrochornology
