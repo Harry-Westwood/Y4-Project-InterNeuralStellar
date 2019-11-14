@@ -81,7 +81,7 @@ def compileModel(model, lr, loss, metrics=None, beta_1=0.9, beta_2=0.999):
 
 def fitModel(model, inputs, outputs, epoch_no, batch_size, save_name, keep_log=False, folder=None):
     if keep_log==True:
-        logdir = folder+"\\logs\\" + datetime.now().strftime("%Y%m%d-%H%M%S")
+        logdir = folder+"/logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
         tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
         callback=[tensorboard_callback]
     else: callback=[]
@@ -112,7 +112,7 @@ def plotHist(history, trial_no, folder, plot_MSE=True):
     ax.set_xlabel('epoch')
     ax.set_ylabel('metric')
     ax.legend()
-    fig.savefig(folder+'\\history'+str(trial_no)+'.png')
+    fig.savefig(folder+'/history'+str(trial_no)+'.png')
 
 def plotHR(Teffm, Lm, Mm, Teffg, Lg, Mg, trial_no, folder):
     fig, ax=plt.subplots(1,2,figsize=[18,10])
@@ -125,7 +125,7 @@ def plotHR(Teffm, Lm, Mm, Teffg, Lg, Mg, trial_no, folder):
     ax[1].set_ylabel(r'$log(L/L_{\odot})$')
     ax[1].set_xlabel(r'$log T_{eff}$')
     fig.colorbar(s2)
-    fig.savefig(folder+'\\HR'+str(trial_no)+'.png')
+    fig.savefig(folder+'/HR'+str(trial_no)+'.png')
 
 data=np.genfromtxt('grid_0_0.csv', delimiter=',', skip_header=1)
 #print(open('grid_0_0.csv', 'r').read().split('\n')[0].split(','))
@@ -150,11 +150,11 @@ y_out=fetchData(evo_tracks,['L','Teff'])
 #m1=buildModel(True,inout_shape=[len(x_in),len(y_out)],no_layers=4,no_nodes=32, reg=['l2',0.01])
 m1=buildModel(False, call_name='small_grid_model.h5')
 compileModel(m1, 0.0001,'MAE',metrics=['MAE','MSE'])
-hist=fitModel(m1, x_in, y_out, 100, len(x_in[0]),folder_name+'\\small_grid_model.h5', keep_log=False)
+hist=fitModel(m1, x_in, y_out, 100, len(x_in[0]),folder_name+'/small_grid_model.h5', keep_log=False)
 
 saving_dict=hist.history
 saving_dict.update({'epoch':hist.epoch})
-with open(folder_name+'\\trainHistoryDict', 'wb') as file_pi:
+with open(folder_name+'/trainHistoryDict', 'wb') as file_pi:
     pickle.dump(saving_dict, file_pi)
 
 plotHist(hist, 1, folder_name, plot_MSE=False)
