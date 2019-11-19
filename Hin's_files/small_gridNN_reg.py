@@ -147,10 +147,10 @@ folder_name='Hin_gridNN_outputs_'+time_now
 os.mkdir(folder_name)
 x_in=fetchData(evo_tracks,['mass','age'])
 y_out=fetchData(evo_tracks,['L','Teff'])
-#m1=buildModel(True,inout_shape=[len(x_in),len(y_out)],no_layers=4,no_nodes=32, reg=['l2',0.01])
+#m1=buildModel(True,inout_shape=[len(x_in),len(y_out)],no_layers=4,no_nodes=32, reg=['l2',0.001])
 m1=buildModel(False, call_name='small_grid_model_reg.h5')
 compileModel(m1, 0.0001,'MAE',metrics=['MAE','MSE'])
-hist=fitModel(m1, x_in, y_out, 200000, len(x_in[0]),folder_name+'/small_grid_model_temp.h5', keep_log=False)
+hist=fitModel(m1, x_in, y_out, 25000-100, len(x_in[0]),folder_name+'/small_grid_model_reg.h5', keep_log=False)
 
 saving_dict=hist.history
 saving_dict.update({'epoch':hist.epoch})
