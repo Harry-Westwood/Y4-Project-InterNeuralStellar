@@ -118,6 +118,27 @@ def fetchData(data, parameters, indices):
             return_array.append(dummy_array)
     return return_array
 
+def shuffleInputs(x_in, y_out):
+    if np.array(x_in).ndim == 2:
+        a = x_in[0]
+        #b = [*x_in[1:], *y_out]
+        p = np.random.permutation(len(a))
+        in_return = [a[p]]
+        for i in range(len(x_in)-1):
+            in_return.append(x_in[i+1][p])
+        if np.array(y_out).ndim == 2:
+            out_return=[yi[p] for yi in y_out]
+        else: out_return = y_out[p]
+        return in_return, out_return
+        
+    else:
+        a = x_in
+        b = y_out
+        p = np.random.permutation(len(a))
+        if np.array(b).ndim == 2:
+            return a[p], [bi[p] for bi in b]
+        else: return a[p], b[p]
+
 class NNModel:
     def __init__(self, track_choice):
         self.model = None
@@ -205,6 +226,7 @@ class NNModel:
         plt.plot()
         if savefile != None:
             fig.savefig(savefile+'/history'+str(trial_no)+'.png')
+            print('history plot saved as "'+savefile+'/history'+str(trial_no)+'.png"')
     
     def plotHR(self, grid, track_no, trial_no=None, savefile=None):
         if self.track_choice == 'evo':
@@ -238,6 +260,7 @@ class NNModel:
         plt.plot()
         if savefile != None:
             fig.savefig(savefile+'/HR'+str(trial_no)+'.png')
+            print('HR diagram saved as '+savefile+'/HR'+str(trial_no)+'.png"')
         
     def lastLoss(self, key):
         if type(self.history)==str:
