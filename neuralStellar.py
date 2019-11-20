@@ -63,18 +63,19 @@ class neuralStellar:
                         range_track.append(entry)
                 if len(range_track)>0:
                     range_tracks.append(np.array(range_track))
-            self.range_tracks=np.array(range_tracks)
+            self.ranged_tracks=np.array(range_tracks)
 
-    def datatoplot(self, track_choice, track_no=None):
+    def datatoplot(self, track_choice, track_no=None, track_index=None):
         if track_choice == 'evo':
             tracks = self.evo_tracks
         elif track_choice == 'ranged':
             tracks = self.ranged_tracks
         else: raise NameError('Wrong track name!')
         if track_no != None:
-            if len(tracks) < track_no:
-                sep=int(len(tracks)/track_no)
-                tracks=tracks[::sep]
+            if len(tracks) > track_no:
+                if type(track_index)==type(None):
+                    track_index=np.random.choice(np.arange(len(tracks)),track_no)
+                tracks=[tracks[i] for i in track_index]
         plot_tracks=[tracks[0][:,self.indices['Teff']],tracks[0][:,self.indices['L']]]
         plot_m=[tracks[0][:,self.indices['mass']]]
         for track in tracks:
@@ -93,6 +94,13 @@ class neuralStellar:
         ax.set_xlabel(r'$log T_{eff}$')
         fig.colorbar(s1)
         plt.show()
+        
+    def fetchData(self, track_choice, parameters):
+        if track_choice == 'evo':
+            return fetchData(self.evo_tracks, parameters, self.indices)
+        elif track_choice == 'ranged':
+            return fetchData(self.evo_tracks, parameters, self.indices)
+        else: raise NameError('Wrong track name!')
     
 def fetchData(data, parameters, indices):
     fIndex=[]
@@ -114,7 +122,9 @@ class NNModel:
     def __init__(self, track_choice):
         self.model = None
         self.history = None
-        self.track_choice = track_choice
+        if track_choice=='evo' or track_choice=='ranged':
+            self.track_choice = track_choice
+        else: raise NameError('Wrong track name!')
     
     def buildModel(self, New_model,inout_shape=[0,0],no_layers=0,no_nodes=0,reg=None, call_name=None):
         if reg!=None:
@@ -201,15 +211,18 @@ class NNModel:
             tracks = grid.evo_tracks
         elif self.track_choice == 'ranged':
             tracks = grid.ranged_tracks
-        else: raise NameError('Wrong track name!')
         if track_no != None:
-            if len(tracks) < track_no:
-                sep=int(len(tracks)/track_no)
-                tracks=tracks[::sep]
+            if len(tracks) > track_no:
+                track_index=np.random.choice(np.arange(len(tracks)),track_no)
+                tracks=[tracks[i] for i in track_index]
+            else: track_index=None
+        else: track_index=None
+        if len(tracks)>200:
+            raise ValueError('Too many tracks, are you sure you want to plot '+str(len(tracks))+' tracks??')
         x_in=fetchData(tracks,['mass','age'],grid.indices)
         NN_tracks=self.model.predict(np.array(x_in).T,verbose=2).T
         NN_m=x_in[0]
-        plot_tracks,plot_m=grid.datatoplot(self.track_choice, track_no=track_no)
+        plot_tracks,plot_m=grid.datatoplot(self.track_choice, track_no=track_no, track_index=track_index)
         [Teffm, Lm, Mm, Teffg, Lg, Mg] = [NN_tracks[1], NN_tracks[0], NN_m, np.log10(plot_tracks[0]), np.log10(plot_tracks[1]), plot_m]
         
         fig, ax=plt.subplots(1,2,figsize=[18,10])
