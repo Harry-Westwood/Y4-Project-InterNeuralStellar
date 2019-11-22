@@ -1,0 +1,3 @@
+{"Grid":
+   {"grid_0_0":{"input_columns":{"M":{"col":2,"lim":None},"A":{"col":3,"lim":[2,6]}},"output_columns":{ "T":7, "L":8}}},
+   "NeuralNet":{"epochs":100000,"validation_fraction":0.1,"nodes":100,"Hidden_layers":6,"regularization":False,"learning_rate":0.001,"beta_1":0.9995,"beta_2":0.999,"epsilon":1e-9}}
