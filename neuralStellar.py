@@ -263,7 +263,7 @@ class NNmodel:
     Class object that stores a keras model trained/to be trained on stellar
     grids, and helps plotting its training results.
     """
-    def __init__(self, track_choice):
+    def __init__(self, track_choice, input_index, output_index):
         """
         Parameters: 
         ----------
@@ -271,6 +271,10 @@ class NNmodel:
             'evo' = to plot grid.evo_tracks, 'ranged' = to plot grid.ranged_tracks
             Raises NameError 'Wrong track name!' if the input does not match either 
             of them.
+        input_index: list of strings
+            The list of keys that corresponds to the inputs to the NN
+        output_index: list of strings
+            The list of keys that corresponds to the outputs to the NN
             
         Other class attributes:
         ----------
@@ -286,6 +290,8 @@ class NNmodel:
         if track_choice=='evo' or track_choice=='ranged':
             self.track_choice = track_choice
         else: raise NameError('Wrong track name!')
+        self.input_index = input_index
+        self.output_index = output_index
     
     def buildModel(self, inout_shape, no_layers, no_nodes, reg=None):
         """
@@ -392,7 +398,7 @@ class NNmodel:
         """Passes the history file name to self.history, does basically nothing"""
         self.history = filename
     
-    def evalData(self, grid, nth_track, index_in, index_out):
+    def evalData(self, grid, nth_track):
         """
         Evaluates the NN on a given grid data, prints the result
         
@@ -407,8 +413,8 @@ class NNmodel:
             tracks = grid.evo_tracks
         elif self.track_choice == 'ranged':
             tracks = grid.ranged_tracks
-        eva_in=fetchData(tracks[nth_track], index_in, grid.indices)
-        eva_out=fetchData(tracks[nth_track], index_out,grid.indices)
+        eva_in=fetchData(tracks[nth_track], self.input_index, grid.indices)
+        eva_out=fetchData(tracks[nth_track], self.output_index, grid.indices)
         print('evaluation results:')
         self.model.evaluate(np.array(eva_in).T,np.array(eva_out).T,verbose=2)
     
@@ -451,7 +457,29 @@ class NNmodel:
             fig.savefig(savefile+'/history'+str(trial_no)+'.png')
             print('history plot saved as "'+savefile+'/history'+str(trial_no)+'.png"')
     
-    def prepPlot(self, grid, track_no, index_in):
+    def prepPlot(self, grid, track_no):
+        """
+        Fetches out the correct number of tracks from a grid as inputs to NN prediction
+        for the comparison plots.
+        
+        Parameters:
+        ----------
+        grid: stellarGrid object
+            grid object with track data stored
+        track_no: int, optional
+            number of tracks to be plotted. If None is given, will plot all tracks.
+            Raises ValueError 'Too many tracks, are you sure you want to plot x
+            tracks?' if number of tracks > 200.
+            
+        Returns:
+        ----------
+        x_in: numpy array
+            the input array that goes into a NN prediction, in order specified in
+            self.input_index
+        track_index: 1D list/numpy array
+            list of indices to be passed to stellarGrid.datatoplot method to index
+            the same randomly chosen tracks as here
+        """
         if self.track_choice == 'evo':
             tracks = grid.evo_tracks
         elif self.track_choice == 'ranged':
@@ -464,9 +492,9 @@ class NNmodel:
         else: track_index=None
         if len(tracks)>200:
             raise ValueError('Too many tracks, are you sure you want to plot '+str(len(tracks))+' tracks??')
-        return fetchData(tracks,index_in,grid.indices)
+        return fetchData(tracks, self.input_index, grid.indices), track_index
     
-    def plotHR(self, grid, track_no, index_in, savefile=None, trial_no=None):
+    def plotHR(self, grid, track_no, savefile=None, trial_no=None):
         """
         Plots both grid(data) and NN predicted HR diagrams. Can save
         plot.
@@ -476,31 +504,29 @@ class NNmodel:
         grid: stellarGrid object
             grid object with track data stored
         track_no: int, optional
-            number of tracks to be plotted. If None is given, will plot all tracks.
-            Raises ValueError 'Too many tracks, are you sure you want to plot x
-            tracks?' if number of tracks > 200.
+            number of tracks to be plotted. Passed to self.prepPlot
         savefile: str, optional
             path and filename for saving the plot. Plot is only saved if not None
         trial_no: int, optional
             only used if savefile is not None. The trial number to be tagged after
             the diagram savename, matches the excel notes.
         """
-        x_in = self.prepPlot(grid, track_no, index_in)
+        x_in, track_index = self.prepPlot(grid, track_no)
         NN_tracks=self.model.predict(np.array(x_in).T,verbose=2).T
         NN_m=x_in[0]
         plot_tracks,plot_m=grid.datatoplot(self.track_choice, track_no=track_no, track_index=track_index)
         [Teffm, Lm, Mm, Teffg, Lg, Mg] = [NN_tracks[1], NN_tracks[0], NN_m, np.log10(plot_tracks[0]), np.log10(plot_tracks[1]), plot_m]
         
-        fig, ax=plt.subplots(1,2,figsize=[18,10])
-        s1=ax[0].scatter(Teffm,Lm,s=5,c=Mm, cmap='viridis')
+        fig, ax=plt.subplots(1,2,figsize=[16,8])
+        ax[0].scatter(Teffm,Lm,s=5,c=Mm, cmap='viridis')
         ax[0].set_xlim(ax[0].get_xlim()[::-1])
-        ax[0].set_ylabel(r'$log(L/L_{\odot})$')
-        ax[0].set_xlabel(r'$log T_{eff}$')
+        ax[0].set_ylabel(r'$\log10(L/L_{\odot})$')
+        ax[0].set_xlabel(r'$\log10 T_{eff}$')
         ax[0].set_title('NN predicted')
         s2=ax[1].scatter(Teffg,Lg,s=5,c=Mg, cmap='viridis')
         ax[1].set_xlim(ax[1].get_xlim()[::-1])
-        ax[1].set_ylabel(r'$log(L/L_{\odot})$')
-        ax[1].set_xlabel(r'$log T_{eff}$')
+        ax[1].set_ylabel(r'$\log10(L/L_{\odot})$')
+        ax[1].set_xlabel(r'$\log10 T_{eff}$')
         ax[1].set_title('Real data')
         fig.colorbar(s2)
         plt.show()
@@ -508,14 +534,30 @@ class NNmodel:
             fig.savefig(savefile+'/HR'+str(trial_no)+'.png')
             print('HR diagram saved as "'+savefile+'/HR'+str(trial_no)+'.png"')
         
-    def plotSR(self, grid, track_no, index_in, savefile=None, trial_no=None):
-        x_in = self.prepPlot(grid, track_no, index_in)
+    def plotSR(self, grid, track_no, savefile=None, trial_no=None):
+        """
+        Plots star mass vs [log10 (delta_nu^(-4)*Teff^(3/2)] for both grid(data)
+        and NN predicted (factors in the mass scaling relation). Can save plot.
+        
+        Parameters:
+        ----------
+        grid: stellarGrid object
+            grid object with track data stored
+        track_no: int, optional
+            number of tracks to be plotted. Passed to self.prepPlot
+        savefile: str, optional
+            path and filename for saving the plot. Plot is only saved if not None
+        trial_no: int, optional
+            only used if savefile is not None. The trial number to be tagged after
+            the diagram savename, matches the excel notes.
+        """
+        x_in = self.prepPlot(grid, track_no)[0]
         NNtracks=self.model.predict(np.array(x_in).T,verbose=2).T
         NNmass=10**x_in[0]
         NNx=np.log10((10**NNtracks[2])**-4*(10**NNtracks[1])**(3/2))
         
         fig, ax=plt.subplots(1,2,figsize=[16,8])
-        s1=ax[0].scatter(NNx, NNmass, s=5, c=x_in[1], cmap='viridis')
+        ax[0].scatter(NNx, NNmass, s=5, c=x_in[1], cmap='viridis')
         ax[0].set_xlabel(r'$\log10\;( \Delta \nu^{-4}{T_{eff}}^{3/2})$')
         ax[0].set_ylabel(r'$M/M_{\odot}$')
         ax[0].set_title('NN predicted')
@@ -533,6 +575,43 @@ class NNmodel:
             fig.savefig(savefile+'/SR'+str(trial_no)+'.png')
             print('SR plot saved as "'+savefile+'/SR'+str(trial_no)+'.png"')
     
+    def plotDelnuAge(self, grid, track_no, savefile=None, trial_no=None):
+        """
+        Plots star age vs log10 delta_nu for both grid(data) and NN predicted.
+        Can save plot.
+        
+        Parameters:
+        ----------
+        grid: stellarGrid object
+            grid object with track data stored
+        track_no: int, optional
+            number of tracks to be plotted. Passed to self.prepPlot
+        savefile: str, optional
+            path and filename for saving the plot. Plot is only saved if not None
+        trial_no: int, optional
+            only used if savefile is not None. The trial number to be tagged after
+            the diagram savename, matches the excel notes.
+        """
+        x_in = self.prepPlot(grid, track_no)[0]
+        NNtracks=self.model.predict(np.array(x_in).T,verbose=2).T
+        
+        fig, ax=plt.subplots(1,2,figsize=[16,8])
+        ax[0].scatter(NNtracks[2], x_in[1], s=5, c=10**x_in[0], cmap='viridis')
+        ax[0].set_xlabel(r'$\log10\; \Delta \nu$')
+        ax[0].set_ylabel(r'$\log10 Age (Gyr)$')
+        ax[0].set_title('NN predicted')
+        
+        plot_data=grid.fetchData('evo',['age','delnu', 'mass'])
+        s2=ax[1].scatter(plot_data[1], plot_data[0], s=5, c=10**plot_data[2], cmap='viridis')
+        ax[1].set_xlabel(r'$\log10\; \Delta \nu$')
+        ax[1].set_ylabel(r'$\log10\;Age\;(Gyr)$')
+        ax[1].set_title('Real data')
+        plt.colorbar(s2)
+        plt.show()
+        if savefile != None:
+            fig.savefig(savefile+'/DelnuAge'+str(trial_no)+'.png')
+            print('delnu vs age plot saved as "'+savefile+'/DelnuAge'+str(trial_no)+'.png"')
+    
     def lastLoss(self, key):
         """
         Returns the final training loss during training from history.
@@ -548,3 +627,29 @@ class NNmodel:
         else:
             hist=self.history.history
         return hist[key][-1]
+    
+    def getDex(self, grid):
+        """
+        Calculates the accuracy of the NN outputs (without logs) in dex.
+        
+        Parameters:
+        ----------
+        grid: stellarGrid object
+            grid object with track data stored
+        
+        Returns:
+        ----------
+        dex_values: dictionary
+            accuracy of each NN output in dex, has the same length as self.output_index
+            element example: {'mass': 0.005}
+        """
+        x_in = fetchData(grid.data, self.input_index, grid.indices)
+        y_out = fetchData(grid.data, self.output_index, grid.indices)
+        NN_tracks=self.model.predict(np.array(x_in).T,verbose=2).T
+        dex_values = {}
+        for i,Dout in enumerate(y_out):
+            Mout = 10**NN_tracks[i]
+            Dout = 10**Dout
+            dex_values[self.output_index[i]] = np.mean(abs(Mout-Dout)/Dout)
+        return dex_values
+            
