@@ -18,6 +18,7 @@ class stellarGrid:
     """
     Class object that stores and process relevent information about a stellar grid.
     """
+    proper_index = ['step', 'mass', 'age', 'feh', 'Y', 'MLT', 'Teff', 'L', 'delnu']
     def __init__(self, filename):
         """
         Parameters: 
@@ -62,13 +63,14 @@ class stellarGrid:
         ----------
         names: str
             list of the names of keys in the original index dictionary to be replaced
-            with, in the order [step, mass, age, Teff, luminosity]
+            with, in the order [step, mass, age, feh, Y, MLT, Teff, luminosity, delnu]
         """
-        self.indices['step'] = self.indices.pop(names[0])
-        self.indices['mass'] = self.indices.pop(names[1])
-        self.indices['age'] = self.indices.pop(names[2])
-        self.indices['Teff'] = self.indices.pop(names[3])
-        self.indices['L'] = self.indices.pop(names[4])
+        if len(names) != len(self.proper_index):
+            raise ValueError('Expecting '+str(len(self.proper_index))+' keys but '
+                             +str(len(names))+' given.')
+        for i,key in enumerate(self.proper_index):
+            if names[i] != None:
+                self.indices[key] = self.indices.pop(names[i])
 
     def initialData(self, age_range=None):
         """
@@ -190,7 +192,7 @@ def fetchData(data, parameters, indices):
     Gathers up and returns an array of specific stellar parameters from a grid data.
     Return array is of size (p, n) where p is the number of parameters requested 
     to be extracted from the data, and n is the total number of grid points
-    involved.
+    involved. All data are log10ed upon returning except feh, Y and MLT.
     
     Parameters:
     ----------
@@ -205,13 +207,21 @@ def fetchData(data, parameters, indices):
         fIndex.append(indices[p])
     return_array=[]
     if np.shape(data[0])==(len(indices),):
-        for i,ind in enumerate(fIndex):
-            return_array.append(np.log10(data[:,ind]).astype('float32'))
+        for p in parameters:
+            if p == 'feh' or p == 'Y' or p == 'MLT':
+                return_array.append(data[:,indices[p]].astype('float32'))
+            else:
+                return_array.append(np.log10(data[:,indices[p]]).astype('float32'))
     else:
-        for i,ind in enumerate(fIndex):
-            dummy_array=[]
-            for d in data:
-                dummy_array=np.append(dummy_array,np.log10(d[:,ind]).astype('float32'))
+        for p in parameters:
+            if p == 'feh' or p == 'Y' or p == 'MLT':
+                dummy_array=[]
+                for d in data:
+                    dummy_array=np.append(dummy_array,d[:,indices[p]].astype('float32'))
+            else:
+                dummy_array=[]
+                for d in data:
+                    dummy_array=np.append(dummy_array,np.log10(d[:,indices[p]]).astype('float32'))
             return_array.append(dummy_array)
     return return_array
 
@@ -382,7 +392,7 @@ class NNmodel:
         """Passes the history file name to self.history, does basically nothing"""
         self.history = filename
     
-    def evalData(self, grid, nth_track):
+    def evalData(self, grid, nth_track, index_in, index_out):
         """
         Evaluates the NN on a given grid data, prints the result
         
@@ -397,8 +407,8 @@ class NNmodel:
             tracks = grid.evo_tracks
         elif self.track_choice == 'ranged':
             tracks = grid.ranged_tracks
-        eva_in=fetchData(tracks[nth_track], ['mass','age'],grid.indices)
-        eva_out=fetchData(tracks[nth_track],['L','Teff'],grid.indices)
+        eva_in=fetchData(tracks[nth_track], index_in, grid.indices)
+        eva_out=fetchData(tracks[nth_track], index_out,grid.indices)
         print('evaluation results:')
         self.model.evaluate(np.array(eva_in).T,np.array(eva_out).T,verbose=2)
     
@@ -436,12 +446,27 @@ class NNmodel:
         ax.set_xlabel('epoch')
         ax.set_ylabel('metric')
         ax.legend()
-        plt.plot()
+        plt.show()
         if savefile != None:
             fig.savefig(savefile+'/history'+str(trial_no)+'.png')
             print('history plot saved as "'+savefile+'/history'+str(trial_no)+'.png"')
     
-    def plotHR(self, grid, track_no, savefile=None, trial_no=None):
+    def prepPlot(self, grid, track_no, index_in):
+        if self.track_choice == 'evo':
+            tracks = grid.evo_tracks
+        elif self.track_choice == 'ranged':
+            tracks = grid.ranged_tracks
+        if track_no != None:
+            if len(tracks) > track_no:
+                track_index=np.random.choice(np.arange(len(tracks)),track_no)
+                tracks=[tracks[i] for i in track_index]
+            else: track_index=None
+        else: track_index=None
+        if len(tracks)>200:
+            raise ValueError('Too many tracks, are you sure you want to plot '+str(len(tracks))+' tracks??')
+        return fetchData(tracks,index_in,grid.indices)
+    
+    def plotHR(self, grid, track_no, index_in, savefile=None, trial_no=None):
         """
         Plots both grid(data) and NN predicted HR diagrams. Can save
         plot.
@@ -460,19 +485,7 @@ class NNmodel:
             only used if savefile is not None. The trial number to be tagged after
             the diagram savename, matches the excel notes.
         """
-        if self.track_choice == 'evo':
-            tracks = grid.evo_tracks
-        elif self.track_choice == 'ranged':
-            tracks = grid.ranged_tracks
-        if track_no != None:
-            if len(tracks) > track_no:
-                track_index=np.random.choice(np.arange(len(tracks)),track_no)
-                tracks=[tracks[i] for i in track_index]
-            else: track_index=None
-        else: track_index=None
-        if len(tracks)>200:
-            raise ValueError('Too many tracks, are you sure you want to plot '+str(len(tracks))+' tracks??')
-        x_in=fetchData(tracks,['mass','age'],grid.indices)
+        x_in = self.prepPlot(grid, track_no, index_in)
         NN_tracks=self.model.predict(np.array(x_in).T,verbose=2).T
         NN_m=x_in[0]
         plot_tracks,plot_m=grid.datatoplot(self.track_choice, track_no=track_no, track_index=track_index)
@@ -483,16 +496,43 @@ class NNmodel:
         ax[0].set_xlim(ax[0].get_xlim()[::-1])
         ax[0].set_ylabel(r'$log(L/L_{\odot})$')
         ax[0].set_xlabel(r'$log T_{eff}$')
+        ax[0].set_title('NN predicted')
         s2=ax[1].scatter(Teffg,Lg,s=5,c=Mg, cmap='viridis')
         ax[1].set_xlim(ax[1].get_xlim()[::-1])
         ax[1].set_ylabel(r'$log(L/L_{\odot})$')
         ax[1].set_xlabel(r'$log T_{eff}$')
+        ax[1].set_title('Real data')
         fig.colorbar(s2)
-        plt.plot()
+        plt.show()
         if savefile != None:
             fig.savefig(savefile+'/HR'+str(trial_no)+'.png')
             print('HR diagram saved as "'+savefile+'/HR'+str(trial_no)+'.png"')
         
+    def plotSR(self, grid, track_no, index_in, savefile=None, trial_no=None):
+        x_in = self.prepPlot(grid, track_no, index_in)
+        NNtracks=self.model.predict(np.array(x_in).T,verbose=2).T
+        NNmass=10**x_in[0]
+        NNx=np.log10((10**NNtracks[2])**-4*(10**NNtracks[1])**(3/2))
+        
+        fig, ax=plt.subplots(1,2,figsize=[16,8])
+        s1=ax[0].scatter(NNx, NNmass, s=5, c=x_in[1], cmap='viridis')
+        ax[0].set_xlabel(r'$\log10\;( \Delta \nu^{-4}{T_{eff}}^{3/2})$')
+        ax[0].set_ylabel(r'$M/M_{\odot}$')
+        ax[0].set_title('NN predicted')
+        
+        plot_data=grid.fetchData('evo',['mass','delnu','Teff', 'age'])
+        mass=10**plot_data[0]
+        x=np.log10((10**plot_data[1])**-4*(10**plot_data[2])**(3/2))
+        s2=ax[1].scatter(x, mass, s=5, c=plot_data[3], cmap='viridis')
+        ax[1].set_xlabel(r'$\log10\;( \Delta \nu^{-4}{T_{eff}}^{3/2})$')
+        ax[1].set_ylabel(r'$M/M_{\odot}$')
+        ax[1].set_title('Real data')
+        plt.colorbar(s2)
+        plt.show()
+        if savefile != None:
+            fig.savefig(savefile+'/SR'+str(trial_no)+'.png')
+            print('SR plot saved as "'+savefile+'/SR'+str(trial_no)+'.png"')
+    
     def lastLoss(self, key):
         """
         Returns the final training loss during training from history.
