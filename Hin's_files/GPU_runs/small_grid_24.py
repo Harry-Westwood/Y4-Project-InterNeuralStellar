@@ -16,7 +16,8 @@ os.mkdir(folder_name)
 file='grid_0_0.csv'
 small_grid=stellarGrid(file)
 small_grid.buildIndex()
-small_grid.popIndex(['','star_mass','star_age','star_feh',None,'star_MLT','effective_T','luminosity','delta_nu'])
+small_grid.popIndex(['','star_mass','star_age','star_feh','star_MLT','effective_T','luminosity','delta_nu'],
+                    proper=['step','mass','age','feh','MLT','Teff','L','delnu'])
 small_grid.initialData()
 
 in_dex=['mass','age','feh','MLT']
