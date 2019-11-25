@@ -53,7 +53,7 @@ class stellarGrid:
             dictionary[h]=i
         self.indices = dictionary
     
-    def popIndex(self, names):
+    def popIndex(self, names, proper=None):
         """
         Interchanges out parts of the index dictionary into names that the code uses.
         This is seperated from buildIndex method so users can print the index dictionary
@@ -65,11 +65,18 @@ class stellarGrid:
             list of the names of keys in the original index dictionary to be replaced
             with, in the order [step, mass, age, feh, Y, MLT, Teff, luminosity, delnu]
         """
-        if len(names) != len(self.proper_index):
-            raise ValueError('Expecting '+str(len(self.proper_index))+' keys but '
-                             +str(len(names))+' given.')
-        for i,key in enumerate(self.proper_index):
-            if names[i] != None:
+        if proper==None:
+            if len(names) != len(self.proper_index):
+                raise ValueError('Expecting '+str(len(self.proper_index))+' keys but '
+                                 +str(len(names))+' given.')
+            for i,key in enumerate(self.proper_index):
+                if names[i] != None:
+                    self.indices[key] = self.indices.pop(names[i])
+        else:
+            if len(names) != len(proper):
+                raise ValueError('Expecting '+str(len(proper))+' keys but '
+                                 +str(len(names))+' given.')
+            for i,key in enumerate(proper):
                 self.indices[key] = self.indices.pop(names[i])
 
     def initialData(self, age_range=None):
@@ -394,6 +401,13 @@ class NNmodel:
         print('training done! now='+str(datetime.now())+' | Time lapsed='+str(datetime.now()-start_time))
         self.model.save(save_name)
 
+    def saveHist(self, filename):
+        """Saves the history dictionary into a txt file with pickle"""
+        saving_dict=self.history.history
+        saving_dict.update({'epoch':self.history.epoch})
+        with open(filename, 'wb') as file_pi:
+            pickle.dump(saving_dict, file_pi)
+    
     def loadHist(self, filename):
         """Passes the history file name to self.history, does basically nothing"""
         self.history = filename
@@ -630,7 +644,7 @@ class NNmodel:
     
     def getDex(self, grid):
         """
-        Calculates the accuracy of the NN outputs (without logs) in dex.
+        Calculates the accuracy of each of the NN outputs (without logs) in dex.
         
         Parameters:
         ----------
@@ -652,4 +666,3 @@ class NNmodel:
             Dout = 10**Dout
             dex_values[self.output_index[i]] = np.mean(abs(Mout-Dout)/Dout)
         return dex_values
-            
