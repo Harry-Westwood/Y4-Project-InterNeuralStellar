@@ -432,7 +432,7 @@ class NNmodel:
         print('evaluation results:')
         self.model.evaluate(np.array(eva_in).T,np.array(eva_out).T,verbose=2)
     
-    def plotHist(self, plot_MSE=True, savefile=None, trial_no=None):
+    def plotHist(self, plot_MSE=True, epochs=None, savefile=None, trial_no=None):
         """
         Plots both training and validation loss vs epochs form training history. Can save
         plot.
@@ -455,11 +455,18 @@ class NNmodel:
             epoch = self.history.epoch
             hist=self.history.history
         MAE,valMAE=hist['MAE'],hist['val_MAE']
+        if type(epochs)!=type(None):
+            epoch = epoch[epochs[0]:epochs[1]]
+            MAE = MAE[epochs[0]:epochs[1]]
+            valMAE = valMAE[epochs[0]:epochs[1]]
         fig, ax = plt.subplots(1, 1)
         ax.plot(epoch,MAE,'b',label='MAE')
         ax.plot(epoch,valMAE,'r',label='valMAE')
         if plot_MSE==True:
             MSE,valMSE = hist['MSE'],hist['val_MSE']
+            if type(epochs)!=type(None):
+                MSE = MSE[epochs[0]:epochs[1]]
+                valMSE = valMSE[epochs[0]:epochs[1]]
             ax.plot(epoch,MSE,'b:',label='MSE')
             ax.plot(epoch,valMSE,'r:',label='valMSE')
         ax.set_yscale('log')
@@ -527,7 +534,7 @@ class NNmodel:
         """
         x_in, track_index = self.prepPlot(grid, track_no)
         NN_tracks=self.model.predict(np.array(x_in).T,verbose=2).T
-        NN_m=x_in[0]
+        NN_m=10**x_in[0]
         plot_tracks,plot_m=grid.datatoplot(self.track_choice, track_no=track_no, track_index=track_index)
         [Teffm, Lm, Mm, Teffg, Lg, Mg] = [NN_tracks[1], NN_tracks[0], NN_m, np.log10(plot_tracks[0]), np.log10(plot_tracks[1]), plot_m]
         
@@ -542,12 +549,18 @@ class NNmodel:
         ax[1].set_ylabel(r'$\log10(L/L_{\odot})$')
         ax[1].set_xlabel(r'$\log10 T_{eff}$')
         ax[1].set_title('Real data')
-        fig.colorbar(s2)
+        fig.subplots_adjust(right=0.83)
+        cbar_ax = fig.add_axes([0.85, ax[1].get_position().y0, 0.02, ax[1].get_position().height])
+        cbar_ax.text(0.5,1.015,r'$M/M_{\odot}$',fontsize=13,horizontalalignment='center',transform=cbar_ax.transAxes)
+        fig.colorbar(s2, cax=cbar_ax)
         plt.show()
         if savefile != None:
             fig.savefig(savefile+'/HR'+str(trial_no)+'.png')
             print('HR diagram saved as "'+savefile+'/HR'+str(trial_no)+'.png"')
+    
+    #def plotIsochrone(self, grid):
         
+    
     def plotSR(self, grid, track_no, savefile=None, trial_no=None):
         """
         Plots star mass vs [log10 (delta_nu^(-4)*Teff^(3/2)] for both grid(data)
@@ -583,7 +596,10 @@ class NNmodel:
         ax[1].set_xlabel(r'$\log10\;( \Delta \nu^{-4}{T_{eff}}^{3/2})$')
         ax[1].set_ylabel(r'$M/M_{\odot}$')
         ax[1].set_title('Real data')
-        plt.colorbar(s2)
+        fig.subplots_adjust(right=0.83)
+        cbar_ax = fig.add_axes([0.85, ax[1].get_position().y0, 0.02, ax[1].get_position().height])
+        cbar_ax.text(0.5,1.015,'log10 Age\n(Gyr)',fontsize=13,horizontalalignment='center',transform=cbar_ax.transAxes)
+        fig.colorbar(s2, cax=cbar_ax)
         plt.show()
         if savefile != None:
             fig.savefig(savefile+'/SR'+str(trial_no)+'.png')
@@ -620,7 +636,10 @@ class NNmodel:
         ax[1].set_xlabel(r'$\log10\; \Delta \nu$')
         ax[1].set_ylabel(r'$\log10\;Age\;(Gyr)$')
         ax[1].set_title('Real data')
-        plt.colorbar(s2)
+        fig.subplots_adjust(right=0.83)
+        cbar_ax = fig.add_axes([0.85, ax[1].get_position().y0, 0.02, ax[1].get_position().height])
+        cbar_ax.text(0.5,1.015,r'$M/M_{\odot}$',fontsize=13,horizontalalignment='center',transform=cbar_ax.transAxes)
+        fig.colorbar(s2, cax=cbar_ax)
         plt.show()
         if savefile != None:
             fig.savefig(savefile+'/DelnuAge'+str(trial_no)+'.png')
@@ -664,5 +683,5 @@ class NNmodel:
         for i,Dout in enumerate(y_out):
             Mout = 10**NN_tracks[i]
             Dout = 10**Dout
-            dex_values[self.output_index[i]] = np.mean(abs(Mout-Dout)/Dout)
+            dex_values[self.output_index[i]] = np.mean(abs((Mout-Dout)/Dout))
         return dex_values
