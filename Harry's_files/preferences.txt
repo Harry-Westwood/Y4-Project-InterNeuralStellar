@@ -1,0 +1,5 @@
+{"Grid":
+   {"grid_0_0":{"inputs":{"M":{"col":2,"lim":None,'log':True}, "A":{"col":3,"lim": None,'log':True}, 'star_feh':{"col":4,"lim": None,'log':False}, 'star_MLT':{"col":5,"lim": None,'log':False}}, "outputs":{"T":{'col':7,'log':True}, "L":{'col':8,'log':True}, 'del_nu':{"col":18,"lim": None,'log':True}}},
+    "grid_mid_0_0":{"inputs":{"M":{"col":1,"lim":None,'log':True},"A":{"col":2,"lim": None,'log':True},'initial_Yinit':{"col":3,"lim": None,'log':False},'initial_feh':{"col":4,"lim": None,'log':False},'initial_MLT':{"col":5,"lim": None,'log':False}},"outputs":{"T":{'col':7,'log':True}, "L":{'col':8,'log':True}, 'del_nu':{"col":9,"lim": None,'log':True}}}},
+   "NeuralNet":{"epochs":153,"validation_fraction":0.1,"nodes":32,"Hidden_layers":4,"regularization":0.0001,"learning_rate":0.01,"beta_1":0.9999,"beta_2":0.999,"epsilon":1e-9},
+   "RunMode":0}
