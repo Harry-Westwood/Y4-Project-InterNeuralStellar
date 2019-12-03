@@ -335,13 +335,20 @@ def NN_setup(input_data,output_data,pref,model_name,new): #inputs = list where e
 def train_NN(data,pref,track_indeces,tracks,model_name,file,new):
     input_data, output_data = format_input_ouput(data=data,track_indeces=track_indeces,pref=pref,shuffle=True)
     model, history_dict = NN_setup(input_data,output_data,pref,model_name=model_name,new=new)
+    try:
+        with tf.device('/gpu:0'):
+            training = model.fit(input_data.T, output_data.T,
+                epochs=pref['NN_pref']['epochs'],
+                batch_size=len(input_data[0]),
+                validation_split=pref['NN_pref']['validation_fraction'],
+                verbose=0)
+    except RuntimeError as e:
+        training = model.fit(input_data.T, output_data.T,
+                epochs=pref['NN_pref']['epochs'],
+                batch_size=len(input_data[0]),
+                validation_split=pref['NN_pref']['validation_fraction'],
+                verbose=0) 
     
-    training = model.fit(input_data.T, output_data.T,
-        epochs=pref['NN_pref']['epochs'],
-        batch_size=len(input_data[0]),
-        validation_split=pref['NN_pref']['validation_fraction'],
-        verbose=0)
-
     model.save(model_name)
     history_dict = save_history(history_dict=history_dict,training=training,model=model,model_name=model_name)
     '''
@@ -491,7 +498,7 @@ def Multi_Run(grid_file,pref_files,new):
     grid_data = load_grid_only(file=grid_file)
     
     for i in range(len(pref_files)):
-        #print(i)
+        print(i)
     
         pref_file = pref_files[i]
         model_name = 'NN'+str(i)+'.h5'
@@ -510,9 +517,10 @@ def Multi_Run(grid_file,pref_files,new):
         training,model = train_NN(data=data,pref=pref,track_indeces=track_indeces,tracks=tracks,new=new,model_name=model_name,file=grid_file)
         
 
-grid_file='grid_mid_0_0'
-#grid_file='grid_mid_debug'
-pref_files=['pref0','pref1','pref2','pref3']
+#grid_file='grid_mid_0_0'
+grid_file='grid_mid_debug'
+#pref_files=['pref0','pref1','pref2','pref3']
+pref_files=['pref0']
 new = True
 Multi_Run(grid_file=grid_file,
           pref_files=pref_files,
