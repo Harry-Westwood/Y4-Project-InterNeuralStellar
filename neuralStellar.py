@@ -13,6 +13,8 @@ from matplotlib import rc
 rc("font", family="serif", size=14)
 from datetime import datetime
 import pickle
+import pymc3 as pm
+import theano.tensor as T
 
 class stellarGrid:
     """
@@ -294,13 +296,15 @@ class NNmodel:
         """
         self.model = None
         self.history = None
+        self.weights = None
+        self.no_hidden_layers = None
         if track_choice=='evo' or track_choice=='ranged':
             self.track_choice = track_choice
         else: raise NameError('Wrong track name!')
         self.input_index = input_index
         self.output_index = output_index
     
-    def buildModel(self, inout_shape, no_layers, no_nodes, reg=None):
+    def buildModel(self, no_layers, no_nodes, reg=None):
         """
         Builds a new NN to self.model, Prints the summary.
         
@@ -324,7 +328,7 @@ class NNmodel:
             elif reg[0]=='l2':
                 regu=keras.regularizers.l2(reg[1])
             else: raise NameError('Wrong regularizer name!')
-        inputs=keras.Input(shape=(inout_shape[0],))
+        inputs=keras.Input(shape=(len(self.input_index),))
         if reg==None:
             xx=keras.layers.Dense(no_nodes,activation='relu')(inputs)
         else: xx=keras.layers.Dense(no_nodes,activation='relu',kernel_regularizer=regu)(inputs)
@@ -332,7 +336,7 @@ class NNmodel:
             if reg==None:
                 xx=keras.layers.Dense(no_nodes,activation='relu')(xx)
             else: xx=keras.layers.Dense(no_nodes,activation='relu',kernel_regularizer=regu)(xx)
-        outputs=keras.layers.Dense(inout_shape[1],activation='linear')(xx)
+        outputs=keras.layers.Dense(len(self.output_index),activation='linear')(xx)
         self.model = keras.Model(inputs=inputs, outputs=outputs)
         self.model.summary()
 
@@ -442,6 +446,10 @@ class NNmodel:
         plot_MSE: bool, optional
             if True, plots MSE in the same plot as MAE,
             if False, only plots MAE
+        epochs: list, optional
+            if None, all epochs is plotted
+            if given a list of [lower limit, upper limit] of epoch numbers, it will
+            plot the history in epochs lower limit to upper limit-1.
         savefile: str, optional
             path and filename for saving the plot. Plot is only saved if not None
         trial_no: int, optional
@@ -534,7 +542,7 @@ class NNmodel:
         """
         x_in, track_index = self.prepPlot(grid, track_no)
         NN_tracks=self.model.predict(np.array(x_in).T,verbose=2).T
-        NN_m=10**x_in[0]
+        NN_m=10**x_in[self.input_index.index('mass')]
         plot_tracks,plot_m=grid.datatoplot(self.track_choice, track_no=track_no, track_index=track_index)
         [Teffm, Lm, Mm, Teffg, Lg, Mg] = [NN_tracks[1], NN_tracks[0], NN_m, np.log10(plot_tracks[0]), np.log10(plot_tracks[1]), plot_m]
         
@@ -558,8 +566,118 @@ class NNmodel:
             fig.savefig(savefile+'/HR'+str(trial_no)+'.png')
             print('HR diagram saved as "'+savefile+'/HR'+str(trial_no)+'.png"')
     
-    #def plotIsochrone(self, grid):
+    def plotIsochrone(self, grid, iso_ages, indices, isos, widths, N=5000, savefile=None, trial_no=None):
+        """
+        Plots both grid(data) and NN predicted isochrones of specified ages in HR
+        diagrams, with the colour bar showing variation in age. Can save plot.
         
+        Parameters:
+        ----------
+        grid: stellarGrid object
+            grid object with track data stored
+        iso_ages: list/array
+            the isochronic ages to be plotted
+        indices: list of strings, length = len(self.input_index)-1 (has age)
+            the order of NN input parameters (stellar fundamentals) of which to
+            constraint, in the form(spelling) of stellarGrid.proper_index.
+            'age' must be at the first index.
+        isos: list/array of, length = len(self.input_index)-2 (no age)
+            the 'mean values', mu of the parameters other than age to be constrainted
+        widths: 2D list, length = len(self.input_index)-1 (has age)
+            the 'boundary width', delta to be added onto the relevent isos number, making
+            the selector select data falling between mu-delta and mu+delta.
+            For each (ith) input parameter, if widths[i][0]=='r', boundary width is 
+            calculated in ratio mode: ie. delta = isos[i-1]*widths[i][1]
+            if widths[i][0]=='a', boundary width is absolute: ie. delta = widths[i][1].
+            If the iso parameter (mu) is zero and widths[i][0] is set to 'r',
+            will force an arbituary width of 0.05 to this instance of the parameter.
+        
+        Note: indices, isos and widths must be in the same order in terms of stellar
+        parameters, and age must always come first, for example, if 4 parameters go
+        into my NN, ['mass', 'age', 'feh', 'MLT'], I need to apply constraint on
+        age, feh and MLT, so my inputs will be:
+            indices = ['age','feh','MLT']
+            isos = [feh_isovalue, MLT_isovalue]
+            widths = [['r',age_width_ratio],['a',feh_width_value],['a',MLT_width_value]]
+        Orders of feh and MLT can be interchanged, but if it is interchanged in one of
+        the inputs, the other two must be changed in accordance.
+        """
+        #checking for correct input lengths
+        if len(indices)!=len(self.input_index)-1 or len(isos)!=len(self.input_index)-2 or len(widths)!=len(self.input_index)-1:
+            raise ValueError('Two (or more) of the lengths of the inputs do not match!')
+        #cropping the correct grid data with given boundaries
+        fetched_data = []
+        for j,iso_age in enumerate(iso_ages):
+            if widths[0][0]=='r':
+                if iso_age!=0:
+                    age_width = iso_age*widths[0][1]
+                else: age_width = 0.05
+            else: age_width=widths[0][1]
+            data = grid.data
+            data = data[np.where(np.logical_and(
+                    data.T[grid.indices['age']] >= iso_age-age_width,
+                    data.T[grid.indices['age']] <= iso_age+age_width))]
+            for i,param in enumerate(indices[1:]):
+                if widths[i+1][0]=='r':
+                    if isos[i]!=0:
+                        this_width = isos[i]*widths[i+1][1]
+                    else: this_width = 0.05
+                else: this_width = widths[i+1][1]
+                data = data[np.where(np.logical_and(
+                        data.T[grid.indices[param]] >= isos[i]-this_width,
+                        data.T[grid.indices[param]] <= isos[i]+this_width))]
+            if j==0:
+                fetched_data = data
+            else: 
+                fetched_data = np.concatenate((fetched_data,data))
+        
+        #creating new input lists for NN to predict
+        masses = np.log10(np.linspace(min(fetched_data[:,grid.indices['mass']]),max(fetched_data[:,grid.indices['mass']]),N))
+        fixed_inputs=[]
+        for i,param in enumerate(indices[1:]):
+            fixed_inputs.append(np.ones(N)*isos[i])
+        x_in = []
+        for i in self.input_index:
+            x_in.append(np.array([]))
+        for i,iso_age in enumerate(iso_ages):
+            for param in self.input_index:
+                if param=='mass':
+                    this_ind=self.input_index.index('mass')
+                    x_in[this_ind] = np.append(x_in[this_ind],masses)
+                elif param=='age':
+                    this_ind=self.input_index.index('age')
+                    x_in[this_ind] = np.append(x_in[this_ind],np.log10(np.ones(N)*iso_age))
+                else:
+                    this_ind=self.input_index.index(param)
+                    x_in[this_ind] = np.append(x_in[this_ind],fixed_inputs[indices.index(param)-1])
+        #NN prediction
+        NN_tracks=self.model.predict(np.array(x_in).T,verbose=2).T
+        NN_age=10**x_in[self.input_index.index('age')]
+        
+        #plotting the isochrone
+        plot_data = fetchData(fetched_data, ['Teff','L','age'], grid.indices)
+        [Teffm, Lm, Am, Teffg, Lg, Ag] = [NN_tracks[self.output_index.index('Teff')], NN_tracks[self.output_index.index('L')], NN_age, plot_data[0], plot_data[1], 10**plot_data[2]]    
+        fig, ax=plt.subplots(1,2,figsize=[16,8])
+        ax[0].scatter(Teffm,Lm,s=5,c=Am, cmap='viridis')
+        ax[0].set_xlim(ax[0].get_xlim()[::-1])
+        ax[0].set_ylabel(r'$\log10(L/L_{\odot})$')
+        ax[0].set_xlabel(r'$\log10 T_{eff}$')
+        ax[0].set_title('NN predicted')
+        s2=ax[1].scatter(Teffg,Lg,s=5,c=Ag, cmap='viridis')
+        ax[1].set_xlim(ax[1].get_xlim()[::-1])
+        ax[1].set_ylabel(r'$\log10(L/L_{\odot})$')
+        ax[1].set_xlabel(r'$\log10 T_{eff}$')
+        ax[1].set_title('Real data')
+        ax[0].set_xlim(ax[1].get_xlim())
+        ax[0].set_ylim(ax[1].get_ylim())
+        fig.subplots_adjust(right=0.83)
+        cbar_ax = fig.add_axes([0.85, ax[1].get_position().y0, 0.020, ax[1].get_position().height])
+        cbar_ax.text(0.5,1.015,'Age(Gyr)',fontsize=13,horizontalalignment='center',transform=cbar_ax.transAxes)
+        fig.colorbar(s2, cax=cbar_ax)
+        plt.show()
+        if savefile != None:
+            fig.savefig(savefile+'/Iso'+str(trial_no)+'.png')
+            print('HR diagram saved as "'+savefile+'/Iso'+str(trial_no)+'.png"')
     
     def plotSR(self, grid, track_no, savefile=None, trial_no=None):
         """
@@ -580,8 +698,9 @@ class NNmodel:
         """
         x_in = self.prepPlot(grid, track_no)[0]
         NNtracks=self.model.predict(np.array(x_in).T,verbose=2).T
-        NNmass=10**x_in[0]
-        NNx=np.log10((10**NNtracks[2])**-4*(10**NNtracks[1])**(3/2))
+        NNmass=10**x_in[self.input_index.index('mass')]
+        NNx=np.log10((10**NNtracks[self.output_index.index('delnu')])**-4*
+                     (10**NNtracks[self.output_index.index('Teff')])**(3/2))
         
         fig, ax=plt.subplots(1,2,figsize=[16,8])
         ax[0].scatter(NNx, NNmass, s=5, c=x_in[1], cmap='viridis')
@@ -626,7 +745,8 @@ class NNmodel:
         NNtracks=self.model.predict(np.array(x_in).T,verbose=2).T
         
         fig, ax=plt.subplots(1,2,figsize=[16,8])
-        ax[0].scatter(NNtracks[2], x_in[1], s=5, c=10**x_in[0], cmap='viridis')
+        ax[0].scatter(NNtracks[self.output_index.index('delnu')], x_in[self.input_index.index('age')],
+          s=5, c=10**x_in[self.input_index.index('mass')], cmap='viridis')
         ax[0].set_xlabel(r'$\log10\; \Delta \nu$')
         ax[0].set_ylabel(r'$\log10 Age (Gyr)$')
         ax[0].set_title('NN predicted')
@@ -685,3 +805,16 @@ class NNmodel:
             Dout = 10**Dout
             dex_values[self.output_index[i]] = np.mean(abs((Mout-Dout)/Dout))
         return dex_values
+    
+    def getWeights(self):
+        self.weights = self.model.get_weights()
+        self.no_hidden_layers = len(self.weights)/2-1
+    
+    def manualPredict(self, inputs):
+        #input shape = 2D array with N rows of parameters, each of M columns of stars
+        xx=inputs
+        for i in np.arange(0,self.no_hidden_layers)*2:
+            i=int(i)
+            xx=T.nnet.relu(pm.math.dot(self.weights[i].T,xx).T+self.weights[i+1]).T
+        xx=(T.dot(self.weights[-2].T,xx).T+self.weights[-1]).T
+        return xx
