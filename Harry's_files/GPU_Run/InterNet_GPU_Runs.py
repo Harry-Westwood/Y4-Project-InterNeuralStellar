@@ -10,10 +10,34 @@ from datetime import datetime
 import numpy as np
 import yaml
 
+
 def load_file_and_preferences(file,pref_file):
     '''
-    loads the given grid
-    returns data, grid preferences (if available) and neural net preferences
+    Loads stellar grid and preferences file
+    
+    Parameters
+    ----------
+    file : str
+        Name of stellar grid file to load, without file extension
+    pref_file : str
+        Name of preferences file to load, without file extension
+    
+    Returns 
+    -------
+    data : nD numpy array
+        containing the stellar grid data loaded from the given "file", without headers
+    preferences : dict
+        keys: 
+            grid_pref : preferences for stellar grid that is to be used for training
+                inputs : dict
+                    contains a dictionary for each input parameter 
+                    each of these dictionaries includes the column corresponding to that parameter in the stellar grid, whether the variable should be logged and if there are any desired limits on the values. 
+                outputs : dict
+                    contains a list of dictionaries, each of which contains the column corresponding to an output parameter
+            NN_pref : dict
+                contains values for each of the neural net inputs required to compile the model and train the neural net
+            RunMode : int
+                deprecated
     '''
     try:
         data = np.genfromtxt(file+'.csv',delimiter=",",skip_header=1)
@@ -46,13 +70,50 @@ def load_file_and_preferences(file,pref_file):
     return data,preferences
 
 def load_grid_only(file):
+    '''
+    Loads stellar grid data
+    
+    Parameters
+    ----------
+    file : str
+    
+    Returns 
+    -------
+    data : nD numpy array
+        containing the stellar grid data loaded from the given "file", without headers
+    '''
     try:
-        grid_data = np.genfromtxt(file+'.csv',delimiter=",",skip_header=1)
+        data = np.genfromtxt(file+'.csv',delimiter=",",skip_header=1)
     except FileNotFoundError as e:
-        grid_data = None
-    return grid_data
+        data = None
+    return data
 
 def load_pref_only(file,pref_file):
+    '''
+    Loads preferences file
+    
+    Parameters
+    ----------
+    file : str
+        Name of stellar grid file, without file extension
+    pref_file : str
+        Name of preferences file to load, without file extension
+    
+    Returns 
+    -------
+    preferences : dict
+        keys: 
+            grid_pref : preferences for stellar grid that is to be used for training
+                inputs : dict
+                    contains a dictionary for each input parameter 
+                    each of these dictionaries includes the column corresponding to that parameter in the stellar grid, whether the variable should be logged and if there are any desired limits on the values. 
+                outputs : dict
+                    contains a list of dictionaries, each of which contains the column corresponding to an output parameter
+            NN_pref : dict
+                contains values for each of the neural net inputs required to compile the model and train the neural net
+            RunMode : int
+                deprecated
+    '''
     try:
         with open(pref_file+'.txt') as f:
             pref = yaml.load(f, Loader=yaml.FullLoader)
@@ -77,6 +138,36 @@ def load_pref_only(file,pref_file):
 
 
 def create_data_dict(data,pref):
+    '''
+    reformats the "data" nd-array returned by "load_file_and_preferences" or "load_grid_only"
+    
+    Parameters
+    ----------
+    data : nD numpy array
+        array of stellar grid data
+    pref : dict
+        keys: 
+            grid_pref : preferences for stellar grid that is to be used for training
+                inputs : dict
+                    contains a dictionary for each input parameter 
+                    each of these dictionaries includes the column corresponding to that parameter in the stellar grid, whether the variable should be logged and if there are any desired limits on the values. 
+                outputs : dict
+                    contains a list of dictionaries, each of which contains the column corresponding to an output parameter
+            NN_pref : dict
+                contains values for each of the neural net inputs required to compile the model and train the neural net
+            RunMode : int
+                deprecated
+    
+    Returns 
+    -------
+    data : dict
+        keys:
+            inputs : dictionary where each key is the variable name of an input prameter and the value is the data for the corresponding parameter
+            outputs : dictionary where each key is the variable name of an output prameter and the value is the data for the corresponding parameter
+            track : array that contains the numbers that describe a row's place in an evolutationry track i.e. 0 is the first row for some evolutionary track
+    pref : dict
+        see "Parameters" above
+    '''
     input_cols = set().union(*(d.keys() for d in [pref['grid_pref']['inputs']]))
     output_cols = set().union(*(d.keys() for d in [pref['grid_pref']['outputs']]))
     data_dict = {'inputs':{},'outputs':{},'track':data[:,0]}
@@ -86,13 +177,50 @@ def create_data_dict(data,pref):
             data_dict['outputs'][i] = data[:,pref['grid_pref']['outputs'][i]['col']]
     return data_dict,pref
 
-def find_tracks(data): #splits data into the individual stellar evalution tracks
+def find_tracks(data):
+    '''
+    splits data into the individual stellar evalution tracks
+    
+    Parameters
+    ----------
+    data : dict
+        the data dict returned by "create_data_dict" 
+
+    Returns 
+    -------
+    tracks : list of tuples
+        list where each element is a tuple. 
+        The ith tuple's 1st element is the index of the row where the ith evolutionary track begins and the 2nd element is the index of the last row of the ith evolutionary track
+    '''
     track_starts = np.where(data['track'] == 0)[0] #finds every occurance of the first row of a evolutionary track
     track_ends = np.append(track_starts[1:]-1,len(data['track'])-1) #looks for the row elemnt before each first row of each evolutionary track (except for the 0th row) to find the end of the previous track and then the last row of the data is appended to get the end of the last track.
     tracks = list(zip(track_starts,track_ends)) #combines the start and end row element of each track
     return tracks #each element of the list is track[i][0]=start row of ith track, track[i][1]= end row ith track.
 
 def parameter_limits(pref):
+    '''
+    checks if any parameter limiting has been requested in the preferences file
+    
+    Parameters
+    ----------
+    pref : dict
+        keys: 
+            grid_pref : preferences for stellar grid that is to be used for training
+                inputs : dict
+                    contains a dictionary for each input parameter 
+                    each of these dictionaries includes the column corresponding to that parameter in the stellar grid, whether the variable should be logged and if there are any desired limits on the values. 
+                outputs : dict
+                    contains a list of dictionaries, each of which contains the column corresponding to an output parameter
+            NN_pref : dict
+                contains values for each of the neural net inputs required to compile the model and train the neural net
+            RunMode : int
+                deprecated
+    
+    Returns 
+    -------
+    True : if an input parameter should be limited
+    False : if no input parameters should be limited
+    '''
     input_cols = set().union(*(d.keys() for d in [pref['grid_pref']['inputs']]))
     for param in input_cols:
         if pref['grid_pref']['inputs'][param]['lim'] != 'None':
@@ -100,6 +228,20 @@ def parameter_limits(pref):
     return False
 
 def find_lim_tracks(lim_data_indeces):
+    '''
+    gets the beginning and ending row index of the limited evolutionary tracks
+    
+    Parameters
+    ----------
+    lim_data_indeces : list of lists
+        (see the "limit_parameter_range" function)
+        each lists contains all the indeces that are valid for limited data
+    
+    Returns 
+    -------
+    tracks : list of lists
+        the ith list has 1st element being the starting row index of the ith limited stellar evolutionary track and the 2nd element is the last row index of the ith limited stellar evolutionary track
+    '''
     tracks = []
     track_start = lim_data_indeces[0]
     for i in range(len(lim_data_indeces)-1):
@@ -110,7 +252,34 @@ def find_lim_tracks(lim_data_indeces):
     return tracks
         
 
-def limit_parameter_range(data,pref): #allows the ability to optimize computation by training only on a limited range on multiple variables to just that is useful for the current scientific enquiry.
+def limit_parameter_range(data,pref): 
+    '''
+    gets the indeces of rows within the parameter limits as given by the pereferences file
+    
+    Parameters
+    ----------
+    data : dict
+        the data dict returned by "create_data_dict" 
+    pref : dict
+        keys: 
+            grid_pref : preferences for stellar grid that is to be used for training
+                inputs : dict
+                    contains a dictionary for each input parameter 
+                    each of these dictionaries includes the column corresponding to that parameter in the stellar grid, whether the variable should be logged and if there are any desired limits on the values. 
+                outputs : dict
+                    contains a list of dictionaries, each of which contains the column corresponding to an output parameter
+            NN_pref : dict
+                contains values for each of the neural net inputs required to compile the model and train the neural net
+            RunMode : int
+                deprecated
+    Returns 
+    -------
+    tracks : list of lists
+        (see the "find_lim_tracks" function)
+        the ith list has 1st element being the starting row index of the ith limited stellar evolutionary track and the 2nd element is the last row index of the ith limited stellar evolutionary track
+    lim_data_indeces : list of lists
+        each lists contains all the indeces that are valid for limited data
+    '''
     tracks = find_tracks(data=data)
     input_cols = set().union(*(d.keys() for d in [pref['grid_pref']['inputs']]))
 
@@ -136,6 +305,37 @@ def limit_parameter_range(data,pref): #allows the ability to optimize computatio
         return tracks, lim_data_indeces
  
 def gen_parameter_tracks(data,tracks,param,pref):
+    '''
+    gets the limited track data for a single parameter
+    
+    Parameters
+    ----------
+    data : dict
+        the data dict returned by "create_data_dict" 
+    tracks : list of lists
+        (see the "find_lim_tracks" function)
+        the ith list has 1st element being the starting row index of the ith limited stellar evolutionary track and the 2nd element is the last row index of the ith limited stellar evolutionary track
+    param : str
+        the name corresponding to a key in either the input or output dicts of the preferences file which describes same parameter       
+    pref : dict
+        keys: 
+            grid_pref : preferences for stellar grid that is to be used for training
+                inputs : dict
+                    contains a dictionary for each input parameter 
+                    each of these dictionaries includes the column corresponding to that parameter in the stellar grid, whether the variable should be logged and if there are any desired limits on the values. 
+                outputs : dict
+                    contains a list of dictionaries, each of which contains the column corresponding to an output parameter
+            NN_pref : dict
+                contains values for each of the neural net inputs required to compile the model and train the neural net
+            RunMode : int
+                deprecated
+        
+    Returns 
+    -------
+    x : 1D-array
+        contains the data for a single parameter, limited by the given limits on the input parameters
+        (see the "limit_parameter_range" function)
+    '''
     if param in set().union(*(d.keys() for d in [pref['grid_pref']['outputs']])):
         x = data['outputs'][param][tracks[0][0]:tracks[0][1]+1]
         for i in range(1,len(tracks)):
@@ -150,6 +350,17 @@ def gen_parameter_tracks(data,tracks,param,pref):
     return x
 
 def HRplot(tracks,data):
+    '''
+    plots a HR-diagram
+    Parameters
+    ----------
+    data : dict
+        the data dict returned by "create_data_dict" 
+    tracks : list of lists
+        (see the "find_lim_tracks" function)
+        the ith list has 1st element being the starting row index of the ith limited stellar evolutionary track and the 2nd element is the last row index of the ith limited stellar evolutionary track    
+    '''
+    
     temp = gen_parameter_tracks(data=data,tracks=tracks,param='T')
     lum = gen_parameter_tracks(data=data,tracks=tracks,param='L')
     mass = gen_parameter_tracks(data=data,tracks=tracks,param='M')
@@ -162,10 +373,59 @@ def HRplot(tracks,data):
     plt.show() 
 
 def dex_calc(d,m):
+    '''
+    Parameters
+    ----------
+    d : grid data for an output parameter
+    m : data predicted by the neural net for the same output parameter as "d"
+    
+    Returns 
+    -------
+    the dex for some output parameter
+    '''
     return np.mean(abs((d-m)/d))
     
     
 def plotHist(training,model,input_data,tracks,data,pref,file,history_dict):
+    '''
+    plots training history and HR-diagram of data and predicted data for comparison
+
+    Parameters
+    ----------
+    traning : <class 'tensorflow.python.keras.callbacks.History'>
+        object containing data from neural net training
+    model : <class 'tensorflow.python.keras.engine.training.Model'>
+        object containing the neural net model
+    input_data : nD-array
+        each column is the data of the input parameters used train the neural net 
+    tracks : list of lists
+        (see the "find_lim_tracks" function)
+        the ith list has 1st element being the starting row index of the ith limited stellar evolutionary track and the 2nd element is the last row index of the ith limited stellar evolutionary track   
+    data : dict
+        the data dict returned by "create_data_dict" 
+    pref : dict
+        keys: 
+            grid_pref : preferences for stellar grid that is to be used for training
+                inputs : dict
+                    contains a dictionary for each input parameter 
+                    each of these dictionaries includes the column corresponding to that parameter in the stellar grid, whether the variable should be logged and if there are any desired limits on the values. 
+                outputs : dict
+                    contains a list of dictionaries, each of which contains the column corresponding to an output parameter
+            NN_pref : dict
+                contains values for each of the neural net inputs required to compile the model and train the neural net
+            RunMode : int
+                deprecated
+    file : str
+        Name of stellar grid file, without file extension
+    history_dict : dict
+        keys:
+            mae : 1D-array = MAE for each epoch of the model being trained 
+            mse : 1D-array = MSE for each epoch of the model being trained 
+            val_mae : 1D-array = validation MAE for each epoch of the model being trained 
+            val_mse : 1D-array = validation MSE for each epoch of the model being trained 
+            epoch : int = number of epochs the current model has been trained for
+            weights : 2D-array where the 1st column contains the weights and the 2nd column contains the biases for the current model    
+    '''
     print('working')
     fig, ax = plt.subplots(nrows = 2, ncols=2, figsize=(20,20))
     #ax = ax.flatten()
@@ -248,6 +508,19 @@ def plotHist(training,model,input_data,tracks,data,pref,file,history_dict):
     print('working7')
 
 def shuffle_data(input_data,output_data):
+    '''
+    shuffles the input and output data by the same permutation
+    
+    Parameters
+    ----------
+    input_data : nD-array
+        each column is the data of an input parameters used to train the neural net 
+    output_data : nD-array
+        each column is the data of an output parameters used to train the neural net 
+    Returns 
+    -------
+    input_data, output_data shuffled using the permutation p
+    '''
     p = np.random.permutation(len(input_data[0,:]))
     for i in range(len(input_data)):
         input_data[i,:] = input_data[i,:][p]
@@ -257,6 +530,34 @@ def shuffle_data(input_data,output_data):
     return input_data,output_data
 
 def format_input_ouput(data,track_indeces,pref,shuffle):
+    '''
+    logs and shuffles data as required to produce the input and output data arrays
+    
+    Parameters
+    ----------
+     data : dict
+        the data dict returned by "create_data_dict" 
+    track_indeces : list of lists
+        (is the same as "lim_data_indeces" from the "limit_parameter_range" function)
+        each lists contains all the indeces that are valid for limited data
+    pref : dict
+        keys: 
+            grid_pref : preferences for stellar grid that is to be used for training
+                inputs : dict
+                    contains a dictionary for each input parameter 
+                    each of these dictionaries includes the column corresponding to that parameter in the stellar grid, whether the variable should be logged and if there are any desired limits on the values. 
+                outputs : dict
+                    contains a list of dictionaries, each of which contains the column corresponding to an output parameter
+            NN_pref : dict
+                contains values for each of the neural net inputs required to compile the model and train the neural net
+            RunMode : int
+                deprecated
+    shuffle : bool
+        True = shuffle the data
+    Returns 
+    -------
+    input_data, output_data = the array formats used by the neural net
+    '''
     input_list = sorted(list(set().union(*(d.keys() for d in [data['inputs']]))))
     output_list = sorted(list(set().union(*(d.keys() for d in [data['outputs']]))))
     input_data=np.vstack(([data['inputs'][i][track_indeces] for i in sorted(list(set().union(*(d.keys() for d in [data['inputs']]))))]))
@@ -275,6 +576,30 @@ def format_input_ouput(data,track_indeces,pref,shuffle):
     return input_data, output_data
 
 def save_history(history_dict,training,model,model_name):
+    '''
+    saves the training history to a history file
+    
+    Parameters
+    ----------
+    history_dict : dict
+        if a history_dict doesn't exist for the current model, history_dict will equal None, otherwise:        
+        keys:
+            mae : 1D-array = MAE for each epoch of the model being trained 
+            mse : 1D-array = MSE for each epoch of the model being trained 
+            val_mae : 1D-array = validation MAE for each epoch of the model being trained 
+            val_mse : 1D-array = validation MSE for each epoch of the model being trained 
+            epoch : int = number of epochs the current model has been trained for
+            weights : 2D-array where the 1st column contains the weights and the 2nd column contains the biases for the current model
+    traning : <class 'tensorflow.python.keras.callbacks.History'>
+        object containing data from neural net training
+    model : <class 'tensorflow.python.keras.engine.training.Model'>
+        object containing the neural net model
+    model_name : str
+        the string inputted to be the name of the model
+    Returns 
+    -------
+    updated history_dict, formatted as above
+    '''
     if history_dict == None:
         history_dict = {
                        "mae":training.history['mae'],
@@ -303,7 +628,49 @@ def save_history(history_dict,training,model,model_name):
 
 
 def NN_setup(input_data,output_data,pref,model_name,new): #inputs = list where each element is all the desired data for a varaible i.e. data[:,2][track_indeces]
-    #new = True #train new neural net
+    '''
+    creates and compiles the neural net model
+    
+    Parameters
+    ----------
+    input_data : nD-array
+        each column is the data of an input parameters used to train the neural net 
+    output_data : nD-array
+        each column is the data of an output parameters used to train the neural net 
+    pref : dict
+        keys: 
+            grid_pref : preferences for stellar grid that is to be used for training
+                inputs : dict
+                    contains a dictionary for each input parameter 
+                    each of these dictionaries includes the column corresponding to that parameter in the stellar grid, whether the variable should be logged and if there are any desired limits on the values. 
+                outputs : dict
+                    contains a list of dictionaries, each of which contains the column corresponding to an output parameter
+            NN_pref : dict
+                contains values for each of the neural net inputs required to compile the model and train the neural net
+            RunMode : int
+                deprecated
+    model_name : str
+        the string inputted to be the name of the model
+    new : bool
+        True = create a new model
+        False = load model using "model_name"
+    Returns 
+    -------
+    model : <class 'tensorflow.python.keras.engine.training.Model'>
+        object containing the neural net model
+    history_dict : dict
+        if new = True:
+            history_dict : None
+        elif new = False:
+            history_dict : dict
+            keys:
+                mae : 1D-array = MAE for each epoch of the model being trained 
+                mse : 1D-array = MSE for each epoch of the model being trained 
+                val_mae : 1D-array = validation MAE for each epoch of the model being trained 
+                val_mse : 1D-array = validation MSE for each epoch of the model being trained 
+                epoch : int = number of epochs the current model has been trained for
+                weights : 2D-array where the 1st column contains the weights and the 2nd column contains the biases for the current model
+    '''
     if new == True:
         inputs=keras.Input(shape=(len(input_data),))
         xx=keras.layers.Dense(pref['NN_pref']['nodes'],activation='relu')(inputs)
@@ -333,6 +700,43 @@ def NN_setup(input_data,output_data,pref,model_name,new): #inputs = list where e
     return model, history_dict
 
 def train_NN(data,pref,track_indeces,tracks,model_name,file,new):
+    '''
+    trains neural net and saves the history and model
+    
+    Parameters
+    ----------
+    data : dict
+        the data dict returned by "create_data_dict" 
+    pref : dict
+        keys: 
+            grid_pref : preferences for stellar grid that is to be used for training
+                inputs : dict
+                    contains a dictionary for each input parameter 
+                    each of these dictionaries includes the column corresponding to that parameter in the stellar grid, whether the variable should be logged and if there are any desired limits on the values. 
+                outputs : dict
+                    contains a list of dictionaries, each of which contains the column corresponding to an output parameter
+            NN_pref : dict
+                contains values for each of the neural net inputs required to compile the model and train the neural net
+            RunMode : int
+                deprecated
+    track_indeces : list of lists
+        (is the same as "lim_data_indeces" from the "limit_parameter_range" function)
+        each lists contains all the indeces that are valid for limited data
+    tracks : list of lists
+        the ith list has 1st element being the starting row index of the ith limited stellar evolutionary track and the 2nd element is the last row index of the ith limited stellar evolutionary track
+    model_name : str
+        the string inputted to be the name of the model
+    file : str
+        Name of stellar grid file, without file extension
+    new : bool
+        True = create a new model
+        False = load model using "model_name"
+    Returns 
+    -------
+    traning : <class 'tensorflow.python.keras.callbacks.History'>
+        object containing data from neural net training
+    model : <class 'tensorflow.python.keras.engine.training.Model'>
+    '''
     input_data, output_data = format_input_ouput(data=data,track_indeces=track_indeces,pref=pref,shuffle=True)
     model, history_dict = NN_setup(input_data,output_data,pref,model_name=model_name,new=new)
     try:
@@ -357,33 +761,22 @@ def train_NN(data,pref,track_indeces,tracks,model_name,file,new):
         model.summary()
         plotHist(training=training,model=model,input_data=input_data.T,tracks=tracks,data=data,pref=pref,file=file,history_dict=history_dict)
     '''
-    
-    
     return training,model
 
-def plot2(model_name,file):
-    fig, ax = plt.subplots(nrows = 1, ncols=1, figsize=(10,20))
-    data,pref = load_file_and_preferences(file=file)
-    data,pref = create_data_dict(data=data,pref=pref)
-    mass = gen_parameter_tracks(data=data,tracks=tracks,param='M')
-    
-    model = keras.models.load_model(model_name)
-    output_order = sorted(list(set().union(*(d.keys() for d in [data['outputs']]))))
-    input_data, output_data = format_input_ouput(data=data,track_indeces=track_indeces,pref=pref,shuffle=False)
-    prediction = model.predict(input_data.T,verbose=2).T
-    for i in range(len(output_order)):
-        if output_order[i] == 'L':
-            L_i = i
-        elif output_order[i] == 'T':
-            T_i = i
-    s2 = ax.scatter(prediction[T_i],prediction[L_i],s=5,c=mass,cmap='viridis')
-    ax.invert_xaxis()
-    ax.set_ylabel(r'$log(L/L_{\odot})$')
-    ax.set_xlabel(r'$log T_{eff}$')
-    fig.colorbar(s2)   
-    plt.show()
 
 def post_training_plot(model_name,file,pref_file):
+    '''
+    plots a set of useful subplots post training
+    
+    Parameters
+    ----------
+    model_name : str
+        the string inputted to be the name of the model
+    file : str
+        Name of stellar grid file, without file extension
+    pref_file : str
+        Name of preferences file to load, without file extension
+    '''
     data,pref = load_file_and_preferences(file=file,pref_file=pref_file)
     model = keras.models.load_model(model_name)
     with open(model_name[:-3]+'_history', 'rb') as in_file:
@@ -476,6 +869,22 @@ def post_training_plot(model_name,file,pref_file):
     plt.show()       
         
 def Run_NeuralNet(file,pref_file,model_name,new):
+    '''
+    Runs a single neural net for a grid file and preferences file
+    
+    Parameters
+    ----------
+    file : str
+        Name of stellar grid file, without file extension
+    pref_file : str
+        Name of preferences file to load, without file extension
+    model_name : str
+        the string inputted to be the name of the model
+    new : bool
+        True = create a new model
+        False = load model using "model_name" 
+    '''
+    
     data,pref = load_file_and_preferences(file=grid_file,pref_file=pref_file)
     if data.any() != None and pref != None:
         data,pref = create_data_dict(data=data,pref=pref)
@@ -495,6 +904,20 @@ def Run_NeuralNet(file,pref_file,model_name,new):
         print("Data or preferences weren\'t loaded properly.")
 
 def Multi_Run(grid_file,pref_files,new):
+    '''
+    Runs a set of neural net for a grid file and list of preferences file
+    
+    Parameters
+    ----------
+    grid_file : str
+        Name of stellar grid file, without file extension
+    pref_files : list of strings
+        each element is the name of a preferences file to load, without file extensions
+    new : bool
+        True = create a new model
+        False = load model using "model_name" 
+        consequently you can either train a set of new models or a set of pretrained models
+    '''
     grid_data = load_grid_only(file=grid_file)
     
     for i in range(len(pref_files)):
