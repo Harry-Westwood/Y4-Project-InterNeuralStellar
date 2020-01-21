@@ -15,12 +15,14 @@ import pickle
 import dill
 import pymc3 as pm
 import theano.tensor as T
+from scipy import constants
 
 class stellarGrid:
     """
     Class object that stores and process relevent information about a stellar grid.
+    Proper spelling of names: step, mass, age, feh, Y, MLT, L, radius, Teff, delnu
     """
-    proper_index = ['step', 'mass', 'age', 'feh', 'Y', 'MLT', 'L', 'Teff', 'delnu']
+    proper_index=['step', 'mass', 'age', 'feh', 'Y', 'MLT', 'L', 'Teff', 'delnu']
     def __init__(self, filename):
         """
         Parameters: 
@@ -40,14 +42,9 @@ class stellarGrid:
         """
         self.file = filename
         
-    def buildIndex(self):
-        """Reads out the headers on the grid csv and saves it as self.indices dictonary"""
+    def loadData(self):
+        """Reads out the csv grid data"""
         self.data = pd.read_csv(self.file)
-        headers = self.data.keys()
-        dictionary={}
-        for i,h in enumerate(headers):
-            dictionary[h]=i
-        self.indices = dictionary
     
     def popIndex(self, names, proper=None):
         """
@@ -68,7 +65,6 @@ class stellarGrid:
             indexDict = {}
             for i,key in enumerate(self.proper_index):
                 if names[i] != None:
-                    self.indices[key] = self.indices.pop(names[i])
                     indexDict[names[i]] = self.proper_index[i]
     
         else:
@@ -77,7 +73,6 @@ class stellarGrid:
                                  +str(len(names))+' given.')
             indexDict = {}
             for i,key in enumerate(proper):
-                self.indices[key] = self.indices.pop(names[i])
                 indexDict[names[i]] = proper[i]
         
         self.data=self.data.rename(columns=indexDict)
@@ -204,7 +199,7 @@ class NNmodel:
     Class object that stores a keras model trained/to be trained on stellar
     grids, and helps plotting its training results.
     """
-    def __init__(self, track_choice, input_index, output_index, non_log_columns=['feh']):
+    def __init__(self, track_choice, input_index, output_index, non_log_columns=['feh'], Teff_scaling=1):
         """
         Parameters: 
         ----------
@@ -234,6 +229,7 @@ class NNmodel:
         self.input_index = input_index
         self.output_index = output_index
         self.non_log_columns = non_log_columns
+        self.Teff_scaling = Teff_scaling
     
     def loadModel(self, filename):
         """
@@ -241,6 +237,13 @@ class NNmodel:
         """
         self.model = keras.models.load_model(filename)
         self.model.summary()
+    
+    def saveHist(self, filename):
+        """Saves the history dictionary into a txt file with pickle"""
+        saving_dict=self.history.history
+        saving_dict.update({'epoch':self.history.epoch})
+        with open(filename, 'wb') as file_pi:
+            pickle.dump(saving_dict, file_pi)
     
     def loadHist(self, filename, filetype):
         """
@@ -289,6 +292,8 @@ class NNmodel:
         nth_track = tracks['track_no'].unique()[nth_track]
         eva_in = self.fetchData(tracks.loc[tracks['track_no'].isin(nth_track)], self.input_index)
         eva_out = self.fetchData(tracks.loc[tracks['track_no'].isin(nth_track)], self.output_index)
+        if 'Teff' in self.output_index:
+            eva_out[self.output_index.index('Teff')] = eva_out[self.output_index.index('Teff')]/self.Teff_scaling
         print('evaluation results:')
         self.model.evaluate(eva_in.T,eva_out.T,verbose=2)
     
@@ -395,6 +400,19 @@ class NNmodel:
         selected = tracks.loc[tracks['track_no'].isin(track_index)]
         return selected
     
+    def calOutputs(self, y_out):
+        output_index = self.output_index
+        if 'Teff' in self.output_index:
+            y_out[self.output_index.index('Teff')] = y_out[self.output_index.index('Teff')]*self.Teff_scaling
+        if 'L' not in self.output_index:
+            if 'radius' in self.output_index and 'Teff' in self.output_index:
+                radius = y_out[self.output_index.index('radius')]
+                Teff = y_out[self.output_index.index('Teff')]
+                y_out[self.output_index.index('radius')] = 4*np.pi()*radius**2*constants.sigma*Teff**4
+                output_index[output_index.index('radius')] = 'L'
+            else: raise NameError('Missing means to calculate luminosity!\nOutput options = '+str(self.output_index))
+        return y_out, output_index
+    
     def plotHR(self, grid, track_no=20, savefile=None, trial_no=None):
         """
         Plots both grid(data) and NN predicted HR diagrams. Can save
@@ -416,7 +434,8 @@ class NNmodel:
         plot_m = tracks['mass']
         x_in = self.fetchData(tracks, self.input_index)
         y_out = self.model.predict(x_in.T,verbose=2).T
-        [Teffm, Lm, Teffg, Lg, M] = [y_out[self.output_index.index('Teff')], y_out[self.output_index.index('L')], 
+        y_out, output_index = self.calOutputs(y_out)
+        [Teffm, Lm, Teffg, Lg, M] = [y_out[output_index.index('Teff')], y_out[output_index.index('L')], 
                                           plot_tracks[0], plot_tracks[1], plot_m]
     
         fig, ax=plt.subplots(1,2,figsize=[16,8])
@@ -429,7 +448,7 @@ class NNmodel:
         ax[1].set_xlim(ax[1].get_xlim()[::-1])
         ax[1].set_ylabel(r'$\log10(L/L_{\odot})$')
         ax[1].set_xlabel(r'$\log10 T_{eff}$')
-        ax[1].set_title('Real data')
+        ax[1].set_title('MESA data')
         fig.subplots_adjust(right=0.83)
         cbar_ax = fig.add_axes([0.85, ax[1].get_position().y0, 0.02, ax[1].get_position().height])
         cbar_ax.text(0.5,1.015,r'$M/M_{\odot}$',fontsize=13,horizontalalignment='center',transform=cbar_ax.transAxes)
@@ -534,12 +553,13 @@ class NNmodel:
         
         #NN prediction
         NN_tracks=np.log10(10**self.model.predict(np.array(x_in).T,verbose=2).T)
+        NN_tracks, output_index = self.calOutputs(NN_tracks)
         NN_age=10**x_in[self.input_index.index('age')]
         
         #plotting the isochrone
         plot_data = self.fetchData(fetched_data, ['Teff','L','age'])
-        [Teffm, Lm, Am, Teffg, Lg, Ag] = [NN_tracks[self.output_index.index('Teff')],
-                                          NN_tracks[self.output_index.index('L')],
+        [Teffm, Lm, Am, Teffg, Lg, Ag] = [NN_tracks[output_index.index('Teff')],
+                                          NN_tracks[output_index.index('L')],
                                           NN_age, plot_data[0], plot_data[1], 10**plot_data[2]]
         fig, ax=plt.subplots(1,2,figsize=[16,8])
         ax[0].scatter(Teffm,Lm,s=5,c=Am, cmap='viridis')
@@ -551,7 +571,7 @@ class NNmodel:
         ax[1].set_xlim(ax[1].get_xlim()[::-1])
         ax[1].set_ylabel(r'$\log10(L/L_{\odot})$')
         ax[1].set_xlabel(r'$\log10 T_{eff}$')
-        ax[1].set_title('Real data')
+        ax[1].set_title('MESA data')
         ax[0].set_xlim(ax[1].get_xlim())
         ax[0].set_ylim(ax[1].get_ylim())
         fig.subplots_adjust(right=0.83)
@@ -586,9 +606,10 @@ class NNmodel:
         
         x_in = self.fetchData(tracks, self.input_index)
         NNtracks = self.model.predict(x_in.T,verbose=2).T
+        NNtracks, output_index = self.calOutputs(NNtracks)
         NNmass=10**x_in[self.input_index.index('mass')]
-        NNx=np.log10((10**NNtracks[self.output_index.index('delnu')])**-4*
-                     (10**NNtracks[self.output_index.index('Teff')])**(3/2))
+        NNx=np.log10((10**NNtracks[output_index.index('delnu')])**-4*
+                     (10**NNtracks[output_index.index('Teff')])**(3/2))
     
         fig, ax=plt.subplots(1,2,figsize=[16,8])
         ax[0].scatter(NNx, NNmass, s=5, c=x_in[1], cmap='viridis')
@@ -598,7 +619,7 @@ class NNmodel:
         s2=ax[1].scatter(SRx, mass, s=5, c=plot_data[3], cmap='viridis')
         ax[1].set_xlabel(r'$\log10\;( \Delta \nu^{-4}{T_{eff}}^{3/2})$')
         ax[1].set_ylabel(r'$M/M_{\odot}$')
-        ax[1].set_title('Real data')
+        ax[1].set_title('MESA data')
         fig.subplots_adjust(right=0.83)
         cbar_ax = fig.add_axes([0.85, ax[1].get_position().y0, 0.02, ax[1].get_position().height])
         cbar_ax.text(0.5,1.015,'log10 Age\n(Gyr)',fontsize=13,horizontalalignment='center',transform=cbar_ax.transAxes)
@@ -639,7 +660,7 @@ class NNmodel:
         s2=ax[1].scatter(plot_data[1], plot_data[0], s=5, c=10**plot_data[2], cmap='viridis')
         ax[1].set_xlabel(r'$\log10\; \Delta \nu$')
         ax[1].set_ylabel(r'$\log10\;Age\;(Gyr)$')
-        ax[1].set_title('Real data')
+        ax[1].set_title('MESA data')
         fig.subplots_adjust(right=0.83)
         cbar_ax = fig.add_axes([0.85, ax[1].get_position().y0, 0.02, ax[1].get_position().height])
         cbar_ax.text(0.5,1.015,r'$M/M_{\odot}$',fontsize=13,horizontalalignment='center',transform=cbar_ax.transAxes)
@@ -673,6 +694,33 @@ class NNmodel:
             hist=dill.load(open( self.history, "rb" ))
         return hist[key][-1]
     
+    def getDex_old(self, grid):
+        """
+        Note: old and wrong dex function, calculates the absolute error ratio instead
+        Calculates the accuracy of each of the NN outputs (without logs) in dex.
+    
+        Parameters:
+        ----------
+        grid: stellarGrid object
+            grid object with track data stored
+    
+        Returns:
+        ----------
+        dex_values: dictionary
+            accuracy of each NN output in dex, has the same length as self.output_index
+            element example: {'mass': 0.005}
+        """
+        tracks = self.prepPlot(grid, track_no=200)
+        x_in = self.fetchData(tracks, self.input_index)
+        y_out = self.fetchData(tracks, self.output_index)
+        NN_tracks=self.model.predict(x_in.T,verbose=2).T
+        dex_values = {}
+        for i,Dout in enumerate(y_out):
+            Mout = 10**NN_tracks[i]
+            Dout = 10**Dout
+            dex_values[self.output_index[i]] = np.mean(abs((Mout-Dout)/Dout))
+        return dex_values
+    
     def getDex(self, grid):
         """
         Calculates the accuracy of each of the NN outputs (without logs) in dex.
@@ -696,7 +744,7 @@ class NNmodel:
         for i,Dout in enumerate(y_out):
             Mout = 10**NN_tracks[i]
             Dout = 10**Dout
-            dex_values[self.output_index[i]] = np.mean(abs((Mout-Dout)/Dout))
+            dex_values[self.output_index[i]] = np.log10(np.mean(abs((Mout-Dout)/Dout)))
         return dex_values
     
     def getWeights(self):
