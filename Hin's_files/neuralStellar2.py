@@ -293,7 +293,7 @@ class NNmodel:
         eva_in = self.fetchData(tracks.loc[tracks['track_no'].isin(nth_track)], self.input_index)
         eva_out = self.fetchData(tracks.loc[tracks['track_no'].isin(nth_track)], self.output_index)
         if 'Teff' in self.output_index:
-            eva_out[self.output_index.index('Teff')] = eva_out[self.output_index.index('Teff')]/self.Teff_scaling
+            eva_out[self.output_index.index('Teff')] = eva_out[self.output_index.index('Teff')]-np.log10(self.Teff_scaling)
         print('evaluation results:')
         self.model.evaluate(eva_in.T,eva_out.T,verbose=2)
     
@@ -400,17 +400,23 @@ class NNmodel:
         selected = tracks.loc[tracks['track_no'].isin(track_index)]
         return selected
     
-    def calOutputs(self, y_out):
-        output_index = self.output_index
+    def calOutputs(self, y_out, check_L=True):
+        """
+        Scales Teff correctly, and if check_L==True and there is no luminosity among
+        NN outputs, calculates luminosity from radius and Teff by:
+        L = 4*pi*R**2*boltzmann_constant*Teff**4
+        """
+        output_index = self.output_index.copy()
         if 'Teff' in self.output_index:
-            y_out[self.output_index.index('Teff')] = y_out[self.output_index.index('Teff')]*self.Teff_scaling
-        if 'L' not in self.output_index:
-            if 'radius' in self.output_index and 'Teff' in self.output_index:
-                radius = y_out[self.output_index.index('radius')]
-                Teff = y_out[self.output_index.index('Teff')]
-                y_out[self.output_index.index('radius')] = 4*np.pi()*radius**2*constants.sigma*Teff**4
-                output_index[output_index.index('radius')] = 'L'
-            else: raise NameError('Missing means to calculate luminosity!\nOutput options = '+str(self.output_index))
+            y_out[self.output_index.index('Teff')] = y_out[self.output_index.index('Teff')]+np.log10(self.Teff_scaling)
+        if check_L:
+            if 'L' not in self.output_index:
+                if 'radius' in self.output_index and 'Teff' in self.output_index:
+                    radius = 10**y_out[self.output_index.index('radius')]
+                    Teff = 10**y_out[self.output_index.index('Teff')]
+                    y_out[self.output_index.index('radius')] = np.log10(radius**2*(Teff/5942.261537)**4)
+                    output_index[output_index.index('radius')] = 'L'
+                else: raise NameError('Missing means to calculate luminosity!\nOutput options = '+str(self.output_index))
         return y_out, output_index
     
     def plotHR(self, grid, track_no=20, savefile=None, trial_no=None):
@@ -739,6 +745,7 @@ class NNmodel:
         tracks = self.prepPlot(grid, track_no=200)
         x_in = self.fetchData(tracks, self.input_index)
         y_out = self.fetchData(tracks, self.output_index)
+        y_out = self.calOutputs(y_out,check_L=False)[0]
         NN_tracks=self.model.predict(x_in.T,verbose=2).T
         dex_values = {}
         for i,Dout in enumerate(y_out):
