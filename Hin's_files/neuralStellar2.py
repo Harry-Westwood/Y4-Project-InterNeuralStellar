@@ -10,12 +10,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rc
 rc("font", family="serif", size=14)
+from datetime import datetime
 import pandas as pd
 import pickle
 import dill
 import pymc3 as pm
 import theano.tensor as T
-from scipy import constants
+import tensorflow as tf
 
 class stellarGrid:
     """
@@ -199,7 +200,8 @@ class NNmodel:
     Class object that stores a keras model trained/to be trained on stellar
     grids, and helps plotting its training results.
     """
-    def __init__(self, track_choice, input_index, output_index, non_log_columns=['feh'], Teff_scaling=1):
+    def __init__(self, track_choice, input_index, output_index, 
+                 non_log_columns=['feh'], Teff_scaling=1, seed=53, precision='float32'):
         """
         Parameters: 
         ----------
@@ -213,6 +215,11 @@ class NNmodel:
             The list of keys that corresponds to the outputs to the NN
         non_log_columns: list of strings, optional
             The list of input keys that is not log10ed when passed to NN
+        Teff_scaling: float, optional
+            scaling factor from NN output Teff to actual Teff
+            (grid Teff = NN output Teff * Teff_scaling)
+        seed: int, optional
+            tensorflow randomization seed
     
         Other class attributes:
         ----------
@@ -230,6 +237,57 @@ class NNmodel:
         self.output_index = output_index
         self.non_log_columns = non_log_columns
         self.Teff_scaling = Teff_scaling
+        self.set_seed(seed)
+        self.precision = precision
+        self.history = None
+    
+    def set_seed(self, seed):
+        ''' Set the seed '''
+        np.random.seed(seed)
+        tf.random.set_seed(seed)
+    
+    def buildModel(self, arch, activation, reg=None, dropout=None):
+        """
+        Builds a new NN to self.model, Prints the summary.
+        
+        Parameters: 
+        ----------
+        arch: list
+            The layer by layer number of nodes, includes input and output layers
+        activation: string
+            The chosen activation function
+        reg: 2-long list, optional
+            regularization is enforced if reg is not None.
+            [0] = str, name of regularizer, l1 or l2, raises Name Error 'Wrong 
+            regularizer name!' if input does not match either of the two.
+            [1] = regularizer value
+        dropout: int, optional
+            dropout is enforced after each hidden layer if not none, dropout fraction
+            given by this value
+        """
+        if reg!=None:
+            if reg[0]=='l1':
+                regu = keras.regularizers.l1(reg[1])
+            elif reg[0]=='l2':
+                regu = keras.regularizers.l2(reg[1])
+            else: raise NameError('Wrong regularizer name!')
+        inputs = keras.Input(shape=(arch[0],))
+        if reg==None:
+            xx = keras.layers.Dense(arch[1],activation=activation)(inputs)
+        else: 
+            xx = keras.layers.Dense(arch[1],activation=activation,kernel_regularizer=regu)(inputs)
+        if dropout is not None:
+            xx = keras.layers.Dropout(dropout)(xx)
+        for i in range(2, len(arch)-1):
+            if reg==None:
+                xx = keras.layers.Dense(arch[i],activation=activation)(xx)
+            else: 
+                xx = keras.layers.Dense(arch[i],activation=activation,kernel_regularizer=regu)(xx)
+            if dropout is not None:
+                xx = keras.layers.Dropout(dropout)(xx)
+        outputs = keras.layers.Dense(arch[-1],activation='linear')(xx)
+        self.model = keras.Model(inputs=inputs, outputs=outputs, name='neuralstellar')
+        self.model.summary()
     
     def loadModel(self, filename):
         """
@@ -237,6 +295,104 @@ class NNmodel:
         """
         self.model = keras.models.load_model(filename)
         self.model.summary()
+        
+    def compileModel(self, opt, lr, loss, metrics=None, beta_1=0.9, beta_2=0.999):
+        """
+        Compiles self.model with Nadam optimizer.
+        
+        Parameters: 
+        ----------
+        opt: string
+            name of optimizer used, Nadam or SDG
+        lr: float
+            learning rate
+        loss: str
+            metric to measure the loss
+        metrics: list, optional
+            list of metrics to be calculated
+        beta_1 and beta_2: float, optional, as defined in keras nadam optimizer
+        """
+        if opt=='Nadam':
+            optimizer=keras.optimizers.Nadam(lr=lr, beta_1=beta_1, beta_2=beta_2)
+        elif opt=='SGD':
+            optimizer=keras.optimizers.SDG(learning_rate=lr)
+        else: raise NameError('No such optimizer!!')
+        if metrics!=None:
+            self.model.compile(optimizer=optimizer,loss=loss, metrics=metrics)
+        else: self.model.compile(optimizer=optimizer,loss=loss)
+    
+    def setWeights(self, model):
+        """
+        set the model weights to be identical to the model given
+        """
+        self.model.set_weights(model.get_weights())
+    
+    def fitModel(self, df, cols, epoch_no, batch_size, save_name, vsplit=0.3, 
+                 callback=[], baseline=0.0005, fractional_patience=0.1):
+        """
+        Trains self.model, saves history to self.history.
+        
+        Parameters: 
+        ----------
+        df: pandas dataframe, the track data
+        cols: list
+        cols[0] = input columns, cols[1] = output columns, of df
+        epoch_no: int
+            number of epochs to train the NN for
+        batch_size: int
+            batch_size of NN training, for the gird, ideally set this to the length
+            of the training data
+        save_name: str
+            file name to save the trained NN to
+        vsplit: float, optional
+            validation_split during training, default to 0.1
+        callback: list of strings, optional
+            callback options to choose from a combination of TensorBoard,
+            EarlyStopping and ModelCheckpoint
+        baseline and fractional_patience: float, optional
+            parameters for EarlyStopping
+        """
+        x = np.log10(df[cols[0]].values).astype(self.precision)
+        y = np.log10(df[cols[1]].values).astype(self.precision)
+        cb=[]
+        if 'tb' in callback:
+            logdir = "/logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+            tb = keras.callbacks.TensorBoard(log_dir=logdir)
+            cb.append(tb)
+        if 'es' in callback:
+            patience = int(fractional_patience * epoch_no)
+            es = keras.callbacks.EarlyStopping(monitor='val_loss', mode='min',
+                                           baseline=baseline, patience=patience)
+            cb.append(es)
+        if 'mc' in callback:
+            mc = keras.callbacks.ModelCheckpoint(f'{save_name}_best_model.h5',
+                                             monitor='val_loss',
+                                             mode='min', save_best_only=True)
+            cb.append(mc)
+    
+        start_time=datetime.now()
+        history = self.model.fit(x,y,
+                          epochs=epoch_no,
+                          batch_size=batch_size,
+                          validation_split=vsplit,
+                          verbose=0,
+                          callbacks=cb)
+        print('training done! now='+str(datetime.now())+' | Time lapsed='+str(datetime.now()-start_time))
+        self.model.save(f'{save_name}.h5')
+        epoch = history.epoch
+        hist = history.history
+        if self.history is not None:
+            old_epoch = self.history['epoch']
+            epoch = np.array(epoch)
+            epoch += max(old_epoch)+1
+            joined_epoch = old_epoch + list(epoch)
+            self.history['epoch'] = joined_epoch
+            for key in hist.keys():
+                joined_key = self.history[key]+hist[key]
+                self.history[key] = joined_key
+        else:
+            hist.update({'epoch':epoch})
+            self.history = hist
     
     def saveHist(self, filename):
         """Saves the history dictionary into a txt file with pickle"""
@@ -250,8 +406,24 @@ class NNmodel:
         Passes the history file name to self.history, does basically nothing
         Note: filetype = 'pickle' or 'dill', depends on how the history file was saved
         """
-        self.history = filename
-        self.hist_type = filetype
+        if filetype == 'pickle':
+            history = pickle.load(open( self.history, "rb" ))
+        elif filetype == 'dill':
+            history = dill.load(open( self.history, "rb" ))
+        else:
+            raise NameError('Incorrect history type '+str(filetype)+'!')
+        if self.history is not None:
+            old_epoch = self.history['epoch']
+            epoch = np.array(history['epoch'])
+            epoch += (max(old_epoch)+1)
+            joined_epoch = old_epoch + list(epoch)
+            self.history['epoch'] = joined_epoch
+            for key in history.keys():
+                if key!='epoch':
+                    joined_key = self.history[key]+history[key]
+                    self.history[key] = joined_key
+        else:
+            self.history = history
     
     def fetchData(self, tracks, parameters):
         """
@@ -317,14 +489,8 @@ class NNmodel:
             only used if savefile is not None. The trial number to be tagged after
             the diagram savename, matches the excel notes.
         """
-        if self.hist_type=='pickle':
-            hist=pickle.load(open( self.history, "rb" ))
-            epoch=hist['epoch']
-        elif self.hist_type=='dill':
-            hist=dill.load(open( self.history, "rb" ))
-            epoch=np.arange(hist['epoch'])
-        else:
-            raise NameError('Incorrect history type '+str(self.hist_type)+'!')
+        hist = self.history
+        epoch = hist['epoch']
         keys = hist.keys()
         if 'MAE' in keys:
             MAE,valMAE=hist['MAE'],hist['val_MAE']
@@ -694,11 +860,7 @@ class NNmodel:
             key to the history dictionary that holds the loss function,
             e.g. 'MAE'
         """
-        if self.hist_type=='pickle':
-            hist=pickle.load(open( self.history, "rb" ))
-        elif self.hist_type=='dill':
-            hist=dill.load(open( self.history, "rb" ))
-        return hist[key][-1]
+        return self.history[key][-1]
     
     def getDex_old(self, grid):
         """
