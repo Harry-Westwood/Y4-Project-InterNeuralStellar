@@ -24,7 +24,7 @@ class stellarGrid:
     Class object that stores and process relevent information about a stellar grid.
     Proper spelling of names: step, mass, age, feh, Y, MLT, L, radius, Teff, delnu
     """
-    proper_index=['step', 'mass', 'age', 'feh', 'Y', 'MLT', 'L', 'Teff', 'delnu']
+    proper_index=['step', 'mass', 'age', 'feh', 'Y', 'MLT', 'L', 'radius', 'Teff', 'delnu']
     def __init__(self, filename):
         """
         Parameters: 
@@ -258,6 +258,7 @@ class NNmodel:
         ----------
         arch: list
             The layer by layer number of nodes, includes input and output layers
+            if layer is specified with 'bn', then layer is a batch normalization layer
         activation: string
             The chosen activation function
         reg: 2-long list, optional
@@ -278,19 +279,25 @@ class NNmodel:
         if activation=='swish':
             activation=self.swish
         inputs = keras.Input(shape=(arch[0],))
-        if reg==None:
-            xx = keras.layers.Dense(arch[1],activation=activation)(inputs)
-        else: 
-            xx = keras.layers.Dense(arch[1],activation=activation,kernel_regularizer=regu)(inputs)
-        if dropout is not None:
-            xx = keras.layers.Dropout(dropout)(xx)
-        for i in range(2, len(arch)-1):
+        if arch[1]=='bn':
+            xx = keras.layers.BatchNormalization()(inputs)
+        else:
             if reg==None:
-                xx = keras.layers.Dense(arch[i],activation=activation)(xx)
+                xx = keras.layers.Dense(arch[1],activation=activation)(inputs)
             else: 
-                xx = keras.layers.Dense(arch[i],activation=activation,kernel_regularizer=regu)(xx)
+                xx = keras.layers.Dense(arch[1],activation=activation,kernel_regularizer=regu)(inputs)
             if dropout is not None:
                 xx = keras.layers.Dropout(dropout)(xx)
+        for i in range(2, len(arch)-1):
+            if arch[i]=='bn':
+                xx = keras.layers.BatchNormalization()(xx)
+            else:
+                if reg==None:
+                    xx = keras.layers.Dense(arch[i],activation=activation)(xx)
+                else: 
+                    xx = keras.layers.Dense(arch[i],activation=activation,kernel_regularizer=regu)(xx)
+                if dropout is not None:
+                    xx = keras.layers.Dropout(dropout)(xx)
         outputs = keras.layers.Dense(arch[-1],activation='linear')(xx)
         self.model = keras.Model(inputs=inputs, outputs=outputs, name='neuralstellar')
         self.model.summary()
@@ -371,7 +378,7 @@ class NNmodel:
                                            baseline=baseline, patience=patience)
             cb.append(es)
         if 'mc' in callback:
-            mc = keras.callbacks.ModelCheckpoint(f'{save_name}_best_model.h5',
+            mc = keras.callbacks.ModelCheckpoint('{}_best_model.h5'.format(save_name),
                                              monitor='val_loss',
                                              mode='min', save_best_only=True)
             cb.append(mc)
@@ -384,7 +391,7 @@ class NNmodel:
                           verbose=0,
                           callbacks=cb)
         print('training done! now='+str(datetime.now())+' | Time lapsed='+str(datetime.now()-start_time))
-        self.model.save(f'{save_name}.h5')
+        self.model.save('{}.h5'.format(save_name))
         epoch = history.epoch
         hist = history.history
         if self.history is not None:
@@ -470,8 +477,8 @@ class NNmodel:
         eva_out = self.fetchData(tracks.loc[tracks['track_no'].isin(nth_track)], self.output_index)
         if 'Teff' in self.output_index:
             eva_out[self.output_index.index('Teff')] = eva_out[self.output_index.index('Teff')]-np.log10(self.Teff_scaling)
-        #print('evaluation results:')
-        return self.model.evaluate(eva_in.T,eva_out.T,verbose=2)
+        print('evaluation results:')
+        self.model.evaluate(eva_in.T,eva_out.T,verbose=2)
     
     def plotHist(self, plot_MSE=True, epochs=None, savefile=None, trial_no=None):
         """
@@ -634,7 +641,7 @@ class NNmodel:
             fig.savefig(savefile+'/HR'+str(trial_no)+'.png')
             print('HR diagram saved as "'+savefile+'/HR'+str(trial_no)+'.png"')
     
-    def plotIsochrone(self, grid, iso_ages, indices, isos, widths=None, N=5000, savefile=None, trial_no=None):
+    def plotIsochrone(self, grid, iso_ages, indices, isos, widths=None, N=5000, one_per_track=True, savefile=None, trial_no=None):
         """
         Plots both grid(data) and NN predicted isochrones of specified ages in HR
         diagrams, with the colour bar showing variation in age. Can save plot.
@@ -650,7 +657,7 @@ class NNmodel:
             'age' must be at the first index.
         isos: list/array of, length = len(self.input_index)-2 (no age)
             the 'mean values', mu of the parameters other than age to be constrainted
-        widths: 2D list, length = len(self.input_index)-1 (has age)
+        widths: 2D list, length = len(self.input_index)-1 (has age), optional
             the 'boundary width', delta to be added onto the relevent isos number, making
             the selector select data falling between mu-delta and mu+delta.
             For each (ith) input parameter, if widths[i][0]=='r', boundary width is 
@@ -658,6 +665,9 @@ class NNmodel:
             if widths[i][0]=='a', boundary width is absolute: ie. delta = widths[i][1].
             If the iso parameter (mu) is zero and widths[i][0] is set to 'r',
             will force an arbituary width of 0.05 to this instance of the parameter.
+        one_per_track: bool, optional
+            if True: each track only supply one point in the grid plot
+            if False: multiple points can be supplied per track
     
         Note: indices, isos and widths must be in the same order in terms of stellar
         parameters, and age must always come first, for example, if 4 parameters go
@@ -697,12 +707,15 @@ class NNmodel:
                 else: age_width = 0.05
             else: age_width=widths[0][1]
             all_tracks = data[(data['age'] >= iso_age-age_width) & (data['age'] <= iso_age+age_width)]
-            for i,track_no in enumerate(all_tracks['track_no'].unique()):
-                track_data = all_tracks.loc[all_tracks.track_no==track_no]
-                if len(track_data.index)>1:
-                    age_dist = abs(track_data['age'].values-iso_age)
-                    fetched_data = fetched_data.append(track_data.iloc[np.argmin(age_dist)],sort=True)
-                else: fetched_data = fetched_data.append(track_data,sort=True)
+            if one_per_track==True:
+                for i,track_no in enumerate(all_tracks['track_no'].unique()):
+                    track_data = all_tracks.loc[all_tracks.track_no==track_no]
+                    if len(track_data.index)>1:
+                        age_dist = abs(track_data['age'].values-iso_age)
+                        fetched_data = fetched_data.append(track_data.iloc[np.argmin(age_dist)],sort=True)
+                    else: fetched_data = fetched_data.append(track_data,sort=True)
+            else:
+                fetched_data = fetched_data.append(all_tracks, sort=True)
         print('found '+str(len(fetched_data.index))+' stars.')
         
         #creating new input lists for NN to predict
