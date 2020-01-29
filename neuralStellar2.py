@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rc
 rc("font", family="serif", size=14)
-from datetime import datetime
+from datetime import datetime,timedelta
 import pandas as pd
 import pickle
 import dill
@@ -241,6 +241,7 @@ class NNmodel:
         self.set_seed(seed)
         self.precision = precision
         self.history = None
+        self.leg = {}
     
     def set_seed(self, seed):
         ''' Set the seed '''
@@ -325,6 +326,9 @@ class NNmodel:
             list of metrics to be calculated
         beta_1 and beta_2: float, optional, as defined in keras nadam optimizer
         """
+        self.leg['recompile'] = True
+        self.leg['optimizer'] = opt
+        self.leg['lr'] = lr
         if opt=='Nadam':
             optimizer=keras.optimizers.Nadam(lr=lr, beta_1=beta_1, beta_2=beta_2)
         elif opt=='SGD':
@@ -341,10 +345,10 @@ class NNmodel:
         self.model.set_weights(model.get_weights())
     
     def fitModel(self, df, cols, epoch_no, batch_size, save_name, vsplit=0.3, 
-                 callback=[], baseline=0.0005, fractional_patience=0.1):
+              callback=[], baseline=0.0005, fractional_patience=0.1):
         """
         Trains self.model, saves history to self.history.
-        
+    
         Parameters: 
         ----------
         df: pandas dataframe, the track data
@@ -365,6 +369,18 @@ class NNmodel:
         baseline and fractional_patience: float, optional
             parameters for EarlyStopping
         """
+        if self.history is None:
+            self.leg['leg_no']=1
+        else:
+            last_leg = self.history['legs'][-1]
+            self.leg['leg_no'] = last_leg['leg_no']+1
+            if 'recompile' not in self.leg:
+                self.leg['optimizer'] = last_leg['optimizer']
+                self.leg['lr'] = last_leg['lr']
+                self.leg['recompile'] = False
+        self.leg['batch_size'] = batch_size
+        self.leg['epoch_no'] = epoch_no
+        
         x = np.log10(df[cols[0]].values).astype(self.precision)
         y = np.log10(df[cols[1]].values).astype(self.precision)
         cb=[]
@@ -375,12 +391,12 @@ class NNmodel:
         if 'es' in callback:
             patience = int(fractional_patience * epoch_no)
             es = keras.callbacks.EarlyStopping(monitor='val_loss', mode='min',
-                                           baseline=baseline, patience=patience)
+                                            baseline=baseline, patience=patience)
             cb.append(es)
         if 'mc' in callback:
             mc = keras.callbacks.ModelCheckpoint('{}_best_model.h5'.format(save_name),
-                                             monitor='val_loss',
-                                             mode='min', save_best_only=True)
+                                              monitor='val_loss',
+                                              mode='min', save_best_only=True)
             cb.append(mc)
     
         start_time=datetime.now()
@@ -390,29 +406,32 @@ class NNmodel:
                           validation_split=vsplit,
                           verbose=0,
                           callbacks=cb)
-        print('training done! now='+str(datetime.now())+' | Time lapsed='+str(datetime.now()-start_time))
+        runtime = datetime.now()-start_time
+        self.leg['runtime'] = runtime
+        print('training done! now='+str(datetime.now())+' | Time lapsed='+str(runtime))
         self.model.save('{}.h5'.format(save_name))
-        epoch = history.epoch
         hist = history.history
         if self.history is not None:
-            old_epoch = self.history['epoch']
-            epoch = np.array(epoch)
-            epoch += max(old_epoch)+1
-            joined_epoch = old_epoch + list(epoch)
-            self.history['epoch'] = joined_epoch
+            self.history['legs'] = self.history['legs']+[self.leg]
             for key in hist.keys():
                 joined_key = self.history[key]+hist[key]
                 self.history[key] = joined_key
+            max_epoch = -1
+            for leg in self.history['legs']:
+                max_epoch+=leg['epoch_no']
+            self.train_epochs=[max_epoch,max_epoch+epoch_no]
         else:
-            hist.update({'epoch':epoch})
+            hist['legs'] = [self.leg]
             self.history = hist
+            self.train_epochs=[0,epoch_no-1]
+        self.leg = {}
     
     def saveHist(self, filename):
         """Saves the history dictionary into a txt file with pickle"""
         with open(filename, 'wb') as file_pi:
             pickle.dump(self.history, file_pi)
     
-    def loadHist(self, filename, filetype):
+    def loadHist(self, filename, filetype, append=False):
         """
         Passes the history file name to self.history, does basically nothing
         Note: filetype = 'pickle' or 'dill', depends on how the history file was saved
@@ -423,18 +442,32 @@ class NNmodel:
             history = dill.load(open( filename, "rb" ))
         else:
             raise NameError('Incorrect history type '+str(filetype)+'!')
-        if self.history is not None:
-            old_epoch = self.history['epoch']
-            epoch = np.array(history['epoch'])
-            epoch += (max(old_epoch)+1)
-            joined_epoch = old_epoch + list(epoch)
-            self.history['epoch'] = joined_epoch
-            for key in history.keys():
-                if key!='epoch':
+        if append==True:
+            if self.history is not None:
+                for key in history.keys():
                     joined_key = self.history[key]+history[key]
                     self.history[key] = joined_key
-        else:
-            self.history = history
+            else:
+                self.history = history
+        else: self.history = history
+    
+    def runtime(self):
+        """
+        calculates the total runtime spent on this model from self.history['legs']
+        """
+        runtime=timedelta()
+        for leg in self.history['legs']:
+            runtime+=leg['runtime']
+        return runtime
+    
+    def saveLegs(self, savefile):
+        df = pd.DataFrame()
+        for leg in self.history['legs']:
+            leg['runtime']=str(leg['runtime'])
+            df2=pd.DataFrame(leg, index=[0])
+            df=df.append(df2, ignore_index=True, sort=True)
+        df = df[['leg_no','optimizer','lr','batch_size','epoch_no','recompile','runtime']]
+        df.to_csv(path_or_buf=savefile, index=False)
     
     def fetchData(self, tracks, parameters):
         """
@@ -480,11 +513,11 @@ class NNmodel:
         print('evaluation results:')
         self.model.evaluate(eva_in.T,eva_out.T,verbose=2)
     
-    def plotHist(self, plot_MSE=True, epochs=None, savefile=None, trial_no=None):
+    def plotHist(self, plot_MSE=True, epochs=None, this_train=False, savefile=None, trial_no=None):
         """
         Plots both training and validation loss vs epochs form training history. Can save
         plot.
-        
+    
         Parameters:
         ----------
         plot_MSE: bool, optional
@@ -500,8 +533,16 @@ class NNmodel:
             only used if savefile is not None. The trial number to be tagged after
             the diagram savename, matches the excel notes.
         """
+        max_epoch = -1
+        for leg in self.history['legs']:
+            max_epoch+=leg['epoch_no']
+        if epochs is not None:
+            if epochs[1]=='max':
+                epochs[1]=max_epoch
+        if this_train==True:
+            epochs=self.train_epochs
         hist = self.history
-        epoch = hist['epoch']
+        epoch = np.arange(max_epoch+1)
         keys = hist.keys()
         if 'MAE' in keys:
             MAE,valMAE=hist['MAE'],hist['val_MAE']
@@ -510,9 +551,9 @@ class NNmodel:
         elif 'mean_absolute_error' in keys:
             MAE,valMAE=hist['mean_absolute_error'],hist['val_mean_absolute_error']
         if type(epochs)!=type(None):
-            epoch = epoch[epochs[0]:epochs[1]]
-            MAE = MAE[epochs[0]:epochs[1]]
-            valMAE = valMAE[epochs[0]:epochs[1]]
+            epoch = epoch[epochs[0]:epochs[1]+1]
+            MAE = MAE[epochs[0]:epochs[1]+1]
+            valMAE = valMAE[epochs[0]:epochs[1]+1]
         fig, ax = plt.subplots(1, 1)
         ax.plot(epoch,MAE,'b',label='MAE')
         ax.plot(epoch,valMAE,'r',label='valMAE')
@@ -524,8 +565,8 @@ class NNmodel:
             elif 'mean_absolute_error' in keys:
                 MSE,valMSE=hist['mean_squared_error'],hist['val_mean_squared_error']
             if type(epochs)!=type(None):
-                MSE = MSE[epochs[0]:epochs[1]]
-                valMSE = valMSE[epochs[0]:epochs[1]]
+                MSE = MSE[epochs[0]:epochs[1]+1]
+                valMSE = valMSE[epochs[0]:epochs[1]+1]
             ax.plot(epoch,MSE,'b:',label='MSE')
             ax.plot(epoch,valMSE,'r:',label='valMSE')
         ax.set_yscale('log')
@@ -770,7 +811,7 @@ class NNmodel:
         plt.show()
         if savefile != None:
             fig.savefig(savefile+'/Iso'+str(trial_no)+'.png')
-            print('HR diagram saved as "'+savefile+'/Iso'+str(trial_no)+'.png"')
+            print('Isochrone saved as "'+savefile+'/Iso'+str(trial_no)+'.png"')
     
     def plotSR(self, grid, track_no=20, savefile=None, trial_no=None):
         """
@@ -921,16 +962,15 @@ class NNmodel:
             accuracy of each NN output in dex, has the same length as self.output_index
             element example: {'mass': 0.005}
         """
-        tracks = self.prepPlot(grid, track_no=200)
-        x_in = self.fetchData(tracks, self.input_index)
-        y_out = self.fetchData(tracks, self.output_index)
+        x_in = self.fetchData(grid.data, self.input_index)
+        y_out = self.fetchData(grid.data, self.output_index)
         NN_tracks = self.model.predict(x_in.T,verbose=2).T
         NN_tracks = self.calOutputs(NN_tracks,check_L=False)[0]
         dex_values = {}
         for i,Dout in enumerate(y_out):
             Mout = 10**NN_tracks[i]
             Dout = 10**Dout
-            dex_values[self.output_index[i]] = np.log10(np.mean(abs((Mout-Dout)/Dout)))
+            dex_values[self.output_index[i]] = np.mean(abs((Mout-Dout)/Dout))/np.log(10)
         return dex_values
     
     def getWeights(self):
