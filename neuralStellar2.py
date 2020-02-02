@@ -408,6 +408,9 @@ class NNmodel:
                           callbacks=cb)
         runtime = datetime.now()-start_time
         self.leg['runtime'] = runtime
+        try: last_loss = history.history['mean_absolute_error'][-1]
+        except KeyError: last_loss = history.history['MAE'][-1]
+        self.leg['final_loss'] = last_loss
         print('training done! now='+str(datetime.now())+' | Time lapsed='+str(runtime))
         self.model.save('{}.h5'.format(save_name))
         hist = history.history
@@ -457,7 +460,11 @@ class NNmodel:
         """
         runtime=timedelta()
         for leg in self.history['legs']:
-            runtime+=leg['runtime']
+            try:
+                runtime+=leg['runtime']
+            except TypeError:
+                t=datetime.strptime(leg['runtime'],'%H:%M:%S.%f')
+                runtime+=timedelta(hours=t.hour, minutes=t.minute, seconds=t.second, microseconds=t.microsecond)
         return runtime
     
     def saveLegs(self, savefile):
@@ -466,7 +473,7 @@ class NNmodel:
             leg['runtime']=str(leg['runtime'])
             df2=pd.DataFrame(leg, index=[0])
             df=df.append(df2, ignore_index=True, sort=True)
-        df = df[['leg_no','optimizer','lr','batch_size','epoch_no','recompile','runtime']]
+        df = df[['leg_no','optimizer','lr','batch_size','epoch_no','recompile','final_loss','runtime']]
         df.to_csv(path_or_buf=savefile, index=False)
     
     def fetchData(self, tracks, parameters):
@@ -489,7 +496,7 @@ class NNmodel:
             return np.log10(return_array)
         else: return np.log10(tracks[parameters].values).T
     
-    def evalData(self, grid, nth_track):
+    def evalData(self, grid, nth_track, track_no=None):
         """
         Evaluates the NN on a given grid data, prints the result
     
@@ -499,15 +506,19 @@ class NNmodel:
         nth_track: list
             a list of the nth track to be used for evaluation, in the grid data
         """
-        if self.track_choice == 'evo':
-            tracks = grid.data
-        elif self.track_choice == 'ranged':
-            if grid.ranged_tracks is None:
-                raise NameError('Grid has no ranged tracks!')
-            else: tracks = grid.ranged_tracks
-        nth_track = tracks['track_no'].unique()[nth_track]
-        eva_in = self.fetchData(tracks.loc[tracks['track_no'].isin(nth_track)], self.input_index)
-        eva_out = self.fetchData(tracks.loc[tracks['track_no'].isin(nth_track)], self.output_index)
+        if track_no==None:
+            if self.track_choice == 'evo':
+                tracks = grid.data
+            elif self.track_choice == 'ranged':
+                if grid.ranged_tracks is None:
+                    raise NameError('Grid has no ranged tracks!')
+                else: tracks = grid.ranged_tracks
+            nth_track = tracks['track_no'].unique()[nth_track]
+            selected = tracks.loc[tracks['track_no'].isin(nth_track)]
+        else:
+            selected = self.prepPlot(grid, track_no=track_no)
+        eva_in = self.fetchData(selected, self.input_index)
+        eva_out = self.fetchData(selected, self.output_index)
         if 'Teff' in self.output_index:
             eva_out[self.output_index.index('Teff')] = eva_out[self.output_index.index('Teff')]-np.log10(self.Teff_scaling)
         print('evaluation results:')
@@ -533,16 +544,22 @@ class NNmodel:
             only used if savefile is not None. The trial number to be tagged after
             the diagram savename, matches the excel notes.
         """
-        max_epoch = -1
-        for leg in self.history['legs']:
-            max_epoch+=leg['epoch_no']
-        if epochs is not None:
-            if epochs[1]=='max':
-                epochs[1]=max_epoch
+        hist = self.history
+        if 'epoch' not in self.history.keys():
+            max_epoch = -1
+            for leg in self.history['legs']:
+                max_epoch+=leg['epoch_no']
+            if epochs is not None:
+                if epochs[1]=='max':
+                    epochs[1]=max_epoch
+            epoch = np.arange(max_epoch+1)
+        else:
+            epoch = hist['epoch']
+            if epochs is not None:
+                if epochs[1]=='max':
+                    epochs[1]=max(epoch)
         if this_train==True:
             epochs=self.train_epochs
-        hist = self.history
-        epoch = np.arange(max_epoch+1)
         keys = hist.keys()
         if 'MAE' in keys:
             MAE,valMAE=hist['MAE'],hist['val_MAE']
@@ -656,8 +673,8 @@ class NNmodel:
         tracks = self.prepPlot(grid, track_no)
         plot_tracks = np.log10([tracks['Teff'], tracks['L']])
         plot_m = tracks['mass']
-        x_in = self.fetchData(tracks, self.input_index)
-        y_out = self.model.predict(x_in.T,verbose=2).T
+        x_in = self.fetchData(tracks, self.input_index).T
+        y_out = self.model.predict(x_in,verbose=2, batch_size=len(x_in)).T
         y_out, output_index = self.calOutputs(y_out)
         [Teffm, Lm, Teffg, Lg, M] = [y_out[output_index.index('Teff')], y_out[output_index.index('L')], 
                                           plot_tracks[0], plot_tracks[1], plot_m]
@@ -682,7 +699,8 @@ class NNmodel:
             fig.savefig(savefile+'/HR'+str(trial_no)+'.png')
             print('HR diagram saved as "'+savefile+'/HR'+str(trial_no)+'.png"')
     
-    def plotIsochrone(self, grid, iso_ages, indices, isos, widths=None, N=5000, one_per_track=True, savefile=None, trial_no=None):
+    def plotIsochrone(self, grid, iso_ages, indices, isos, widths=None, N=5000, 
+                      one_per_track=True, extended=True, savefile=None, trial_no=None):
         """
         Plots both grid(data) and NN predicted isochrones of specified ages in HR
         diagrams, with the colour bar showing variation in age. Can save plot.
@@ -709,6 +727,11 @@ class NNmodel:
         one_per_track: bool, optional
             if True: each track only supply one point in the grid plot
             if False: multiple points can be supplied per track
+        extended: bool, optional
+            if True: NN side plots the entire mass range of datapoints picked from the grid,
+                for all individual isochrones.
+            If False: NN side's mass input range depends on the individual groups of
+                datapoints picked from the grid for the corresponding iso-age
     
         Note: indices, isos and widths must be in the same order in terms of stellar
         parameters, and age must always come first, for example, if 4 parameters go
@@ -741,6 +764,7 @@ class NNmodel:
             else: this_width = widths[i+1][1]
             data = data[(data[param] >= isos[i]-this_width) & (data[param] <= isos[i]+this_width)]
         fetched_data = pd.DataFrame()
+        mass_ranges = []
         for iso_age in iso_ages:
             if widths[0][0]=='r':
                 if iso_age!=0:
@@ -748,6 +772,7 @@ class NNmodel:
                 else: age_width = 0.05
             else: age_width=widths[0][1]
             all_tracks = data[(data['age'] >= iso_age-age_width) & (data['age'] <= iso_age+age_width)]
+            mass_ranges.append([min(all_tracks['mass'].unique()),max(all_tracks['mass'].unique())])
             if one_per_track==True:
                 for i,track_no in enumerate(all_tracks['track_no'].unique()):
                     track_data = all_tracks.loc[all_tracks.track_no==track_no]
@@ -760,7 +785,6 @@ class NNmodel:
         print('found '+str(len(fetched_data.index))+' stars.')
         
         #creating new input lists for NN to predict
-        masses = np.log10(np.linspace(min(fetched_data['mass']),max(fetched_data['mass']),N))
         fixed_inputs=[]
         for i,param in enumerate(indices[1:]):
             if param in self.non_log_columns:
@@ -773,6 +797,9 @@ class NNmodel:
             for param in self.input_index:
                 if param=='mass':
                     this_ind=self.input_index.index('mass')
+                    if extended==False:
+                        masses = np.log10(np.linspace(*mass_ranges[i],N))
+                    else: masses = np.log10(np.linspace(min(fetched_data['mass']),max(fetched_data['mass']),N))
                     x_in[this_ind] = np.append(x_in[this_ind],masses)
                 elif param=='age':
                     this_ind=self.input_index.index('age')
@@ -782,7 +809,8 @@ class NNmodel:
                     x_in[this_ind] = np.append(x_in[this_ind],fixed_inputs[indices.index(param)-1])
         
         #NN prediction
-        NN_tracks=np.log10(10**self.model.predict(np.array(x_in).T,verbose=2).T)
+        x_in = np.array(x_in)
+        NN_tracks=np.log10(10**self.model.predict(x_in.T, batch_size=len(x_in.T),verbose=2).T)
         NN_tracks, output_index = self.calOutputs(NN_tracks)
         NN_age=10**x_in[self.input_index.index('age')]
         
@@ -835,7 +863,7 @@ class NNmodel:
         SRx=np.log10((10**plot_data[1])**-4*(10**plot_data[2])**(3/2))
         
         x_in = self.fetchData(tracks, self.input_index)
-        NNtracks = self.model.predict(x_in.T,verbose=2).T
+        NNtracks = self.model.predict(x_in.T,batch_size=len(x_in.T),verbose=2).T
         NNtracks, output_index = self.calOutputs(NNtracks)
         NNmass=10**x_in[self.input_index.index('mass')]
         NNx=np.log10((10**NNtracks[output_index.index('delnu')])**-4*
@@ -879,7 +907,7 @@ class NNmodel:
         tracks = self.prepPlot(grid, track_no)
         plot_data = self.fetchData(tracks, ['age','delnu', 'mass'])
         x_in = self.fetchData(tracks, self.input_index)
-        NNtracks = self.model.predict(x_in.T,verbose=2).T
+        NNtracks = self.model.predict(x_in.T,batch_size=len(x_in.T),verbose=2).T
     
         fig, ax=plt.subplots(1,2,figsize=[16,8])
         ax[0].scatter(NNtracks[self.output_index.index('delnu')], x_in[self.input_index.index('age')],
@@ -937,9 +965,9 @@ class NNmodel:
             element example: {'mass': 0.005}
         """
         tracks = self.prepPlot(grid, track_no=200)
-        x_in = self.fetchData(tracks, self.input_index)
+        x_in = self.fetchData(tracks, self.input_index).T
         y_out = self.fetchData(tracks, self.output_index)
-        NN_tracks=self.model.predict(x_in.T,verbose=2).T
+        NN_tracks=self.model.predict(x_in,len(x_in),verbose=2).T
         dex_values = {}
         for i,Dout in enumerate(y_out):
             Mout = 10**NN_tracks[i]
@@ -962,15 +990,16 @@ class NNmodel:
             accuracy of each NN output in dex, has the same length as self.output_index
             element example: {'mass': 0.005}
         """
-        x_in = self.fetchData(grid.data, self.input_index)
-        y_out = self.fetchData(grid.data, self.output_index)
-        NN_tracks = self.model.predict(x_in.T,verbose=2).T
+        tracks = self.prepPlot(grid, track_no=200)
+        x_in = self.fetchData(tracks, self.input_index).T
+        y_out = self.fetchData(tracks, self.output_index)
+        NN_tracks = self.model.predict(x_in,batch_size=len(x_in),verbose=2).T
         NN_tracks = self.calOutputs(NN_tracks,check_L=False)[0]
         dex_values = {}
         for i,Dout in enumerate(y_out):
             Mout = 10**NN_tracks[i]
             Dout = 10**Dout
-            dex_values[self.output_index[i]] = np.mean(abs((Mout-Dout)/Dout))/np.log(10)
+            dex_values[self.output_index[i]] = np.mean(abs((Mout-Dout)/Dout)*np.log10(Dout))/np.log(10)
         return dex_values
     
     def getWeights(self):
