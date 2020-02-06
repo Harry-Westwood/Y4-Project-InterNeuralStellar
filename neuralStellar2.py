@@ -18,6 +18,7 @@ import pymc3 as pm
 import theano.tensor as T
 import tensorflow as tf
 from keras.backend import sigmoid
+import seaborn as sns
 
 class stellarGrid:
     """
@@ -251,7 +252,7 @@ class NNmodel:
     def swish(self, x, beta = 1):
         return (x * sigmoid(beta * x))
     
-    def buildModel(self, arch, activation, reg=None, dropout=None):
+    def buildModel(self, arch, activation, reg=None, dropout=None, summary=True):
         """
         Builds a new NN to self.model, Prints the summary.
         
@@ -271,6 +272,8 @@ class NNmodel:
             dropout is enforced after each hidden layer if not none, dropout fraction
             given by this value
         """
+        self.leg['reg'] = reg
+        self.leg['dropout'] = dropout
         if reg!=None:
             if reg[0]=='l1':
                 regu = keras.regularizers.l1(reg[1])
@@ -301,14 +304,16 @@ class NNmodel:
                     xx = keras.layers.Dropout(dropout)(xx)
         outputs = keras.layers.Dense(arch[-1],activation='linear')(xx)
         self.model = keras.Model(inputs=inputs, outputs=outputs, name='neuralstellar')
-        self.model.summary()
+        if summary==True:
+            self.model.summary()
     
-    def loadModel(self, filename):
+    def loadModel(self, filename, summary=True):
         """
         Loads in a pre-trained/pre-built NN to self.model, prints the summary.
         """
         self.model = keras.models.load_model(filename, custom_objects={'swish':self.swish})
-        self.model.summary()
+        if summary==True:
+            self.model.summary()
         
     def compileModel(self, opt, lr, loss, metrics=None, beta_1=0.9, beta_2=0.999):
         """
@@ -329,6 +334,7 @@ class NNmodel:
         self.leg['recompile'] = True
         self.leg['optimizer'] = opt
         self.leg['lr'] = lr
+        self.leg['loss_func'] = loss
         if opt=='Nadam':
             optimizer=keras.optimizers.Nadam(lr=lr, beta_1=beta_1, beta_2=beta_2)
         elif opt=='SGD':
@@ -375,8 +381,8 @@ class NNmodel:
             last_leg = self.history['legs'][-1]
             self.leg['leg_no'] = last_leg['leg_no']+1
             if 'recompile' not in self.leg:
-                self.leg['optimizer'] = last_leg['optimizer']
-                self.leg['lr'] = last_leg['lr']
+                for item in ['reg','dropout','optimizer','lr','loss_func']:
+                    self.leg[item] = last_leg[item]
                 self.leg['recompile'] = False
         self.leg['batch_size'] = batch_size
         self.leg['epoch_no'] = epoch_no
@@ -415,7 +421,6 @@ class NNmodel:
         self.model.save('{}.h5'.format(save_name))
         hist = history.history
         if self.history is not None:
-            self.history['legs'] = self.history['legs']+[self.leg]
             for key in hist.keys():
                 joined_key = self.history[key]+hist[key]
                 self.history[key] = joined_key
@@ -423,10 +428,15 @@ class NNmodel:
             for leg in self.history['legs']:
                 max_epoch+=leg['epoch_no']
             self.train_epochs=[max_epoch,max_epoch+epoch_no]
+            self.leg['epoch_range'] = [max_epoch,max_epoch+epoch_no]
+            self.leg['cumulative_epochs'] = max_epoch+epoch_no+1
+            self.history['legs'] = self.history['legs']+[self.leg]
         else:
-            hist['legs'] = [self.leg]
             self.history = hist
             self.train_epochs=[0,epoch_no-1]
+            self.leg['epoch_range'] = [0,epoch_no-1]
+            self.leg['cumulative_epochs'] = epoch_no
+            hist['legs'] = [self.leg]
         self.leg = {}
     
     def saveHist(self, filename):
@@ -468,12 +478,22 @@ class NNmodel:
         return runtime
     
     def saveLegs(self, savefile):
+        """
+        saves the legs into a csv
+        """
         df = pd.DataFrame()
-        for leg in self.history['legs']:
+        legs = self.history['legs'].copy()
+        for leg in legs:
             leg['runtime']=str(leg['runtime'])
+            for item in ['reg','epoch_range']:
+                if item in leg.keys():
+                    leg[item] = str(leg[item])
             df2=pd.DataFrame(leg, index=[0])
             df=df.append(df2, ignore_index=True, sort=True)
-        df = df[['leg_no','optimizer','lr','batch_size','epoch_no','recompile','final_loss','runtime']]
+        cols = list(df.columns)
+        for item in ['leg_no','final_loss','runtime']:
+            cols.remove(item)
+        df = df[['leg_no']+cols+['final_loss','runtime']]
         df.to_csv(path_or_buf=savefile, index=False)
     
     def fetchData(self, tracks, parameters):
@@ -649,7 +669,7 @@ class NNmodel:
                 if 'radius' in self.output_index and 'Teff' in self.output_index:
                     radius = 10**y_out[self.output_index.index('radius')]
                     Teff = 10**y_out[self.output_index.index('Teff')]
-                    y_out[self.output_index.index('radius')] = np.log10(radius**2*(Teff/5942.261537)**4)
+                    y_out[self.output_index.index('radius')] = np.log10(radius**2*(Teff/5942.261537)**4*(1+1.07289541e-01))
                     output_index[output_index.index('radius')] = 'L'
                 else: raise NameError('Missing means to calculate luminosity!\nOutput options = '+str(self.output_index))
         return y_out, output_index
@@ -1002,21 +1022,41 @@ class NNmodel:
             dex_values[self.output_index[i]] = np.mean(abs((Mout-Dout)/Dout)*np.log10(Dout))/np.log(10)
         return dex_values
     
-    def getWeights(self):
-        """
-        pass self.weights the NN's weights and calculate number of hidden layers
-        """
-        self.weights = self.model.get_weights()
-        self.no_hidden_layers = len(self.weights)/2-1
+    def plotError(self, grid, std_limit=True):
+        x_in = self.fetchData(grid.data, self.input_index).T
+        y_out = self.fetchData(grid.data, ['L','Teff','delnu'])
+        NN_tracks = self.model.predict(x_in,batch_size=len(x_in),verbose=2).T
+        NN_tracks, output_index = self.calOutputs(NN_tracks)
+        fig, ax = plt.subplots(1,3,figsize=[15,4])
+        x_labels = [r'luminosity ($L_\odot$)',r'$T_{eff}$ (K)',r'$\Delta \nu$ ($\mu$Hz)']
+        for i,Dout in enumerate(y_out):
+            Mout = 10**NN_tracks[i]
+            Dout = 10**Dout
+            errors = Mout-Dout
+            std = np.std(errors)
+            median = np.round(np.median(abs(errors)),2)
+            sns.distplot(errors, bins=200, ax=ax[i], label='median='+str(median))
+            ax[i].set_xlabel(x_labels[i])
+            ax[i].legend()
+            if std_limit==True:
+                ax[i].set_xlim([-10*std,10*std])
+        plt.show()
     
     def manualPredict(self, inputs):
         """
         "Manual calculation" of a NN done with theano tensors, for pymc3 to use
         """
-        xx=T.nnet.elu(pm.math.dot(self.weights[0].T,inputs).T+self.weights[1])
-        for i in np.arange(1,self.no_hidden_layers)*2:
-            i=int(i)
-            xx=T.nnet.elu(pm.math.dot(xx,self.weights[i])+self.weights[i+1])
-        xx=(T.dot(xx,self.weights[-2])+self.weights[-1])
+        xx = T.transpose(inputs)
+        for i,layer in enumerate(self.model.layers):
+            if i == len(self.model.layers)-1:
+                weights = layer.get_weights()
+                xx=T.dot(xx,weights[0])+weights[1]
+            elif 'batch_normalization' in layer.get_config()['name']:
+                weights = layer.get_weights()
+                weights[3] = weights[3]**2
+                xx=T.nnet.bn.batch_normalization_test(xx,*weights,epsilon=0.001)
+            elif 'dense' in layer.get_config()['name']:
+                weights = layer.get_weights()
+                xx=T.nnet.elu(pm.math.dot(xx,weights[0])+weights[1])
         return xx.T
     
