@@ -13,7 +13,6 @@ rc("font", family="serif", size=14)
 from datetime import datetime,timedelta
 import pandas as pd
 import pickle
-import dill
 import pymc3 as pm
 import theano.tensor as T
 import tensorflow as tf
@@ -252,6 +251,60 @@ class NNmodel:
     def swish(self, x, beta = 1):
         return (x * sigmoid(beta * x))
     
+    def normTrainInputs(self, df, input_cols):
+        """
+        Normalizes training inputs, log10s the data in the process
+        
+        Parameters:
+        ----------
+        df: pandas dataframe, holds all training data
+        input_cols: list, holds the names of the NN input cols in the df
+        
+        Returns:
+        ----------
+        return_df: pandas dataframe, logged and normalized inputs for training
+        norm_dict: dictionary, means and stds of the inputs
+        
+        Called in: self.fitModel
+        """
+        norm_dict = {}
+        return_df = pd.DataFrame()
+        for parameter in input_cols:
+            data = np.log10(df[parameter])
+            mean = np.mean(data)
+            std = np.std(data)
+            norm_dict[parameter] = {'mean':mean,'std':std}
+            return_df = return_df.append((data-mean)/std, sort=True)
+        return return_df.transpose(), norm_dict
+    
+    def normPredictInputs(self, array):
+        """
+        Normalizes prediction inputs, using information in self.history['norm'],
+        requires history file to be loaded in to work, assumes input array is
+        already log10ed
+        Nothing will be done to the data if self.history['norm'] does not exist
+        (indicating NN was not trained on normalized data)
+        
+        Parameters:
+        ----------
+        array: numpy array, already log10ed inputs
+        
+        Returns:
+        ----------
+        return_array: numpy array, normalized inputs
+        
+        Called in: self.plotHR, plotIsochrone, plotSR, plotDelnuAge, getDex, plotError
+        """
+        if 'norm' not in self.history.keys():
+            return array
+        else:
+            return_array = []
+            for i,parameter in enumerate(self.input_index):
+                norm_key = list(self.history['norm'].keys())[i]
+                mean,std = self.history['norm'][norm_key]['mean'],self.history['norm'][norm_key]['std']
+                return_array.append((array[i]-mean)/std)
+            return np.array(return_array)
+    
     def buildModel(self, arch, activation, reg=None, dropout=None, summary=True):
         """
         Builds a new NN to self.model, Prints the summary.
@@ -350,8 +403,8 @@ class NNmodel:
         """
         self.model.set_weights(model.get_weights())
     
-    def fitModel(self, df, cols, epoch_no, batch_size, save_name, vsplit=0.3, 
-              callback=[], baseline=0.0005, fractional_patience=0.1):
+    def fitModel(self, df, cols, epoch_no, batch_size, save_name, norm=False, 
+                 vsplit=0.3, callback=[], baseline=0.0005, fractional_patience=0.1):
         """
         Trains self.model, saves history to self.history.
     
@@ -367,6 +420,8 @@ class NNmodel:
             of the training data
         save_name: str
             file name to save the trained NN to
+        norm: bool
+            whether to manually normalize input training data
         vsplit: float, optional
             validation_split during training, default to 0.1
         callback: list of strings, optional
@@ -387,8 +442,28 @@ class NNmodel:
         self.leg['batch_size'] = batch_size
         self.leg['epoch_no'] = epoch_no
         
-        x = np.log10(df[cols[0]].values).astype(self.precision)
+        if norm==True:
+            if self.history is not None:
+                if 'norm' not in self.history.keys():
+                    print('You assigned for input normalization but this NN was'+
+                          'training on data without normalization!'+
+                          '\nContinuing without normalization')
+                    norm=False
+        else:
+            if self.history is not None:
+                if 'norm' in self.history.keys():
+                    print('You assigned for no input normalization but this NN was'+
+                          'training on data with normalization!'+
+                          '\nContinuing with normalization')
+                    norm=True
+        
+        if norm==True:
+            input_df,norm_dict = self.normTrainInputs(df,cols[0])
+            x = input_df.values.astype(self.precision)
+        else:
+            x = np.log10(df[cols[0]].values).astype(self.precision)
         y = np.log10(df[cols[1]].values).astype(self.precision)
+        
         cb=[]
         if 'tb' in callback:
             logdir = "/logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -432,11 +507,13 @@ class NNmodel:
             self.leg['cumulative_epochs'] = max_epoch+epoch_no+1
             self.history['legs'] = self.history['legs']+[self.leg]
         else:
-            self.history = hist
             self.train_epochs=[0,epoch_no-1]
             self.leg['epoch_range'] = [0,epoch_no-1]
             self.leg['cumulative_epochs'] = epoch_no
             hist['legs'] = [self.leg]
+            if norm==True:
+                hist['norm'] = norm_dict
+            self.history = hist
         self.leg = {}
     
     def saveHist(self, filename):
@@ -449,12 +526,7 @@ class NNmodel:
         Passes the history file name to self.history, does basically nothing
         Note: filetype = 'pickle' or 'dill', depends on how the history file was saved
         """
-        if filetype == 'pickle':
-            history = pickle.load(open( filename, "rb" ))
-        elif filetype == 'dill':
-            history = dill.load(open( filename, "rb" ))
-        else:
-            raise NameError('Incorrect history type '+str(filetype)+'!')
+        history = pickle.load(open( filename, "rb" ))
         if append==True:
             if self.history is not None:
                 for key in history.keys():
@@ -506,6 +578,8 @@ class NNmodel:
         tracks: pandas dataframe
         parameters: list of strings
             columns in the dataframe to be fetch
+            
+        Called in: many places
         """
         if 'feh' in parameters:
             return_array=[]
@@ -538,6 +612,7 @@ class NNmodel:
         else:
             selected = self.prepPlot(grid, track_no=track_no)
         eva_in = self.fetchData(selected, self.input_index)
+        eva_in = self.normPredictInputs(eva_in)
         eva_out = self.fetchData(selected, self.output_index)
         if 'Teff' in self.output_index:
             eva_out[self.output_index.index('Teff')] = eva_out[self.output_index.index('Teff')]-np.log10(self.Teff_scaling)
@@ -669,7 +744,7 @@ class NNmodel:
                 if 'radius' in self.output_index and 'Teff' in self.output_index:
                     radius = 10**y_out[self.output_index.index('radius')]
                     Teff = 10**y_out[self.output_index.index('Teff')]
-                    y_out[self.output_index.index('radius')] = np.log10(radius**2*(Teff/5942.261537)**4*(1+1.07289541e-01))
+                    y_out[self.output_index.index('radius')] = np.log10(radius**2*(Teff/5776.02970722)**4)
                     output_index[output_index.index('radius')] = 'L'
                 else: raise NameError('Missing means to calculate luminosity!\nOutput options = '+str(self.output_index))
         return y_out, output_index
@@ -693,8 +768,9 @@ class NNmodel:
         tracks = self.prepPlot(grid, track_no)
         plot_tracks = np.log10([tracks['Teff'], tracks['L']])
         plot_m = tracks['mass']
-        x_in = self.fetchData(tracks, self.input_index).T
-        y_out = self.model.predict(x_in,verbose=2, batch_size=len(x_in)).T
+        x_in = self.fetchData(tracks, self.input_index)
+        x_in = self.normPredictInputs(x_in)
+        y_out = self.model.predict(x_in.T,verbose=2, batch_size=len(x_in.T)).T
         y_out, output_index = self.calOutputs(y_out)
         [Teffm, Lm, Teffg, Lg, M] = [y_out[output_index.index('Teff')], y_out[output_index.index('L')], 
                                           plot_tracks[0], plot_tracks[1], plot_m]
@@ -830,9 +906,10 @@ class NNmodel:
         
         #NN prediction
         x_in = np.array(x_in)
+        NN_age=10**x_in[self.input_index.index('age')]
+        x_in = self.normPredictInputs(x_in)
         NN_tracks=np.log10(10**self.model.predict(x_in.T, batch_size=len(x_in.T),verbose=2).T)
         NN_tracks, output_index = self.calOutputs(NN_tracks)
-        NN_age=10**x_in[self.input_index.index('age')]
         
         #plotting the isochrone
         plot_data = self.fetchData(fetched_data, ['Teff','L','age'])
@@ -883,14 +960,16 @@ class NNmodel:
         SRx=np.log10((10**plot_data[1])**-4*(10**plot_data[2])**(3/2))
         
         x_in = self.fetchData(tracks, self.input_index)
+        NNmass=10**x_in[self.input_index.index('mass')]
+        NNage=x_in[1]
+        x_in = self.normPredictInputs(x_in)
         NNtracks = self.model.predict(x_in.T,batch_size=len(x_in.T),verbose=2).T
         NNtracks, output_index = self.calOutputs(NNtracks)
-        NNmass=10**x_in[self.input_index.index('mass')]
         NNx=np.log10((10**NNtracks[output_index.index('delnu')])**-4*
                      (10**NNtracks[output_index.index('Teff')])**(3/2))
     
         fig, ax=plt.subplots(1,2,figsize=[16,8])
-        ax[0].scatter(NNx, NNmass, s=5, c=x_in[1], cmap='viridis')
+        ax[0].scatter(NNx, NNmass, s=5, c=NNage, cmap='viridis')
         ax[0].set_xlabel(r'$\log10\;( \Delta \nu^{-4}{T_{eff}}^{3/2})$')
         ax[0].set_ylabel(r'$M/M_{\odot}$')
         ax[0].set_title('NN predicted')
@@ -927,7 +1006,8 @@ class NNmodel:
         tracks = self.prepPlot(grid, track_no)
         plot_data = self.fetchData(tracks, ['age','delnu', 'mass'])
         x_in = self.fetchData(tracks, self.input_index)
-        NNtracks = self.model.predict(x_in.T,batch_size=len(x_in.T),verbose=2).T
+        x_in_norm = self.normPredictInputs(x_in)
+        NNtracks = self.model.predict(x_in_norm.T,batch_size=len(x_in_norm.T),verbose=2).T
     
         fig, ax=plt.subplots(1,2,figsize=[16,8])
         ax[0].scatter(NNtracks[self.output_index.index('delnu')], x_in[self.input_index.index('age')],
@@ -985,9 +1065,10 @@ class NNmodel:
             element example: {'mass': 0.005}
         """
         tracks = self.prepPlot(grid, track_no=200)
-        x_in = self.fetchData(tracks, self.input_index).T
+        x_in = self.fetchData(tracks, self.input_index)
+        x_in = self.normPredictInputs(x_in)
         y_out = self.fetchData(tracks, self.output_index)
-        NN_tracks=self.model.predict(x_in,len(x_in),verbose=2).T
+        NN_tracks=self.model.predict(x_in.T,len(x_in.T),verbose=2).T
         dex_values = {}
         for i,Dout in enumerate(y_out):
             Mout = 10**NN_tracks[i]
@@ -1011,9 +1092,10 @@ class NNmodel:
             element example: {'mass': 0.005}
         """
         tracks = self.prepPlot(grid, track_no=200)
-        x_in = self.fetchData(tracks, self.input_index).T
+        x_in = self.fetchData(tracks, self.input_index)
+        x_in = self.normPredictInputs(x_in)
         y_out = self.fetchData(tracks, self.output_index)
-        NN_tracks = self.model.predict(x_in,batch_size=len(x_in),verbose=2).T
+        NN_tracks = self.model.predict(x_in.T,batch_size=len(x_in.T),verbose=2).T
         NN_tracks = self.calOutputs(NN_tracks,check_L=False)[0]
         dex_values = {}
         for i,Dout in enumerate(y_out):
@@ -1023,9 +1105,10 @@ class NNmodel:
         return dex_values
     
     def plotError(self, grid, std_limit=True):
-        x_in = self.fetchData(grid.data, self.input_index).T
+        x_in = self.fetchData(grid.data, self.input_index)
+        x_in = self.normPredictInputs(x_in)
         y_out = self.fetchData(grid.data, ['L','Teff','delnu'])
-        NN_tracks = self.model.predict(x_in,batch_size=len(x_in),verbose=2).T
+        NN_tracks = self.model.predict(x_in.T,batch_size=len(x_in.T),verbose=2).T
         NN_tracks, output_index = self.calOutputs(NN_tracks)
         fig, ax = plt.subplots(1,3,figsize=[15,4])
         x_labels = [r'luminosity ($L_\odot$)',r'$T_{eff}$ (K)',r'$\Delta \nu$ ($\mu$Hz)']
@@ -1035,7 +1118,7 @@ class NNmodel:
             errors = Mout-Dout
             std = np.std(errors)
             median = np.round(np.median(abs(errors)),2)
-            sns.distplot(errors, bins=200, ax=ax[i], label='median='+str(median))
+            sns.distplot(errors, bins=200, ax=ax[i], label='median absolute ='+str(median))
             ax[i].set_xlabel(x_labels[i])
             ax[i].legend()
             if std_limit==True:
@@ -1053,10 +1136,8 @@ class NNmodel:
                 xx=T.dot(xx,weights[0])+weights[1]
             elif 'batch_normalization' in layer.get_config()['name']:
                 weights = layer.get_weights()
-                weights[3] = weights[3]**2
                 xx=T.nnet.bn.batch_normalization_test(xx,*weights,epsilon=0.001)
             elif 'dense' in layer.get_config()['name']:
                 weights = layer.get_weights()
                 xx=T.nnet.elu(pm.math.dot(xx,weights[0])+weights[1])
         return xx.T
-    
