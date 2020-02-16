@@ -368,71 +368,35 @@ class NNmodel:
         if summary==True:
             self.model.summary()
         
-    def compileModel(self, opt, lr, loss, decay=None, metrics=None, beta_1=0.9, beta_2=0.999):
+    def compileModel(self, opt, lr, loss, metrics=None, beta_1=0.9, beta_2=0.999, 
+                     decay=0, momentum=0):
         """
         Compiles self.model with Nadam optimizer.
-    
+        
         Parameters: 
         ----------
         opt: string
             name of optimizer used, Nadam or SDG
-        lr: float or str
+        lr: float
             learning rate
-            if passed 'prev', uses the previous leg's learning rate
-            Requires: model to have a previous leg in self.history['legs'], chose SGD as optimizer
         loss: str
             metric to measure the loss
-        decay: float or str, optional
-            decay parameter for SGD
-            if passed 'prev', uses the previous leg's decay
-            Requires: model to have a previous leg in self.history['legs'], chose SGD as optimizer
         metrics: list, optional
             list of metrics to be calculated
         beta_1 and beta_2: float, optional, as defined in keras nadam optimizer
         """
         self.leg['recompile'] = True
         self.leg['optimizer'] = opt
+        self.leg['lr'] = lr
         self.leg['loss_func'] = loss
-        if opt == 'SGD':
-            if lr == 'prev':
-                if self.history is None:
-                    raise KeyError('This is the first leg! Cannot apply previous settings.')
-                elif self.history['legs'][-1]['optimizer']!='SGD':
-                    raise KeyError('Last leg was not running on SGD! Cannot apply previous settings.')
-                else: 
-                    lr = self.history['legs'][-1]['last_lr']
-                    self.leg['prev_lr'] = True
-            else:
-                self.leg['prev_lr'] = False
-            self.leg['lr'] = lr
-            
-            if decay == 'prev':
-                if self.history is None:
-                    raise KeyError('This is the first leg! Cannot apply previous settings.')
-                elif self.history['legs'][-1]['optimizer']!='SGD':
-                    raise KeyError('Last leg was not running on SGD! Cannot apply previous settings.')
-                else: 
-                    decay = self.history['legs'][-1]['decay']
-                    self.leg['prev_decay'] = True
-            else:
-                self.leg['prev_decay'] = False
-            self.leg['decay'] = decay
-        elif opt == 'Nadam':
-            if lr == 'prev' or decay == 'prev':
-                raise KeyError('Previous lr or decay only works on SGD, you chose Nadam.')
-            else:
-                self.leg['prev_lr'] = False
-                self.leg['prev_decay'] = False
-                self.leg['decay'] = None
-                self.leg['lr'] = lr
-        
         if opt=='Nadam':
+            self.leg['decay'] = 'N/A'
+            self.leg['momentum'] = 'N/A'
             optimizer=keras.optimizers.Nadam(lr=lr, beta_1=beta_1, beta_2=beta_2)
         elif opt=='SGD':
-            if decay==None:
-                optimizer=keras.optimizers.SGD(learning_rate=lr)
-            else:
-                optimizer=keras.optimizers.SGD(learning_rate=lr, decay=decay)     
+            self.leg['decay'] = decay
+            self.leg['momentum'] = momentum
+            optimizer=keras.optimizers.SGD(learning_rate=lr, decay=decay, momentum=momentum)
         else: raise NameError('No such optimizer!!')
         if metrics!=None:
             self.model.compile(optimizer=optimizer,loss=loss, metrics=metrics)
@@ -477,7 +441,7 @@ class NNmodel:
             last_leg = self.history['legs'][-1]
             self.leg['leg_no'] = last_leg['leg_no']+1
             if 'recompile' not in self.leg:
-                for item in ['reg','dropout','optimizer','lr','loss_func']:
+                for item in ['reg','dropout','optimizer','lr','loss_func','decay','momentum']:
                     self.leg[item] = last_leg[item]
                 self.leg['recompile'] = False
         self.leg['batch_size'] = batch_size
@@ -530,11 +494,10 @@ class NNmodel:
                           callbacks=cb)
         runtime = datetime.now()-start_time
         self.leg['runtime'] = runtime
-        self.leg['last_lr'] = float(self.model.optimizer._decayed_lr('float32'))
         try: last_loss = history.history['mean_absolute_error'][-1]
         except KeyError: last_loss = history.history['MAE'][-1]
         self.leg['final_loss'] = last_loss
-        print('training done! now='+str(datetime.now())+' | Time lapsed='+str(runtime))
+        print('training done! now='+str(datetime.now())+' | Time elapsed='+str(runtime))
         self.model.save('{}.h5'.format(save_name))
         hist = history.history
         if self.history is not None:
