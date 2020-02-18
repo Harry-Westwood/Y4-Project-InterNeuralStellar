@@ -67,7 +67,7 @@ def Leg_Setup(folder_name,reg,lr,epoch_no,batch_size,opt,activation,dropout,mome
             try:
                  leg_dict['lr'] = lr[leg]
                  if leg > 0:
-                     if lr[leg] != lr[leg-1]:
+                     if lr[leg] != lr[leg-1] and lr[leg] != 'prev':
                          leg_dict['changeingNNparam'] = True
             except IndexError:
                 leg_dict['lr'] = lr[-1]
@@ -176,6 +176,8 @@ def NN_run(folder_name, df, hidden_layers, legs, leg):
     if contNN == True and changeingNNparam == True:
         m0=NNmodel('evo',['mass', 'age', 'feh', 'Y', 'MLT'], ['L', 'Teff', 'delnu']) #not compiling NN, but different...who knows???
         m0.loadModel('drive/My Drive/4th Year Project/{}/{}_best_model.h5'.format(folder_name,folder_name),summary = False)
+        if lr == 'prev':
+            lr = tf.keras.backend.eval(m0.model.optimizer._decayed_lr('float32'))
     if contNN == False:
         start_epoch = 0
         #from datetime import datetime
