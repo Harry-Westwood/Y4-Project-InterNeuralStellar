@@ -202,7 +202,8 @@ class NNmodel:
     grids, and helps plotting its training results.
     """
     def __init__(self, track_choice, input_index, output_index, 
-                 non_log_columns=['feh'], Teff_scaling=1, seed=53, precision='float32'):
+                 non_log_columns=['feh'], Teff_scaling=1, radius_coeffs=None,
+                 Teff_limit=10**3.72, delnu_limit=100, seed=53, precision='float32'):
         """
         Parameters: 
         ----------
@@ -219,6 +220,13 @@ class NNmodel:
         Teff_scaling: float, optional
             scaling factor from NN output Teff to actual Teff
             (grid Teff = NN output Teff * Teff_scaling)
+        radius_coeffs: list or None, optional
+            polynomial coefficients that scales the RGB part of radius,
+            meant to aid training and isochrone perfecting
+            No scaling occurs if "None"
+        Teff_limit and delnu_limit: floats, optional
+            Limits for classification of RGB, anything with Teff<10**3.72 and
+            delnu<100 are taken as RGB
         seed: int, optional
             tensorflow randomization seed
     
@@ -238,6 +246,9 @@ class NNmodel:
         self.output_index = output_index
         self.non_log_columns = non_log_columns
         self.Teff_scaling = Teff_scaling
+        self.radius_coeffs = radius_coeffs
+        self.Teff_limit = Teff_limit
+        self.delnu_limit = delnu_limit
         self.set_seed(seed)
         self.precision = precision
         self.history = None
@@ -384,18 +395,28 @@ class NNmodel:
         metrics: list, optional
             list of metrics to be calculated
         beta_1 and beta_2: float, optional, as defined in keras nadam optimizer
+        decay: None or float, optional
+            decay parameter, if passed None, use default
+        momentum: float, optional
+            momentum parameter for SGD
         """
         self.leg['recompile'] = True
         self.leg['optimizer'] = opt
         self.leg['lr'] = lr
         self.leg['loss_func'] = loss
         if opt=='Nadam':
-            self.leg['decay'] = 'N/A'
-            self.leg['momentum'] = 'N/A'
-            optimizer=keras.optimizers.Nadam(lr=lr, beta_1=beta_1, beta_2=beta_2)
-        elif opt=='SGD':
             self.leg['decay'] = decay
+            self.leg['momentum'] = 'N/A'
+            if decay is None:
+                optimizer=keras.optimizers.Nadam(lr=lr, beta_1=beta_1, beta_2=beta_2)
+            else:
+                optimizer=keras.optimizers.Nadam(lr=lr, beta_1=beta_1, beta_2=beta_2, schedule_decay=decay)
+        elif opt=='SGD':
             self.leg['momentum'] = momentum
+            if decay is None:
+                decay = 0
+                self.leg['decay'] = 0
+            else: self.leg['decay'] = decay
             optimizer=keras.optimizers.SGD(learning_rate=lr, decay=decay, momentum=momentum)
         else: raise NameError('No such optimizer!!')
         if metrics!=None:
@@ -526,7 +547,7 @@ class NNmodel:
         with open(filename, 'wb') as file_pi:
             pickle.dump(self.history, file_pi)
     
-    def loadHist(self, filename, filetype, append=False):
+    def loadHist(self, filename, filetype='pickle', append=False):
         """
         Passes the history file name to self.history, does basically nothing
         Note: filetype = 'pickle' or 'dill', depends on how the history file was saved
@@ -619,8 +640,14 @@ class NNmodel:
         eva_in = self.fetchData(selected, self.input_index)
         eva_in = self.normPredictInputs(eva_in)
         eva_out = self.fetchData(selected, self.output_index)
+        log_Teff = eva_out[self.output_index.index('Teff')].copy()
         if 'Teff' in self.output_index:
             eva_out[self.output_index.index('Teff')] = eva_out[self.output_index.index('Teff')]-np.log10(self.Teff_scaling)
+        if 'radius' in self.output_index and self.radius_coeffs is not None:
+            log_delnu = eva_out[self.output_index.index('delnu')]
+            truths = np.logical_and(log_Teff<np.log10(self.Teff_limit), log_delnu<np.log10(self.delnu_limit))
+            radius_index = self.output_index.index('radius')
+            eva_out[radius_index] = eva_out[radius_index]-self.polynomial(3.72-log_Teff,self.radius_coeffs)*truths
         print('evaluation results:')
         self.model.evaluate(eva_in.T,eva_out.T,verbose=2)
     
@@ -735,15 +762,31 @@ class NNmodel:
         selected = tracks.loc[tracks['track_no'].isin(track_index)]
         return selected
     
+    @staticmethod
+    def polynomial(x, a):
+        """Calculates the fitting polynomial on radius scaling in RGB for self.calOutputs"""
+        if len(a)==1:
+            return a*x
+        elif len(a)==2:
+            return a[0]*x**2+a[1]*x
+        elif len(a)==3:
+            return a[0]*x**3+a[1]*x**2+a[2]*x
+    
     def calOutputs(self, y_out, check_L=True):
         """
-        Scales Teff correctly, and if check_L==True and there is no luminosity among
-        NN outputs, calculates luminosity from radius and Teff by:
+        Scales Teff and radius correctly, and if check_L==True and there is no 
+        luminosity among NN outputs, calculates luminosity from radius and Teff by:
         L = 4*pi*R**2*boltzmann_constant*Teff**4
         """
         output_index = self.output_index.copy()
         if 'Teff' in self.output_index:
             y_out[self.output_index.index('Teff')] = y_out[self.output_index.index('Teff')]+np.log10(self.Teff_scaling)
+        if 'radius' in self.output_index and self.radius_coeffs is not None:
+            log_Teff = y_out[self.output_index.index('Teff')]
+            log_delnu = y_out[self.output_index.index('delnu')]
+            truths = np.logical_and(log_Teff<np.log10(self.Teff_limit), log_delnu<np.log10(self.delnu_limit))
+            radius_index = self.output_index.index('radius')
+            y_out[radius_index] = y_out[radius_index]+self.polynomial(3.72-log_Teff,self.radius_coeffs)*truths
         if check_L:
             if 'L' not in self.output_index:
                 if 'radius' in self.output_index and 'Teff' in self.output_index:
