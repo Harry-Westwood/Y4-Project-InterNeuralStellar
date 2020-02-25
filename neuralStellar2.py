@@ -25,28 +25,24 @@ class stellarGrid:
     Proper spelling of names: step, mass, age, feh, Y, MLT, L, radius, Teff, delnu
     """
     proper_index=['step', 'mass', 'age', 'feh', 'Y', 'MLT', 'L', 'radius', 'Teff', 'delnu']
-    def __init__(self, filename):
+    def __init__(self, data_or_file):
         """
         Parameters: 
         ----------
-        filename: str
-            path and filename of the grid, in csv form.
+        data_or_file: pandas dataframe or str
+            dataframe = holds all relevent information in the grid
+            str = path and filename of the grid, in csv form.
             
         Other class attributes:
         ----------
         data: numpy array
             stores the entire dataframe read from the grid
-        indices: dictionary
-            stores the name-to-column-index of the grid data, used to index the correct
-            stellar parameters in the code
         ranged_tracks: numpy array/list
             stores the dataframe that is of a given age range of stars
         """
-        self.file = filename
-    
-    def loadData(self):
-        """Reads out the csv grid data"""
-        self.data = pd.read_csv(self.file)
+        if type(data_or_file)==str:
+            self.data = pd.read_csv(data_or_file)
+        else: self.data = data_or_file
     
     def popIndex(self, names, proper=None):
         """
@@ -100,13 +96,15 @@ class stellarGrid:
         diff = initial_sum[1:]-initial_sum[:-1]
         boundaries = np.where(abs(diff)>0)[0]
     
-        lastb = 0
-        tracks = np.array([])
-        for i,bi in enumerate(boundaries):
-            tracks = np.concatenate((tracks,np.ones(bi+1-lastb)*i))
-            lastb = bi+1
-        tracks = np.concatenate((tracks, np.ones(len(self.data.index)-len(tracks))*(tracks[-1]+1)))
-        self.data['track_no'] = tracks
+        if len(boundaries)>0:
+            lastb = 0
+            tracks = np.array([])
+            for i,bi in enumerate(boundaries):
+                tracks = np.concatenate((tracks,np.ones(bi+1-lastb)*i))
+                lastb = bi+1
+            tracks = np.concatenate((tracks, np.ones(len(self.data.index)-len(tracks))*(tracks[-1]+1)))
+            self.data['track_no'] = tracks
+        else: self.data['track_no'] = np.zeros(len(self.data.index))
     
     def getAgeRange(self, age_lb, age_ub):
         """
@@ -797,7 +795,7 @@ class NNmodel:
                 else: raise NameError('Missing means to calculate luminosity!\nOutput options = '+str(self.output_index))
         return y_out, output_index
     
-    def plotHR(self, grid, track_no=20, savefile=None, trial_no=None):
+    def plotHR(self, grid, track_no=20, in_between=None, savefile=None, trial_no=None):
         """
         Plots both grid(data) and NN predicted HR diagrams. Can save
         plot.
@@ -807,6 +805,9 @@ class NNmodel:
         grid: stellarGrid object
         track_no: int, optional
             number of tracks to be plotted. Passed to self.prepPlot
+        in_between: None or int, optional
+            number of points to add in between each datapoints of the grid for the
+            NN to predict
         savefile: str, optional
             path and filename for saving the plot. Plot is only saved if not None
         trial_no: int, optional
@@ -816,20 +817,37 @@ class NNmodel:
         tracks = self.prepPlot(grid, track_no)
         plot_tracks = np.log10([tracks['Teff'], tracks['L']])
         plot_m = tracks['mass']
-        x_in = self.fetchData(tracks, self.input_index)
+        if in_between is None:
+            x_in = self.fetchData(tracks, self.input_index)
+            Mm = plot_m
+        else:
+            x_in = []
+            for track_no in tracks['track_no'].unique():
+                track = tracks[tracks['track_no']==track_no]
+                grid_x_in = self.fetchData(track, self.input_index)
+                track_x_in = []
+                for parameter in grid_x_in:
+                    new_parameter = np.array([parameter[0]])
+                    for i,front in enumerate(parameter[:-1]):
+                        add_ins = np.linspace(front,parameter[i+1],in_between+2)[1:]
+                        new_parameter = np.append(new_parameter,add_ins)
+                    track_x_in.append(new_parameter)
+                x_in.append(np.array(track_x_in))
+            x_in = np.concatenate(x_in,axis=1)
+            Mm = x_in[self.input_index.index('mass')]
         x_in = self.normPredictInputs(x_in)
         y_out = self.model.predict(x_in.T,verbose=2, batch_size=len(x_in.T)).T
         y_out, output_index = self.calOutputs(y_out)
-        [Teffm, Lm, Teffg, Lg, M] = [y_out[output_index.index('Teff')], y_out[output_index.index('L')], 
+        [Teffm, Lm, Teffg, Lg, Mg] = [y_out[output_index.index('Teff')], y_out[output_index.index('L')],
                                           plot_tracks[0], plot_tracks[1], plot_m]
     
         fig, ax=plt.subplots(1,2,figsize=[16,8])
-        ax[0].scatter(Teffm,Lm,s=5,c=M, cmap='viridis')
+        ax[0].scatter(Teffm,Lm,s=5,c=Mm, cmap='viridis')
         ax[0].set_xlim(ax[0].get_xlim()[::-1])
         ax[0].set_ylabel(r'$\log10(L/L_{\odot})$')
         ax[0].set_xlabel(r'$\log10 T_{eff}$')
         ax[0].set_title('NN predicted')
-        s2=ax[1].scatter(Teffg,Lg,s=5,c=M, cmap='viridis')
+        s2=ax[1].scatter(Teffg,Lg,s=5,c=Mg, cmap='viridis')
         ax[1].set_xlim(ax[1].get_xlim()[::-1])
         ax[1].set_ylabel(r'$\log10(L/L_{\odot})$')
         ax[1].set_xlabel(r'$\log10 T_{eff}$')
@@ -1075,7 +1093,94 @@ class NNmodel:
         if savefile != None:
             fig.savefig(savefile+'/DelnuAge'+str(trial_no)+'.png')
             print('delnu vs age plot saved as "'+savefile+'/DelnuAge'+str(trial_no)+'.png"')
+    
+    def plotTrends(self, grid, track_no=20, in_between=None, savefile=None, trial_no=None):
+        """
+        Plots the three observables vs star age, both grid data and NN predicted overlapping
+        in the same plot, along with each observables' residue fraction at the bottom.
+        Warning: only really makes sense when doing a single evolution track.
         
+        Parameters:
+        ----------
+        grid: stellarGrid object
+            grid object with track data stored
+        track_no: int, optional
+            number of tracks to be plotted. Passed to self.prepPlot
+        in_between: None or int, optional
+            number of points to add in between each datapoints of the grid for the
+            NN to predict
+        savefile: str, optional
+            path and filename for saving the plot. Plot is only saved if not None
+        trial_no: int, optional
+            only used if savefile is not None. The trial number to be tagged after
+            the diagram savename, matches the excel notes.
+        """
+        tracks = self.prepPlot(grid, track_no)
+        [Ageg, Lg, Teffg, delnug] = [tracks['age'], tracks['L'], tracks['Teff'], tracks['delnu']]
+        if in_between is None:
+            x_in = self.fetchData(tracks, self.input_index)
+            Agem = Ageg
+        else:
+            x_in = []
+            for track_no in tracks['track_no'].unique():
+                track = tracks[tracks['track_no']==track_no]
+                grid_x_in = self.fetchData(track, self.input_index)
+                track_x_in = []
+                for parameter in grid_x_in:
+                    new_parameter = np.array([parameter[0]])
+                    for i,front in enumerate(parameter[:-1]):
+                        add_ins = np.linspace(front,parameter[i+1],in_between+2)[1:]
+                        new_parameter = np.append(new_parameter,add_ins)
+                    track_x_in.append(new_parameter)
+                x_in.append(np.array(track_x_in))
+            x_in = np.concatenate(x_in,axis=1)
+            Agem = 10**x_in[self.input_index.index('age')]
+        x_in = self.normPredictInputs(x_in)
+        y_out = self.model.predict(x_in.T,verbose=2, batch_size=len(x_in.T)).T
+        y_out, output_index = self.calOutputs(y_out)
+        [Lm, Teffm, delnum] = 10**(np.array([y_out[output_index.index('L')], y_out[output_index.index('Teff')],
+                               y_out[output_index.index('delnu')]]))
+        
+        fig, ax=plt.subplots(4,1,figsize=[12,12],sharex=True)
+        fig.subplots_adjust(hspace=0)
+        ax[0].plot(Ageg,Lg,c='black',zorder=1,label='MESA data')
+        ax[0].plot(Agem,Lm,c='blue',zorder=2,label='NN predicted')
+        ax[0].set_yscale('log')
+        ax[0].legend()
+        ax[0].set_ylabel(r'$L/L_{\odot}$')
+        ax[1].plot(Ageg,Teffg,c='black',zorder=1,label='MESA data')
+        ax[1].plot(Agem,Teffm,c='blue',zorder=2,label='NN predicted')
+        ax[1].set_yscale('log')
+        ax[1].legend()
+        ax[1].set_ylabel(r'$T_{eff}$ (K)')
+        ax[2].plot(Ageg,delnug,c='black',zorder=1,label='MESA data')
+        ax[2].plot(Agem,delnum,c='blue',zorder=2,label='NN predicted')
+        ax[2].set_yscale('log')
+        ax[2].legend()
+        ax[2].set_ylabel(r'$\Delta \nu\;(\mu$Hz)')
+        if in_between is not None:
+            x_in = self.fetchData(tracks, self.input_index)
+            x_in = self.normPredictInputs(x_in)
+            y_out = self.model.predict(x_in.T,verbose=2, batch_size=len(x_in.T)).T
+            y_out, output_index = self.calOutputs(y_out)
+            [Lm, Teffm, delnum] = 10**(np.array([y_out[output_index.index('L')], y_out[output_index.index('Teff')],
+                               y_out[output_index.index('delnu')]]))
+        L_res = (Lm-Lg)/Lg
+        Teff_res = (Teffm-Teffg)/Teffg
+        delnu_res = (delnum-delnug)/delnug
+        ax[3].plot(Ageg,L_res,label='luminosity',zorder=2)
+        ax[3].plot(Ageg,Teff_res,label='Teff',zorder=2)
+        ax[3].plot(Ageg,delnu_res,label='delta nu',zorder=2)
+        x_lim = ax[3].get_xlim()
+        ax[3].hlines(0,0,12,ls='--',zorder=1)
+        ax[3].set_xlim(x_lim)
+        ax[3].legend()
+        ax[3].set_ylabel('residue fraction')
+        plt.show()
+        if savefile != None:
+            fig.savefig(savefile+'/Trends'+str(trial_no)+'.png')
+            print('Trends plot saved as "'+savefile+'/Trends'+str(trial_no)+'.png"')
+    
     def plotAll(self, grid, track_no=100, savefile=None, trial_no=None):
         """
         Plotting the three plots HR, SR and DelnuAge in one go
