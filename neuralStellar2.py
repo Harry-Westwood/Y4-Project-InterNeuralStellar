@@ -86,25 +86,37 @@ class stellarGrid:
         print('Data headers = ')
         print(self.data.keys())
         
-        self.data.sort_values(by='step', axis=0, inplace=True)
-        self.data.set_index(keys=['step'], drop=False,inplace=True)
-        
-        if initial_columns is None:
-            initials = np.array(self.data[['initial_mass',self.proper_index[4], 'initial_feh', self.proper_index[5]]])
-        else: initials = np.array(self.data[initial_columns])
-        initial_sum = np.sum(initials, axis=1)
-        diff = initial_sum[1:]-initial_sum[:-1]
-        boundaries = np.where(abs(diff)>0)[0]
+        if 'track_no' not in self.data.columns:
+            if initial_columns is None:
+                initials = np.array(self.data[['initial_mass',self.proper_index[4], 'initial_feh', self.proper_index[5]]])
+            else: initials = np.array(self.data[initial_columns])
+            initial_str_list = []
+            for ini in initials:
+                initial_str=''
+                for i in ini:
+                    initial_str+=str(i)
+                initial_str_list.append(initial_str)
+            self.data['initial_str'] = initial_str_list
+            self.data.sort_values(by='initial_str',inplace=True)
+            self.data.reset_index(inplace=True)
     
-        if len(boundaries)>0:
-            lastb = 0
-            tracks = np.array([])
-            for i,bi in enumerate(boundaries):
-                tracks = np.concatenate((tracks,np.ones(bi+1-lastb)*i))
-                lastb = bi+1
-            tracks = np.concatenate((tracks, np.ones(len(self.data.index)-len(tracks))*(tracks[-1]+1)))
-            self.data['track_no'] = tracks
-        else: self.data['track_no'] = np.zeros(len(self.data.index))
+            if initial_columns is None:
+                initials = np.array(self.data[['initial_mass',self.proper_index[4], 'initial_feh', self.proper_index[5]]])
+            else: initials = np.array(self.data[initial_columns])
+            initial_sum = np.sum(initials, axis=1)
+            diff = initial_sum[1:]-initial_sum[:-1]
+            boundaries = np.where(abs(diff)>0)[0]
+    
+            if len(boundaries)>0:
+                lastb = 0
+                tracks = np.array([])
+                for i,bi in enumerate(boundaries):
+                    tracks = np.concatenate((tracks,np.ones(bi+1-lastb)*i))
+                    lastb = bi+1
+                tracks = np.concatenate((tracks, np.ones(len(self.data.index)-len(tracks))*(tracks[-1]+1)))
+                self.data['track_no'] = tracks
+            else: self.data['track_no'] = np.zeros(len(self.data.index))
+            self.data.drop(columns=['initial_str'])
     
     def getAgeRange(self, age_lb, age_ub):
         """
@@ -775,6 +787,8 @@ class NNmodel:
         Scales Teff and radius correctly, and if check_L==True and there is no 
         luminosity among NN outputs, calculates luminosity from radius and Teff by:
         L = 4*pi*R**2*boltzmann_constant*Teff**4
+        
+        Note: y_out are NN outputs that are log10 of actual values
         """
         output_index = self.output_index.copy()
         if 'Teff' in self.output_index:
@@ -795,7 +809,7 @@ class NNmodel:
                 else: raise NameError('Missing means to calculate luminosity!\nOutput options = '+str(self.output_index))
         return y_out, output_index
     
-    def plotHR(self, grid, track_no=20, in_between=None, savefile=None, trial_no=None):
+    def plotHR(self, grid, track_no=20, in_between=None, match_axes=False, savefile=None, trial_no=None):
         """
         Plots both grid(data) and NN predicted HR diagrams. Can save
         plot.
@@ -852,6 +866,9 @@ class NNmodel:
         ax[1].set_ylabel(r'$\log10(L/L_{\odot})$')
         ax[1].set_xlabel(r'$\log10 T_{eff}$')
         ax[1].set_title('MESA data')
+        if match_axes == True:
+            ax[0].set_xlim(ax[1].get_xlim())
+            ax[0].set_ylim(ax[1].get_ylim())
         fig.subplots_adjust(right=0.83)
         cbar_ax = fig.add_axes([0.85, ax[1].get_position().y0, 0.02, ax[1].get_position().height])
         cbar_ax.text(0.5,1.015,r'$M/M_{\odot}$',fontsize=13,horizontalalignment='center',transform=cbar_ax.transAxes)
@@ -974,7 +991,7 @@ class NNmodel:
         x_in = np.array(x_in)
         NN_age=10**x_in[self.input_index.index('age')]
         x_in = self.normPredictInputs(x_in)
-        NN_tracks=np.log10(10**self.model.predict(x_in.T, batch_size=len(x_in.T),verbose=2).T)
+        NN_tracks=self.model.predict(x_in.T, batch_size=len(x_in.T),verbose=2).T
         NN_tracks, output_index = self.calOutputs(NN_tracks)
         
         #plotting the isochrone
@@ -1175,7 +1192,8 @@ class NNmodel:
         ax[3].hlines(0,0,12,ls='--',zorder=1)
         ax[3].set_xlim(x_lim)
         ax[3].legend()
-        ax[3].set_ylabel('residue fraction')
+        ax[3].set_ylabel('residual fraction')
+        ax[3].set_xlabel('Age (Gyr)')
         plt.show()
         if savefile != None:
             fig.savefig(savefile+'/Trends'+str(trial_no)+'.png')
