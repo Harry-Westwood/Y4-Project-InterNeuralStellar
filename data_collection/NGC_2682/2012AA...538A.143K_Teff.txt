@@ -1,0 +1,3 @@
+Star TEFF TEFF_ERR [Fe/H] [Fe/H]_ERR
+mmj6490 8947  211  -1.37 0.21  
+mmj6476 7648   22  +0.28 0.04
