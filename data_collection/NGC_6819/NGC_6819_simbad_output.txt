@@ -1,0 +1,2842 @@
+::script::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+format object form1 "%OBJECT|%MEASLIST(Fe_H;A)"
+GAIA DR2 2076299585902317952
+GAIA DR2 2076299860776265984
+GAIA DR2 2076285567128682240
+GAIA DR2 2076297829248112256
+GAIA DR2 2076299929499736192
+GAIA DR2 2076298864347827456
+GAIA DR2 2076299585902318336
+GAIA DR2 2076292542155588352
+GAIA DR2 2076299311024404736
+GAIA DR2 2076300032578964608
+GAIA DR2 2076299070506202496
+GAIA DR2 2076300135658207232
+GAIA DR2 2076290476266690304
+GAIA DR2 2076299001782702336
+GAIA DR2 2076284738190254592
+GAIA DR2 2076280894204417792
+GAIA DR2 2076299414103588224
+GAIA DR2 2076295565812951680
+GAIA DR2 2076298314591960960
+... There are more lines
+
+::console:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+C.D.S.  -  SIMBAD4 rel 1.7  -  2020.03.09CET20:12:13
+object formats:
+form1:	"%OBJECT|%MEASLIST(Fe_H;A)"
+
+
+total execution time: 18.601 secs
+simbatch done
+
+::error:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+[3] Identifier not found in the database : Gaia DR2 2076299860776265984
+[4] Identifier not found in the database : Gaia DR2 2076285567128682240
+[9] Identifier not found in the database : Gaia DR2 2076292542155588352
+[14] Identifier not found in the database : Gaia DR2 2076290476266690304
+[15] Identifier not found in the database : Gaia DR2 2076299001782702336
+[16] Identifier not found in the database : Gaia DR2 2076284738190254592
+[23] Identifier not found in the database : Gaia DR2 2076282195569024256
+[24] Identifier not found in the database : Gaia DR2 2076297146360791040
+[26] Identifier not found in the database : Gaia DR2 2076300032574859008
+[31] Identifier not found in the database : Gaia DR2 2076299276660358400
+[33] Identifier not found in the database : Gaia DR2 2076293087606834432
+[36] Identifier not found in the database : Gaia DR2 2076281924996575616
+[40] Identifier not found in the database : Gaia DR2 2076299826416431360
+[44] Identifier not found in the database : Gaia DR2 2076300032574863616
+[47] Identifier not found in the database : Gaia DR2 2076294775538927360
+[48] Identifier not found in the database : Gaia DR2 2076282298648240896
+[50] Identifier not found in the database : Gaia DR2 2076286804079235456
+[51] Identifier not found in the database : Gaia DR2 2076290648065400448
+[58] Identifier not found in the database : Gaia DR2 2076279760332937984
+[69] Identifier not found in the database : Gaia DR2 2076295909410227072
+[73] Identifier not found in the database : Gaia DR2 2076292954472727808
+[79] Identifier not found in the database : Gaia DR2 2076299688977362304
+[80] Identifier not found in the database : Gaia DR2 2076278660821316480
+[81] Identifier not found in the database : Gaia DR2 2076300101294350976
+[84] Identifier not found in the database : Gaia DR2 2076284909988894464
+[96] Identifier not found in the database : Gaia DR2 2076299688977365632
+[98] Identifier not found in the database : Gaia DR2 2076292920112992640
+[102] Identifier not found in the database : Gaia DR2 2076298791320706048
+[104] Identifier not found in the database : Gaia DR2 2076297318159505664
+[108] Identifier not found in the database : Gaia DR2 2076297318159506560
+[109] Identifier not found in the database : Gaia DR2 2076273605635434752
+[114] Identifier not found in the database : Gaia DR2 2076282302953709568
+[125] Identifier not found in the database : Gaia DR2 2076285738927360000
+[129] Identifier not found in the database : Gaia DR2 2076276874115049856
+[130] Identifier not found in the database : Gaia DR2 2076299792056778880
+[133] Identifier not found in the database : Gaia DR2 2076299688981549312
+[138] Identifier not found in the database : Gaia DR2 2076300066934687360
+[143] Identifier not found in the database : Gaia DR2 2076284532031791104
+[147] Identifier not found in the database : Gaia DR2 2076293023192217856
+[152] Identifier not found in the database : Gaia DR2 2076286838438991360
+[156] Identifier not found in the database : Gaia DR2 2076273536915513856
+[159] Identifier not found in the database : Gaia DR2 2076299792060831360
+[167] Identifier not found in the database : Gaia DR2 2076292473436110592
+[171] Identifier not found in the database : Gaia DR2 2076294088339960320
+[177] Identifier not found in the database : Gaia DR2 2076289067517392000
+[186] Identifier not found in the database : Gaia DR2 2076288006670336256
+[189] Identifier not found in the database : Gaia DR2 2076290274413074560
+[192] Identifier not found in the database : Gaia DR2 2076288449042024704
+[199] Identifier not found in the database : Gaia DR2 2076295767666426368
+[200] Identifier not found in the database : Gaia DR2 2076298383311461504
+[201] Identifier not found in the database : Gaia DR2 2076295771971258368
+[204] Identifier not found in the database : Gaia DR2 2076286254323371264
+[222] Identifier not found in the database : Gaia DR2 2076298726904825984
+[224] Identifier not found in the database : Gaia DR2 2076294053984434048
+[228] Identifier not found in the database : Gaia DR2 2076277526950057216
+[230] Identifier not found in the database : Gaia DR2 2076299688977374080
+[238] Identifier not found in the database : Gaia DR2 2076293538588322560
+[243] Identifier not found in the database : Gaia DR2 2076298310284495232
+[248] Identifier not found in the database : Gaia DR2 2076299719037114496
+[250] Identifier not found in the database : Gaia DR2 2076296699684228736
+[253] Identifier not found in the database : Gaia DR2 2076288517761517952
+[254] Identifier not found in the database : Gaia DR2 2076300101298449664
+[256] Identifier not found in the database : Gaia DR2 2076298997479150208
+[263] Identifier not found in the database : Gaia DR2 2076278587796269696
+[265] Identifier not found in the database : Gaia DR2 2076300066934760832
+[267] Identifier not found in the database : Gaia DR2 2076294599434623744
+[269] Identifier not found in the database : Gaia DR2 2076296493525814400
+[273] Identifier not found in the database : Gaia DR2 2076300131350532608
+[275] Identifier not found in the database : Gaia DR2 2076286116884434048
+[276] Identifier not found in the database : Gaia DR2 2076295394010354432
+[277] Identifier not found in the database : Gaia DR2 2076298761264704640
+[283] Identifier not found in the database : Gaia DR2 2076296527885543680
+[286] Identifier not found in the database : Gaia DR2 2076282509112158464
+[287] Identifier not found in the database : Gaia DR2 2076299031838896896
+[288] Identifier not found in the database : Gaia DR2 2076300032574900480
+[291] Identifier not found in the database : Gaia DR2 2076285665903626368
+[293] Identifier not found in the database : Gaia DR2 2076298933067351936
+[310] Identifier not found in the database : Gaia DR2 2076277836187747200
+[311] Identifier not found in the database : Gaia DR2 2076299650317640064
+[316] Identifier not found in the database : Gaia DR2 2076299860780326272
+[335] Identifier not found in the database : Gaia DR2 2076291300897773056
+[338] Identifier not found in the database : Gaia DR2 2076296493525818624
+[343] Identifier not found in the database : Gaia DR2 2076294702514163072
+[354] Identifier not found in the database : Gaia DR2 2076291236485782400
+[358] Identifier not found in the database : Gaia DR2 2076280481887536640
+[359] Identifier not found in the database : Gaia DR2 2076296768399310080
+[363] Identifier not found in the database : Gaia DR2 2076292159893129216
+[365] Identifier not found in the database : Gaia DR2 2076298142793310208
+[372] Identifier not found in the database : Gaia DR2 2076294191423402880
+[373] Identifier not found in the database : Gaia DR2 2076287663072602752
+[374] Identifier not found in the database : Gaia DR2 2076285940781083392
+[377] Identifier not found in the database : Gaia DR2 2076300066934705152
+[381] Identifier not found in the database : Gaia DR2 2076299826416407296
+[385] Identifier not found in the database : Gaia DR2 2076299723341302528
+[388] Identifier not found in the database : Gaia DR2 2076287590048523264
+[392] Identifier not found in the database : Gaia DR2 2076289685992697088
+[402] Identifier not found in the database : Gaia DR2 2076299963859449088
+[411] Identifier not found in the database : Gaia DR2 2076273678659207680
+[414] Identifier not found in the database : Gaia DR2 2076277114633176320
+[427] Identifier not found in the database : Gaia DR2 2076299890832483072
+[437] Identifier not found in the database : Gaia DR2 2076298864347825920
+[448] Identifier not found in the database : Gaia DR2 2076277114633177984
+[453] Identifier not found in the database : Gaia DR2 2076299929499739136
+[469] Identifier not found in the database : Gaia DR2 2076299826416672512
+[470] Identifier not found in the database : Gaia DR2 2076280859844671744
+[473] Identifier not found in the database : Gaia DR2 2076299826416673024
+[476] Identifier not found in the database : Gaia DR2 2076299723341310976
+[481] Identifier not found in the database : Gaia DR2 2076299826420526976
+[485] Identifier not found in the database : Gaia DR2 2076286872798734976
+[486] Identifier not found in the database : Gaia DR2 2076289789071896704
+[488] Identifier not found in the database : Gaia DR2 2076300032575105152
+[490] Identifier not found in the database : Gaia DR2 2076299444155833856
+[509] Identifier not found in the database : Gaia DR2 2076285326610468736
+[510] Identifier not found in the database : Gaia DR2 2076291064687092992
+[513] Identifier not found in the database : Gaia DR2 2076291270845523712
+[515] Identifier not found in the database : Gaia DR2 2076299826420530176
+[516] Identifier not found in the database : Gaia DR2 2076299620262077568
+[524] Identifier not found in the database : Gaia DR2 2076273403781293184
+[525] Identifier not found in the database : Gaia DR2 2076291060382308864
+[540] Identifier not found in the database : Gaia DR2 2076280653686215168
+[541] Identifier not found in the database : Gaia DR2 2076290270108231936
+[547] Identifier not found in the database : Gaia DR2 2076299929499726592
+[552] Identifier not found in the database : Gaia DR2 2076278759594984576
+[555] Identifier not found in the database : Gaia DR2 2076295703251929856
+[556] Identifier not found in the database : Gaia DR2 2076297627392720384
+[559] Identifier not found in the database : Gaia DR2 2076290304467973632
+[565] Identifier not found in the database : Gaia DR2 2076299998219205376
+[566] Identifier not found in the database : Gaia DR2 2076293396844520832
+[567] Identifier not found in the database : Gaia DR2 2076294947333255424
+[572] Identifier not found in the database : Gaia DR2 2076286666640306304
+[587] Identifier not found in the database : Gaia DR2 2076300101298445184
+[592] Identifier not found in the database : Gaia DR2 2076295428369938432
+[595] Identifier not found in the database : Gaia DR2 2076285326610475520
+[596] Identifier not found in the database : Gaia DR2 2076294535020829184
+[604] Identifier not found in the database : Gaia DR2 2076288247188495744
+[607] Identifier not found in the database : Gaia DR2 2076276491852265984
+[610] Identifier not found in the database : Gaia DR2 2076299585898069632
+[611] Identifier not found in the database : Gaia DR2 2076299826420541184
+[612] Identifier not found in the database : Gaia DR2 2076300032578971648
+[615] Identifier not found in the database : Gaia DR2 2076298829983954176
+[618] Identifier not found in the database : Gaia DR2 2076300101298448768
+[620] Identifier not found in the database : Gaia DR2 2076291786241370880
+[624] Identifier not found in the database : Gaia DR2 2076299723337152512
+[627] Identifier not found in the database : Gaia DR2 2076300101298449920
+[628] Identifier not found in the database : Gaia DR2 2076293194990940032
+[634] Identifier not found in the database : Gaia DR2 2076298761268666368
+[638] Identifier not found in the database : Gaia DR2 2076292061119330176
+[641] Identifier not found in the database : Gaia DR2 2076286701000012160
+[643] Identifier not found in the database : Gaia DR2 2076293980959301504
+[644] Identifier not found in the database : Gaia DR2 2076297382571483776
+[645] Identifier not found in the database : Gaia DR2 2076288315907973632
+[652] Identifier not found in the database : Gaia DR2 2076300101298453376
+[656] Identifier not found in the database : Gaia DR2 2076299826416500224
+[657] Identifier not found in the database : Gaia DR2 2076286529201326848
+[671] Identifier not found in the database : Gaia DR2 2076299826420547584
+[675] Identifier not found in the database : Gaia DR2 2076287800511521024
+[677] Identifier not found in the database : Gaia DR2 2076387271953669248
+[685] Identifier not found in the database : Gaia DR2 2076394105234047872
+[690] Identifier not found in the database : Gaia DR2 2076392838222927616
+[692] Identifier not found in the database : Gaia DR2 2076381121560024320
+[694] Identifier not found in the database : Gaia DR2 2076386103722568320
+[695] Identifier not found in the database : Gaia DR2 2076376929672077440
+[698] Identifier not found in the database : Gaia DR2 2076372080643940736
+[699] Identifier not found in the database : Gaia DR2 2076388886853340544
+[700] Identifier not found in the database : Gaia DR2 2076373837295357824
+[701] Identifier not found in the database : Gaia DR2 2076384454454647680
+[709] Identifier not found in the database : Gaia DR2 2076388371464948992
+[728] Identifier not found in the database : Gaia DR2 2076395552650395776
+[732] Identifier not found in the database : Gaia DR2 2076392838224860544
+[735] Identifier not found in the database : Gaia DR2 2076377887440730624
+[736] Identifier not found in the database : Gaia DR2 2076392322834989824
+[747] Identifier not found in the database : Gaia DR2 2076399435301023744
+[748] Identifier not found in the database : Gaia DR2 2076378918226664576
+[754] Identifier not found in the database : Gaia DR2 2076377341988691328
+[759] Identifier not found in the database : Gaia DR2 2076403210564826368
+[765] Identifier not found in the database : Gaia DR2 2076393113108873088
+[767] Identifier not found in the database : Gaia DR2 2076396514723095936
+[778] Identifier not found in the database : Gaia DR2 2076403214872209408
+[779] Identifier not found in the database : Gaia DR2 2076385966283579264
+[784] Identifier not found in the database : Gaia DR2 2076382976985908864
+[788] Identifier not found in the database : Gaia DR2 2076386408650285440
+[790] Identifier not found in the database : Gaia DR2 2076379433628601728
+[798] Identifier not found in the database : Gaia DR2 2076375001221678080
+[802] Identifier not found in the database : Gaia DR2 2076404894190717184
+[803] Identifier not found in the database : Gaia DR2 2076371427810571392
+[809] Identifier not found in the database : Gaia DR2 2076376001950375168
+[819] Identifier not found in the database : Gaia DR2 2076393903374691712
+[820] Identifier not found in the database : Gaia DR2 2076395655729632256
+[823] Identifier not found in the database : Gaia DR2 2076372630400027008
+[825] Identifier not found in the database : Gaia DR2 2076399022984126976
+[830] Identifier not found in the database : Gaia DR2 2076393284899818368
+[832] Identifier not found in the database : Gaia DR2 2076388818141586560
+[834] Identifier not found in the database : Gaia DR2 2076374730648591872
+[836] Identifier not found in the database : Gaia DR2 2076401595657269504
+[842] Identifier not found in the database : Gaia DR2 2076371913141229568
+[844] Identifier not found in the database : Gaia DR2 2076403833347536768
+[848] Identifier not found in the database : Gaia DR2 2076373459338305664
+[849] Identifier not found in the database : Gaia DR2 2076378441500320256
+[851] Identifier not found in the database : Gaia DR2 2076394590569880064
+[855] Identifier not found in the database : Gaia DR2 2076402355878726528
+[858] Identifier not found in the database : Gaia DR2 2076395793168613120
+[859] Identifier not found in the database : Gaia DR2 2076374009094081024
+[862] Identifier not found in the database : Gaia DR2 2076380739299020672
+[866] Identifier not found in the database : Gaia DR2 2076393662865120384
+[876] Identifier not found in the database : Gaia DR2 2076402939994239616
+[880] Identifier not found in the database : Gaia DR2 2076402596396857088
+[883] Identifier not found in the database : Gaia DR2 2076390398681976576
+[884] Identifier not found in the database : Gaia DR2 2076398640717508608
+[888] Identifier not found in the database : Gaia DR2 2076395067304296064
+[891] Identifier not found in the database : Gaia DR2 2076392455964242176
+[892] Identifier not found in the database : Gaia DR2 2076392632072461696
+[896] Identifier not found in the database : Gaia DR2 2076371569552604800
+[897] Identifier not found in the database : Gaia DR2 2076371599607679616
+[899] Identifier not found in the database : Gaia DR2 2076377234605409920
+[901] Identifier not found in the database : Gaia DR2 2076399396638223744
+[903] Identifier not found in the database : Gaia DR2 2076398163990597248
+[904] Identifier not found in the database : Gaia DR2 2076402630756582144
+[906] Identifier not found in the database : Gaia DR2 2076385137339501312
+[907] Identifier not found in the database : Gaia DR2 2076400775330879360
+[908] Identifier not found in the database : Gaia DR2 2076390707927243520
+[918] Identifier not found in the database : Gaia DR2 2076388611983092992
+[924] Identifier not found in the database : Gaia DR2 2076384007777999232
+[926] Identifier not found in the database : Gaia DR2 2076397300687281280
+[930] Identifier not found in the database : Gaia DR2 2076390639207768832
+[931] Identifier not found in the database : Gaia DR2 2076377651227025280
+[933] Identifier not found in the database : Gaia DR2 2076392941310125184
+[948] Identifier not found in the database : Gaia DR2 2076401084568537344
+[959] Identifier not found in the database : Gaia DR2 2076390398689581952
+[969] Identifier not found in the database : Gaia DR2 2076391738719406208
+[974] Identifier not found in the database : Gaia DR2 2076391463841499392
+[978] Identifier not found in the database : Gaia DR2 2076392838230907264
+[987] Identifier not found in the database : Gaia DR2 2076378196672129664
+[991] Identifier not found in the database : Gaia DR2 2076403897758255744
+[992] Identifier not found in the database : Gaia DR2 2076385072930296064
+[994] Identifier not found in the database : Gaia DR2 2076378643348690688
+[1010] Identifier not found in the database : Gaia DR2 2076392906942382336
+[1011] Identifier not found in the database : Gaia DR2 2076388302745462272
+[1015] Identifier not found in the database : Gaia DR2 2076388989932484736
+[1016] Identifier not found in the database : Gaia DR2 2076376964031839744
+[1018] Identifier not found in the database : Gaia DR2 2076396274204896512
+[1022] Identifier not found in the database : Gaia DR2 2076385102979755776
+[1025] Identifier not found in the database : Gaia DR2 2076403317951373184
+[1031] Identifier not found in the database : Gaia DR2 2076395174693266560
+[1033] Identifier not found in the database : Gaia DR2 2076403485441493376
+[1034] Identifier not found in the database : Gaia DR2 2076399980747704704
+[1035] Identifier not found in the database : Gaia DR2 2076376723513362944
+[1037] Identifier not found in the database : Gaia DR2 2076391223323360640
+[1041] Identifier not found in the database : Gaia DR2 2076396927039985152
+[1046] Identifier not found in the database : Gaia DR2 2076394899815362816
+[1058] Identifier not found in the database : Gaia DR2 2076390570488319616
+[1059] Identifier not found in the database : Gaia DR2 2076395720139703680
+[1061] Identifier not found in the database : Gaia DR2 2076388337105190912
+[1066] Identifier not found in the database : Gaia DR2 2076385931916924544
+[1067] Identifier not found in the database : Gaia DR2 2076386344240729600
+[1073] Identifier not found in the database : Gaia DR2 2076391841798636416
+[1081] Identifier not found in the database : Gaia DR2 2076384832412089728
+[1085] Identifier not found in the database : Gaia DR2 2076396858320489216
+[1088] Identifier not found in the database : Gaia DR2 2076376070678279424
+[1093] Identifier not found in the database : Gaia DR2 2076376345556183040
+[1094] Identifier not found in the database : Gaia DR2 2076378918226657280
+[1095] Identifier not found in the database : Gaia DR2 2076375314764038400
+[1097] Identifier not found in the database : Gaia DR2 2076402007972212736
+[1100] Identifier not found in the database : Gaia DR2 2076401771763142656
+[1103] Identifier not found in the database : Gaia DR2 2076388573313044096
+[1106] Identifier not found in the database : Gaia DR2 2076401870533117056
+[1107] Identifier not found in the database : Gaia DR2 2076374765008349568
+[1108] Identifier not found in the database : Gaia DR2 2076395312124859776
+[1110] Identifier not found in the database : Gaia DR2 2076388199665911680
+[1115] Identifier not found in the database : Gaia DR2 2076388749422077312
+[1120] Identifier not found in the database : Gaia DR2 2076403863398425216
+[1121] Identifier not found in the database : Gaia DR2 2076400358704763136
+[1122] Identifier not found in the database : Gaia DR2 2076388882550713472
+[1123] Identifier not found in the database : Gaia DR2 2076396171117999616
+[1124] Identifier not found in the database : Gaia DR2 2076372222387621248
+[1127] Identifier not found in the database : Gaia DR2 2076402935685399808
+[1130] Identifier not found in the database : Gaia DR2 2076389299169820416
+[1131] Identifier not found in the database : Gaia DR2 2076393628496852992
+[1140] Identifier not found in the database : Gaia DR2 2076389466666269056
+[1142] Identifier not found in the database : Gaia DR2 2076376513050765568
+[1143] Identifier not found in the database : Gaia DR2 2076371878790213376
+[1144] Identifier not found in the database : Gaia DR2 2076375276099784064
+[1145] Identifier not found in the database : Gaia DR2 2076379021305931776
+[1148] Identifier not found in the database : Gaia DR2 2076403485441482240
+[1153] Identifier not found in the database : Gaia DR2 2076394929865291392
+[1165] Identifier not found in the database : Gaia DR2 2076393697224335744
+[1169] Identifier not found in the database : Gaia DR2 2076390192531122688
+[1171] Identifier not found in the database : Gaia DR2 2076378510220114432
+[1173] Identifier not found in the database : Gaia DR2 2076371359089261056
+[1178] Identifier not found in the database : Gaia DR2 2076395788859314688
+[1193] Identifier not found in the database : Gaia DR2 2076396510413844352
+[1197] Identifier not found in the database : Gaia DR2 2076392219755816064
+[1204] Identifier not found in the database : Gaia DR2 2076396823960759936
+[1205] Identifier not found in the database : Gaia DR2 2076388195361864064
+[1211] Identifier not found in the database : Gaia DR2 2076399572740019328
+[1212] Identifier not found in the database : Gaia DR2 2076370740613781760
+[1214] Identifier not found in the database : Gaia DR2 2076375830160145408
+[1215] Identifier not found in the database : Gaia DR2 2076388298442691200
+[1216] Identifier not found in the database : Gaia DR2 2076388852501350528
+[1227] Identifier not found in the database : Gaia DR2 2076392872590611328
+[1231] Identifier not found in the database : Gaia DR2 2076401836173583232
+[1232] Identifier not found in the database : Gaia DR2 2076393697224331648
+[1233] Identifier not found in the database : Gaia DR2 2076398335789269760
+[1237] Identifier not found in the database : Gaia DR2 2076393697224332800
+[1250] Identifier not found in the database : Gaia DR2 2076383870339055232
+[1253] Identifier not found in the database : Gaia DR2 2076396033686712448
+[1257] Identifier not found in the database : Gaia DR2 2076393319267340288
+[1266] Identifier not found in the database : Gaia DR2 2076385657045857536
+[1274] Identifier not found in the database : Gaia DR2 2076394109541236096
+[1281] Identifier not found in the database : Gaia DR2 2076384007777998592
+[1282] Identifier not found in the database : Gaia DR2 2076392906950373504
+[1286] Identifier not found in the database : Gaia DR2 2076405169068723584
+[1289] Identifier not found in the database : Gaia DR2 2076491137132502528
+[1292] Identifier not found in the database : Gaia DR2 2076495981857323648
+[1293] Identifier not found in the database : Gaia DR2 2076497291832198144
+[1296] Identifier not found in the database : Gaia DR2 2076482684636589824
+[1299] Identifier not found in the database : Gaia DR2 2076491583809086080
+[1300] Identifier not found in the database : Gaia DR2 2076478325256621056
+[1301] Identifier not found in the database : Gaia DR2 2076489320373039488
+[1304] Identifier not found in the database : Gaia DR2 2076504919694422656
+[1311] Identifier not found in the database : Gaia DR2 2076507492370129536
+[1312] Identifier not found in the database : Gaia DR2 2076484372570652544
+[1313] Identifier not found in the database : Gaia DR2 2076479081170972544
+[1322] Identifier not found in the database : Gaia DR2 2076487671105798016
+[1324] Identifier not found in the database : Gaia DR2 2076483135620039808
+[1328] Identifier not found in the database : Gaia DR2 2076484265188130176
+[1335] Identifier not found in the database : Gaia DR2 2076479351741991040
+[1341] Identifier not found in the database : Gaia DR2 2076478909372229888
+[1342] Identifier not found in the database : Gaia DR2 2076490278139017600
+[1344] Identifier not found in the database : Gaia DR2 2076504095060574464
+[1345] Identifier not found in the database : Gaia DR2 2076476259366137472
+[1346] Identifier not found in the database : Gaia DR2 2076491210158692480
+[1347] Identifier not found in the database : Gaia DR2 2076491004000263808
+[1353] Identifier not found in the database : Gaia DR2 2076481108395337472
+[1354] Identifier not found in the database : Gaia DR2 2076487666798821888
+[1355] Identifier not found in the database : Gaia DR2 2076478497055345792
+[1360] Identifier not found in the database : Gaia DR2 2076453994254927360
+[1362] Identifier not found in the database : Gaia DR2 2076498661916976384
+[1369] Identifier not found in the database : Gaia DR2 2076497429271193088
+[1370] Identifier not found in the database : Gaia DR2 2076489659663642752
+[1376] Identifier not found in the database : Gaia DR2 2076503991981342848
+[1377] Identifier not found in the database : Gaia DR2 2076478531415090432
+[1378] Identifier not found in the database : Gaia DR2 2076476263672214784
+[1379] Identifier not found in the database : Gaia DR2 2076482482776376704
+[1381] Identifier not found in the database : Gaia DR2 2076497807220265600
+[1382] Identifier not found in the database : Gaia DR2 2076485742653395072
+[1386] Identifier not found in the database : Gaia DR2 2076493477901552896
+[1388] Identifier not found in the database : Gaia DR2 2076485025405765504
+[1389] Identifier not found in the database : Gaia DR2 2076480691775298944
+[1395] Identifier not found in the database : Gaia DR2 2076493855858258688
+[1400] Identifier not found in the database : Gaia DR2 2076488908049390208
+[1407] Identifier not found in the database : Gaia DR2 2076487018270874752
+[1408] Identifier not found in the database : Gaia DR2 2076492030485721728
+[1410] Identifier not found in the database : Gaia DR2 2076489389092822912
+[1411] Identifier not found in the database : Gaia DR2 2076479046811222016
+[1412] Identifier not found in the database : Gaia DR2 2076489492172037760
+[1414] Identifier not found in the database : Gaia DR2 2076492618908039680
+[1416] Identifier not found in the database : Gaia DR2 2076496325454757376
+[1417] Identifier not found in the database : Gaia DR2 2076491656835404672
+[1421] Identifier not found in the database : Gaia DR2 2076487533666799872
+[1426] Identifier not found in the database : Gaia DR2 2076497528045678208
+[1427] Identifier not found in the database : Gaia DR2 2076481963083968000
+[1433] Identifier not found in the database : Gaia DR2 2076496364119291904
+[1435] Identifier not found in the database : Gaia DR2 2076488427019993344
+[1437] Identifier not found in the database : Gaia DR2 2076500349848894720
+[1444] Identifier not found in the database : Gaia DR2 2076506294083950976
+[1451] Identifier not found in the database : Gaia DR2 2076476779068350592
+[1452] Identifier not found in the database : Gaia DR2 2076486983910929920
+[1453] Identifier not found in the database : Gaia DR2 2076485777013132800
+[1455] Identifier not found in the database : Gaia DR2 2076487980336203136
+[1457] Identifier not found in the database : Gaia DR2 2076484303851143040
+[1463] Identifier not found in the database : Gaia DR2 2076485845732619904
+[1467] Identifier not found in the database : Gaia DR2 2076479974524142208
+[1473] Identifier not found in the database : Gaia DR2 2076497287526994432
+[1475] Identifier not found in the database : Gaia DR2 2076477397543552000
+[1482] Identifier not found in the database : Gaia DR2 2076486434155045632
+[1484] Identifier not found in the database : Gaia DR2 2076503442225579776
+[1489] Identifier not found in the database : Gaia DR2 2076492240951018624
+[1496] Identifier not found in the database : Gaia DR2 2076490316805527552
+[1497] Identifier not found in the database : Gaia DR2 2076487804237824256
+[1498] Identifier not found in the database : Gaia DR2 2076494371254379008
+[1499] Identifier not found in the database : Gaia DR2 2076483337471692928
+[1500] Identifier not found in the database : Gaia DR2 2076481039675863552
+[1502] Identifier not found in the database : Gaia DR2 2076484097684399232
+[1503] Identifier not found in the database : Gaia DR2 2076489835769156864
+[1508] Identifier not found in the database : Gaia DR2 2076487327501088256
+[1509] Identifier not found in the database : Gaia DR2 2076490553016871424
+[1510] Identifier not found in the database : Gaia DR2 2076506500242450560
+[1511] Identifier not found in the database : Gaia DR2 2076488014703175680
+[1512] Identifier not found in the database : Gaia DR2 2076483238699267456
+[1516] Identifier not found in the database : Gaia DR2 2076503167347680128
+[1517] Identifier not found in the database : Gaia DR2 2076480215042291840
+[1524] Identifier not found in the database : Gaia DR2 2076485639574172160
+[1528] Identifier not found in the database : Gaia DR2 2076488044756001536
+[1529] Identifier not found in the database : Gaia DR2 2076492550188674944
+[1530] Identifier not found in the database : Gaia DR2 2076503167347681280
+[1532] Identifier not found in the database : Gaia DR2 2076496776436178432
+[1540] Identifier not found in the database : Gaia DR2 2076481074035617280
+[1543] Identifier not found in the database : Gaia DR2 2076480416893919488
+[1545] Identifier not found in the database : Gaia DR2 2076504232499547264
+[1547] Identifier not found in the database : Gaia DR2 2076490106340267264
+[1548] Identifier not found in the database : Gaia DR2 2076487739825277568
+[1549] Identifier not found in the database : Gaia DR2 2076500830885640704
+[1556] Identifier not found in the database : Gaia DR2 2076502888172074112
+[1562] Identifier not found in the database : Gaia DR2 2076493271743161856
+[1564] Identifier not found in the database : Gaia DR2 2076504438657986176
+[1566] Identifier not found in the database : Gaia DR2 2076493271743162880
+[1567] Identifier not found in the database : Gaia DR2 2076486434147333376
+[1568] Identifier not found in the database : Gaia DR2 2076486846471945088
+[1574] Identifier not found in the database : Gaia DR2 2076480348174438784
+[1582] Identifier not found in the database : Gaia DR2 2076504881027930624
+[1583] Identifier not found in the database : Gaia DR2 2076490449937644288
+[1587] Identifier not found in the database : Gaia DR2 2076496329759573760
+[1589] Identifier not found in the database : Gaia DR2 2076492344030203136
+[1590] Identifier not found in the database : Gaia DR2 2076495642564686592
+[1597] Identifier not found in the database : Gaia DR2 2076485815679793152
+[1599] Identifier not found in the database : Gaia DR2 2076505916126808704
+[1600] Identifier not found in the database : Gaia DR2 2076486468514769280
+[1601] Identifier not found in the database : Gaia DR2 2076487293148617472
+[1605] Identifier not found in the database : Gaia DR2 2076493718419250304
+[1608] Identifier not found in the database : Gaia DR2 2076488530091736320
+[1611] Identifier not found in the database : Gaia DR2 2076483891534243072
+[1613] Identifier not found in the database : Gaia DR2 2076491966073041152
+[1617] Identifier not found in the database : Gaia DR2 2076481172808087168
+[1625] Identifier not found in the database : Gaia DR2 2076492825066502656
+[1628] Identifier not found in the database : Gaia DR2 2076485987478395008
+[1632] Identifier not found in the database : Gaia DR2 2076502480152809856
+[1634] Identifier not found in the database : Gaia DR2 2076486227988944896
+[1635] Identifier not found in the database : Gaia DR2 2076501174474590848
+[1638] Identifier not found in the database : Gaia DR2 2076484922326530944
+[1639] Identifier not found in the database : Gaia DR2 2076490896614324096
+[1642] Identifier not found in the database : Gaia DR2 2076486331075786496
+[1643] Identifier not found in the database : Gaia DR2 2076486124917387264
+[1647] Identifier not found in the database : Gaia DR2 2076491583809086336
+[1651] Identifier not found in the database : Gaia DR2 2076503579664443520
+[1657] Identifier not found in the database : Gaia DR2 2076488186501779712
+[1659] Identifier not found in the database : Gaia DR2 2076503747158465152
+[1661] Identifier not found in the database : Gaia DR2 2076477702474910208
+[1664] Identifier not found in the database : Gaia DR2 2076488255221259008
+[1665] Identifier not found in the database : Gaia DR2 2076501002676146944
+[1667] Identifier not found in the database : Gaia DR2 2076478428335860480
+[1672] Identifier not found in the database : Gaia DR2 2076479287329395072
+[1678] Identifier not found in the database : Gaia DR2 2076483719735643136
+[1683] Identifier not found in the database : Gaia DR2 2076495603904471936
+[1685] Identifier not found in the database : Gaia DR2 2076502651951557632
+[1687] Identifier not found in the database : Gaia DR2 2076504885334653568
+[1693] Identifier not found in the database : Gaia DR2 2076502651951555200
+[1697] Identifier not found in the database : Gaia DR2 2076505057133329408
+[1699] Identifier not found in the database : Gaia DR2 2076487808544792320
+[1701] Identifier not found in the database : Gaia DR2 2076476675989118336
+[1707] Identifier not found in the database : Gaia DR2 2076489182934322944
+[1710] Identifier not found in the database : Gaia DR2 2076497394911441152
+[1711] Identifier not found in the database : Gaia DR2 2076496428533956736
+[1712] Identifier not found in the database : Gaia DR2 2076496772131400192
+[1714] Identifier not found in the database : Gaia DR2 2076478187811403136
+[1718] Identifier not found in the database : Gaia DR2 2076493645393497472
+[1721] Identifier not found in the database : Gaia DR2 2076510314173459968
+[1723] Identifier not found in the database : Gaia DR2 2076509626978591360
+[1730] Identifier not found in the database : Gaia DR2 2076600263663745024
+[1731] Identifier not found in the database : Gaia DR2 2076601431894847872
+[1732] Identifier not found in the database : Gaia DR2 2076594942207534720
+[1733] Identifier not found in the database : Gaia DR2 2076586902028623488
+[1734] Identifier not found in the database : Gaia DR2 2076586902028622848
+[1737] Identifier not found in the database : Gaia DR2 2076581851147039232
+[1739] Identifier not found in the database : Gaia DR2 2076590475441541120
+[1740] Identifier not found in the database : Gaia DR2 2076582297823676928
+[1744] Identifier not found in the database : Gaia DR2 2076585385894473088
+[1745] Identifier not found in the database : Gaia DR2 2076589062388621312
+[1751] Identifier not found in the database : Gaia DR2 2076590475441540992
+[1753] Identifier not found in the database : Gaia DR2 2076582813219680256
+[1754] Identifier not found in the database : Gaia DR2 2076595972999678848
+[1759] Identifier not found in the database : Gaia DR2 2076581988585956992
+[1761] Identifier not found in the database : Gaia DR2 2076600126224776448
+[1763] Identifier not found in the database : Gaia DR2 2076589479009054592
+[1766] Identifier not found in the database : Gaia DR2 2076585321480707968
+[1772] Identifier not found in the database : Gaia DR2 2076588169035812480
+[1776] Identifier not found in the database : Gaia DR2 2076585351534714112
+[1777] Identifier not found in the database : Gaia DR2 2076581816776766080
+[1780] Identifier not found in the database : Gaia DR2 2076584801778898688
+[1782] Identifier not found in the database : Gaia DR2 2076586588487772032
+[1783] Identifier not found in the database : Gaia DR2 2076586730229943296
+[1790] Identifier not found in the database : Gaia DR2 2076590574214959232
+[1791] Identifier not found in the database : Gaia DR2 2076602604429348736
+[1796] Identifier not found in the database : Gaia DR2 2076595491963375104
+[1797] Identifier not found in the database : Gaia DR2 2076601741132508032
+[1801] Identifier not found in the database : Gaia DR2 2076590711653917568
+[1803] Identifier not found in the database : Gaia DR2 2076592154763026176
+[1805] Identifier not found in the database : Gaia DR2 2076585901290579968
+[1806] Identifier not found in the database : Gaia DR2 2076590475441544960
+[1809] Identifier not found in the database : Gaia DR2 2076584703005456768
+[1810] Identifier not found in the database : Gaia DR2 2076590264979489664
+[1817] Identifier not found in the database : Gaia DR2 2076583603493739904
+[1820] Identifier not found in the database : Gaia DR2 2076584045864620672
+[1821] Identifier not found in the database : Gaia DR2 2076581782427556096
+[1824] Identifier not found in the database : Gaia DR2 2076585768157339008
+[1826] Identifier not found in the database : Gaia DR2 2076584252023054208
+[1828] Identifier not found in the database : Gaia DR2 2076586146114322304
+[1831] Identifier not found in the database : Gaia DR2 2076583431695059584
+[1836] Identifier not found in the database : Gaia DR2 2076587520503849728
+[1839] Identifier not found in the database : Gaia DR2 2076584290688576128
+[1845] Identifier not found in the database : Gaia DR2 2076583844012374656
+[1846] Identifier not found in the database : Gaia DR2 2076586725927012992
+[1847] Identifier not found in the database : Gaia DR2 2076583874065921664
+[1850] Identifier not found in the database : Gaia DR2 2076592223482509952
+[1853] Identifier not found in the database : Gaia DR2 2076593018062248832
+[1854] Identifier not found in the database : Gaia DR2 2076591982964339456
+[1857] Identifier not found in the database : Gaia DR2 2076591708086393088
+[1859] Identifier not found in the database : Gaia DR2 2076594907847780480
+[1860] Identifier not found in the database : Gaia DR2 2076591540593421696
+[1862] Identifier not found in the database : Gaia DR2 2076588443913316608
+[1863] Identifier not found in the database : Gaia DR2 2076588963613036544
+[1864] Identifier not found in the database : Gaia DR2 2076583637853457024
+[1865] Identifier not found in the database : Gaia DR2 2076586008675533824
+[1866] Identifier not found in the database : Gaia DR2 2076584840444429696
+[1867] Identifier not found in the database : Gaia DR2 2076585321470413824
+[1868] Identifier not found in the database : Gaia DR2 2076584634285999872
+[1869] Identifier not found in the database : Gaia DR2 2076591261409789952
+[1871] Identifier not found in the database : Gaia DR2 2076585733797625216
+[1876] Identifier not found in the database : Gaia DR2 2076581816787314560
+[1878] Identifier not found in the database : Gaia DR2 2076584737365185536
+[1882] Identifier not found in the database : Gaia DR2 2076582263463923200
+[1885] Identifier not found in the database : Gaia DR2 2076589479009058944
+[1887] Identifier not found in the database : Gaia DR2 2076582916298933632
+[1892] Identifier not found in the database : Gaia DR2 2076599958729223680
+[1896] Identifier not found in the database : Gaia DR2 2076581679337658496
+[1898] Identifier not found in the database : Gaia DR2 2076591433208523136
+[1901] Identifier not found in the database : Gaia DR2 2076583736629135616
+[1903] Identifier not found in the database : Gaia DR2 2076590612880517760
+[1905] Identifier not found in the database : Gaia DR2 2076584252023059456
+[1906] Identifier not found in the database : Gaia DR2 2076599821290237440
+[1908] Identifier not found in the database : Gaia DR2 2076582813209012864
+[1913] Identifier not found in the database : Gaia DR2 2076582843276257920
+[1916] Identifier not found in the database : Gaia DR2 2076596144798380032
+
+::data::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+GAIA DR2 2076299585902317952|
+Gaia DR2 2076299860776265984|
+Gaia DR2 2076285567128682240|
+GAIA DR2 2076297829248112256|
+GAIA DR2 2076299929499736192|
+GAIA DR2 2076298864347827456|
+GAIA DR2 2076299585902318336|
+Gaia DR2 2076292542155588352|
+GAIA DR2 2076299311024404736|
+GAIA DR2 2076300032578964608|
+GAIA DR2 2076299070506202496|
+GAIA DR2 2076300135658207232|
+Gaia DR2 2076290476266690304|
+Gaia DR2 2076299001782702336|
+Gaia DR2 2076284738190254592|
+GAIA DR2 2076280894204417792|
+GAIA DR2 2076299414103588224|Fe_H  | 6455 4.12  |-0.10   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076295565812951680|
+GAIA DR2 2076298314591960960|
+GAIA DR2 2076300101294400768|
+GAIA DR2 2076299414103591936|
+Gaia DR2 2076282195569024256|
+Gaia DR2 2076297146360791040|
+GAIA DR2 2076299757701063936|
+Gaia DR2 2076300032574859008|
+GAIA DR2 2076294019624475648|
+GAIA DR2 2076298726908904832|
+GAIA DR2 2076296115568643712|
+GAIA DR2 2076299959551919232|
+Gaia DR2 2076299276660358400|
+GAIA DR2 2076296115568643200|
+Gaia DR2 2076293087606834432|
+GAIA DR2 2076295153496051968|Fe_H  | 6311 4.32  |-0.18   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299207945180160|
+Gaia DR2 2076281924996575616|
+GAIA DR2 2076300062631198208|
+GAIA DR2 2076296046849168512|
+GAIA DR2 2076292370356991872|
+Gaia DR2 2076299826416431360|
+GAIA DR2 2076293813466041216|
+GAIA DR2 2076298074073810944|
+GAIA DR2 2076295084776574336|
+Gaia DR2 2076300032574863616|
+GAIA DR2 2076292576515597696|
+GAIA DR2 2076298005354332672|Fe_H  | 6307 4.32  | 0.02   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076294775538927360|
+Gaia DR2 2076282298648240896|
+GAIA DR2 2076299826420529280|
+Gaia DR2 2076286804079235456|
+Gaia DR2 2076290648065400448|
+GAIA DR2 2076298074073807744|Fe_H  | 6287 4.27  |-0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076298138485666304|
+GAIA DR2 2076294981697354752|
+GAIA DR2 2076298933067350272|
+GAIA DR2 2076299826416438016|
+GAIA DR2 2076299001786827136|
+Gaia DR2 2076279760332937984|
+GAIA DR2 2076299379743863936|Fe_H  | 6426 4.02  |-0.10   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076296489220988416|
+GAIA DR2 2076292954472722432|
+GAIA DR2 2076299173585433216|
+GAIA DR2 2076299895140066304|
+GAIA DR2 2076300066934670848|
+GAIA DR2 2076300066938718592|
+GAIA DR2 2076299826420550144|
+GAIA DR2 2076299792060812032|
+GAIA DR2 2076296283062879616|Fe_H  | 6846 4.09  | 0.05   |SUN      |     |2016A&A...594A..39F|
+Gaia DR2 2076295909410227072|
+GAIA DR2 2076300066938719744|
+GAIA DR2 2076300135658196864|
+GAIA DR2 2076298692549185152|
+Gaia DR2 2076292954472727808|
+GAIA DR2 2076299036142588032|
+GAIA DR2 2076298967427093248|
+GAIA DR2 2076299448463336064|
+GAIA DR2 2076297386878978688|
+GAIA DR2 2076299860780291456|
+Gaia DR2 2076299688977362304|
+Gaia DR2 2076278660821316480|
+Gaia DR2 2076300101294350976|
+GAIA DR2 2076300066938722176|
+GAIA DR2 2076299792060815872|
+Gaia DR2 2076284909988894464|
+GAIA DR2 2076299036146572288|
+GAIA DR2 2076299860780293376|
+GAIA DR2 2076299036146572416|
+GAIA DR2 2076299895139984384|
+GAIA DR2 2076298692549189504|
+GAIA DR2 2076299036146572928|
+GAIA DR2 2076300135658201216|
+GAIA DR2 2076296798455929472|
+GAIA DR2 2076296764096190976|
+GAIA DR2 2076298791320705280|
+GAIA DR2 2076299070506210048|
+Gaia DR2 2076299688977365632|
+GAIA DR2 2076298791320705152|
+Gaia DR2 2076292920112992640|
+GAIA DR2 2076299860780295168|
+GAIA DR2 2076299001786821632|
+GAIA DR2 2076299860780295936|Fe_H  |            | 0.10   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4715 2.620 | 0.105  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4654 2.66  |-0.07   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076298791320706048|
+GAIA DR2 2076299792060819328|Fe_H  |            | 0.11   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4609 2.479 | 0.13   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4665 2.510 | 0.105  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4567 2.48  |-0.06   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4540 2.46  |        |SUN      |     |2011ApJ...729L..10B|
+Gaia DR2 2076297318159505664|
+GAIA DR2 2076295943769970688|
+GAIA DR2 2076299757701064832|Fe_H  | 5963 3.75  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076300101294355968|Fe_H  | 4849 2.555 | 0.05   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4731 2.48  |-0.19   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076297318159506560|
+Gaia DR2 2076273605635434752|
+GAIA DR2 2076298791320707968|
+GAIA DR2 2076299517178610688|
+GAIA DR2 2076299757701063424|
+GAIA DR2 2076296665324480000|
+Gaia DR2 2076282302953709568|
+GAIA DR2 2076300032578958080|
+GAIA DR2 2076300066938729856|
+GAIA DR2 2076298722601233792|
+GAIA DR2 2076294569380590080|
+GAIA DR2 2076299654621822720|Fe_H  | 6259 3.92  | 0.07   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299792060823680|
+GAIA DR2 2076298555110194304|
+GAIA DR2 2076297936634830336|Fe_H  | 6430 4.02  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076297696116632576|
+GAIA DR2 2076298761268673024|
+Gaia DR2 2076285738927360000|
+GAIA DR2 2076294569380592000|
+GAIA DR2 2076299792060824832|
+GAIA DR2 2076299723341297920|
+Gaia DR2 2076276874115049856|
+Gaia DR2 2076299792056778880|
+GAIA DR2 2076299860780302464|Fe_H  | 6496 3.92  |-0.13   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299792060826240|
+Gaia DR2 2076299688981549312|
+GAIA DR2 2076299792060826624|
+GAIA DR2 2076297867915351040|
+GAIA DR2 2076298967427105920|
+GAIA DR2 2076298761268676352|Fe_H  |            | 0.09   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4093 1.89  |-0.03   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4174 1.515 | 0.14   |         |     |2016A&A...594A..43H|
+Fe_H  | 4159 1.599 | 0.21   |         |     |2016A&A...594A..43H|
+Fe_H  | 4154 1.590 | 0.047  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4060 1.91  | 0.01   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4130 1.64  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4174 1.515 |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4046 1.77  |-0.18   |SUN      |     |2013MNRAS.434.1422M|
+Fe_H  |    1 1.64  |        |         |     |2013AJ....146..133M|
+Gaia DR2 2076300066934687360|
+GAIA DR2 2076299963859456000|
+GAIA DR2 2076299615954435072|
+GAIA DR2 2076297696116635648|Fe_H  | 6446 4.21  |-0.04   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076300066938734464|
+Gaia DR2 2076284532031791104|
+GAIA DR2 2076299792060827648|
+GAIA DR2 2076299826420533248|
+GAIA DR2 2076300066938735360|
+Gaia DR2 2076293023192217856|
+GAIA DR2 2076300066938736128|
+GAIA DR2 2076299688981555328|
+GAIA DR2 2076299688981555072|
+GAIA DR2 2076300066938736896|
+Gaia DR2 2076286838438991360|
+GAIA DR2 2076299826420588288|
+GAIA DR2 2076298653881725824|
+GAIA DR2 2076300096990710144|
+Gaia DR2 2076273536915513856|
+GAIA DR2 2076299203645002752|
+GAIA DR2 2076299963859460736|Fe_H  | 6303 3.92  |-0.03   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076299792060831360|
+GAIA DR2 2076300028271234816|Fe_H  |            | 0.11   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4996 2.814 | 0.01   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4946 2.41  |-0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076272579147578112|
+GAIA DR2 2076299860780325504|
+GAIA DR2 2076292091173641600|
+GAIA DR2 2076300135658216448|
+GAIA DR2 2076300135658216576|
+GAIA DR2 2076299311024407936|Fe_H  | 6332 4.02  | 0.02   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076292473436110592|
+GAIA DR2 2076299311024408192|
+GAIA DR2 2076299993911705600|
+GAIA DR2 2076298967427112576|
+Gaia DR2 2076294088339960320|
+GAIA DR2 2076299792060833792|
+GAIA DR2 2076294912977898496|
+GAIA DR2 2076298417671211136|
+GAIA DR2 2076299719033591424|Fe_H  |            | 0.15   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4684 2.580 |-0.24   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4791 2.620 | 0.161  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4692 2.54  |-0.07   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4614 2.58  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076299585902316416|
+Gaia DR2 2076289067517392000|
+GAIA DR2 2076299723341311360|
+GAIA DR2 2076295187855804800|Fe_H  | 6455 4.12  | 0.00   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076278965753461888|
+GAIA DR2 2076299585902317056|
+GAIA DR2 2076299963859456128|
+GAIA DR2 2076298417671212800|
+GAIA DR2 2076300028278728448|Fe_H  |            | 0.15   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4910 2.839 | 0.11   |         |     |2016A&A...594A..43H|
+Fe_H  | 4872 2.640 | 0.143  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4812 2.36  |-0.11   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4867 2.88  |        |         |     |2013AJ....146..133M|
+Fe_H  |    1 2.88  |        |         |     |2013AJ....146..133M|
+GAIA DR2 2076299654621833472|
+Gaia DR2 2076288006670336256|
+GAIA DR2 2076299173585436672|
+GAIA DR2 2076298074073809536|
+Gaia DR2 2076290274413074560|
+GAIA DR2 2076296557940470272|
+GAIA DR2 2076297966689744000|Fe_H  | 6356 4.27  |-0.15   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076288449042024704|
+GAIA DR2 2076299276664657408|
+GAIA DR2 2076299482823088000|
+GAIA DR2 2076294878618145536|
+GAIA DR2 2076299551542564992|
+GAIA DR2 2076299207945183360|Fe_H  | 6287 4.27  |-0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299993911658368|
+Gaia DR2 2076295767666426368|
+Gaia DR2 2076298383311461504|
+Gaia DR2 2076295771971258368|
+GAIA DR2 2076299959551918848|
+GAIA DR2 2076300066938728832|Fe_H  | 4740 2.774 |-0.01   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4790 2.78  |-0.16   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4727 2.78  |        |SUN      |     |2011ApJ...729L..10B|
+Gaia DR2 2076286254323371264|
+GAIA DR2 2076298177153032960|Fe_H  | 6377 4.21  |-0.15   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299207945184128|
+GAIA DR2 2076299482823091200|
+GAIA DR2 2076298177153033344|
+GAIA DR2 2076299276664661248|Fe_H  | 6332 4.02  |-0.08   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299207945184896|
+GAIA DR2 2076299276664661504|
+GAIA DR2 2076299207945185152|
+GAIA DR2 2076299792060820864|
+GAIA DR2 2076295153496059136|
+GAIA DR2 2076298310284438656|
+GAIA DR2 2076299414103588608|
+GAIA DR2 2076299207945186048|Fe_H  | 6247 3.75  |-0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076298383311466368|Fe_H  |            | 0.08   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4789 2.595 |-0.26   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4848 2.56  |-0.14   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4761 2.573 | 0.01   |         |     |2016A&A...594A..43H|
+Fe_H  | 4856 2.865 | 0.09   |         |     |2016A&A...594A..43H|
+Fe_H  | 4772 2.590 | 0.032  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4867 2.76  | 0.05   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4709 2.48  |-0.13   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4803 2.82  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4761 2.573 |        |         |     |2014ApJS..215...19P|
+GAIA DR2 2076292507795851520|
+GAIA DR2 2076299482823094272|
+GAIA DR2 2076294878618153984|
+Gaia DR2 2076298726904825984|
+GAIA DR2 2076298486390682496|
+Gaia DR2 2076294053984434048|
+GAIA DR2 2076299517182833152|
+GAIA DR2 2076300135654227968|
+GAIA DR2 2076298177153037056|
+Gaia DR2 2076277526950057216|
+GAIA DR2 2076295187855801472|
+Gaia DR2 2076299688977374080|
+GAIA DR2 2076298417671207040|
+GAIA DR2 2076300135658202368|
+GAIA DR2 2076299792060818560|Fe_H  | 6368 4.02  |-0.10   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299242304928256|
+GAIA DR2 2076294187117740672|
+GAIA DR2 2076299929495609088|
+GAIA DR2 2076299585902312448|
+Gaia DR2 2076293538588322560|
+GAIA DR2 2076292679589228544|
+GAIA DR2 2076295187855800960|
+GAIA DR2 2076298486390685440|
+GAIA DR2 2076298860040192128|
+Gaia DR2 2076298310284495232|
+GAIA DR2 2076298692549198336|
+GAIA DR2 2076298894399932160|
+GAIA DR2 2076299757696982912|
+GAIA DR2 2076300066934756736|
+Gaia DR2 2076299719037114496|
+GAIA DR2 2076296630964751872|
+Gaia DR2 2076296699684228736|
+GAIA DR2 2076300131353981312|
+GAIA DR2 2076300131350663552|
+Gaia DR2 2076288517761517952|
+Gaia DR2 2076300101298449664|
+GAIA DR2 2076298967427094656|
+Gaia DR2 2076298997479150208|
+GAIA DR2 2076300135654236160|Fe_H  | 6328 4.02  | 0.06   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299792060824960|Fe_H  | 6551 4.12  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299895140066560|
+GAIA DR2 2076300131350662016|
+GAIA DR2 2076299787756595328|
+GAIA DR2 2076299826420542080|
+Gaia DR2 2076278587796269696|
+GAIA DR2 2076298074073809152|
+Gaia DR2 2076300066934760832|
+GAIA DR2 2076297833555597952|Fe_H  | 6438 4.21  | 0.00   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076294599434623744|
+GAIA DR2 2076300032579018752|
+Gaia DR2 2076296493525814400|
+GAIA DR2 2076299448463343488|
+GAIA DR2 2076297455598475520|Fe_H  | 6436 3.99  | 0.13   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 6442 4.02  |-0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299856476070784|
+Gaia DR2 2076300131350532608|
+GAIA DR2 2076299860780326016|
+Gaia DR2 2076286116884434048|
+Gaia DR2 2076295394010354432|
+Gaia DR2 2076298761264704640|
+GAIA DR2 2076298039714190976|Fe_H  |            | 0.07   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4730 2.353 |-0.36   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4620       |        |         |     |2016A&A...594A..43H|
+Fe_H  | 4760 2.662 | 0.26   |         |     |2016A&A...594A..43H|
+Fe_H  | 4748 2.450 | 0.059  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4636 2.72  |-0.05   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4671 2.49  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4620       |        |         |     |2014ApJS..215...19P|
+GAIA DR2 2076282440392687104|Fe_H  | 6588 4.12  |-0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076296802763450112|Fe_H  | 6559 4.21  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076292198558252416|
+GAIA DR2 2076298963119417856|
+Gaia DR2 2076296527885543680|
+GAIA DR2 2076299757701063552|
+GAIA DR2 2076299581598159744|
+Gaia DR2 2076282509112158464|
+Gaia DR2 2076299031838896896|
+Gaia DR2 2076300032574900480|
+GAIA DR2 2076299826416472192|
+GAIA DR2 2076297833555603456|
+Gaia DR2 2076285665903626368|
+GAIA DR2 2076296802763452544|Fe_H  | 6401 4.02  | 0.07   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076298933067351936|
+GAIA DR2 2076299753393404160|
+GAIA DR2 2076297627397174528|
+GAIA DR2 2076298997479158272|
+GAIA DR2 2076299822113010560|Fe_H  | 6808 3.61  | 0.08   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076296734043979392|
+GAIA DR2 2076300028271441536|
+GAIA DR2 2076297867915346816|
+GAIA DR2 2076299993911704064|
+GAIA DR2 2076295703251980288|
+GAIA DR2 2076299719037115264|
+GAIA DR2 2076299993911705088|
+GAIA DR2 2076298108433667328|
+GAIA DR2 2076298108433667200|
+GAIA DR2 2076300028271316224|Fe_H  | 6191 3.77  | 0.04   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076294363221905536|Fe_H  | 6488 4.21  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076300028274761856|
+Gaia DR2 2076277836187747200|
+Gaia DR2 2076299650317640064|
+GAIA DR2 2076299860780325760|
+GAIA DR2 2076297867915349248|Fe_H  | 6364 4.02  | 0.00   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076297799195859072|
+GAIA DR2 2076296562245292800|
+Gaia DR2 2076299860780326272|
+GAIA DR2 2076299826420588160|
+GAIA DR2 2076294294502430720|Fe_H  |            | 0.07   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4925 2.900 |-0.35   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4926 2.65  |-0.16   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4943 2.70  |-0.08   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4877 2.855 | 0.01   |         |     |2016A&A...594A..43H|
+Fe_H  | 4829 2.590 | 0.064  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 5050 2.72  |-0.22   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4952 2.72  |-0.11   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4877 2.855 |        |         |     |2014ApJS..215...19P|
+GAIA DR2 2076299826420588416|Fe_H  | 5861 3.77  |-0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076297661756920192|Fe_H  | 6203 3.83  |-0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076297867915351552|
+GAIA DR2 2076299929499804032|
+GAIA DR2 2076299929499804160|
+GAIA DR2 2076299929499804288|Fe_H  | 6180 3.83  | 0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299929499804416|
+GAIA DR2 2076300062631185664|
+GAIA DR2 2076299306716924416|
+GAIA DR2 2076300131350662912|
+GAIA DR2 2076296935894866304|Fe_H  | 6459 3.92  |-0.14   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076300101294387584|Fe_H  |            | 0.09   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4782 2.559 |-0.17   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4835 2.61  | 0.10   |SUN      |     |2001AJ....121..327B|
+Fe_H  | 4755 2.547 | 0.06   |         |     |2016A&A...594A..43H|
+Fe_H  | 4846 2.708 | 0.11   |         |     |2016A&A...594A..43H|
+Fe_H  | 4803 2.500 | 0.079  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4752 2.48  |-0.06   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4798 2.70  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4755 2.547 |        |         |     |2014ApJS..215...19P|
+GAIA DR2 2076299517182944768|
+GAIA DR2 2076294049678792832|
+GAIA DR2 2076299448463468416|
+GAIA DR2 2076299585902421760|Fe_H  | 5041 3.55  |-0.05   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076291300897773056|
+GAIA DR2 2076296837123202944|
+GAIA DR2 2076297661756923648|
+Gaia DR2 2076296493525818624|
+GAIA DR2 2076299688981554688|Fe_H  | 4946 3.57  |-0.11   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076279004418729216|
+GAIA DR2 2076296837123203968|
+GAIA DR2 2076297867915356032|
+Gaia DR2 2076294702514163072|
+GAIA DR2 2076296493525821440|
+GAIA DR2 2076295492787830016|
+GAIA DR2 2076297249440012672|
+GAIA DR2 2076297661756927104|Fe_H  | 6385 4.21  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299242304934912|
+GAIA DR2 2076298486390690944|
+GAIA DR2 2076295565812944384|
+GAIA DR2 2076298447723274880|Fe_H  |            | 0.09   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4859 2.693 |-0.33   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4921 2.790 | 0.091  |SUN      |     |2016ApJ...823..114N|
+GAIA DR2 2076291099046815872|
+GAIA DR2 2076299620262070400|
+Gaia DR2 2076291236485782400|
+GAIA DR2 2076295320987086080|
+GAIA DR2 2076277080273429760|Fe_H  | 4606 3.167 |-0.23   |         |     |2018ApJS...236..42Y|
+GAIA DR2 2076296459166071424|Fe_H  | 6480 4.21  |-0.04   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076280481887536640|
+Gaia DR2 2076296768399310080|
+GAIA DR2 2076299895139975424|Fe_H  | 6451 4.12  |-0.14   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076298142793309952|Fe_H  | 6521 4.21  |-0.07   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299311024414592|Fe_H  |            | 0.02   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4943 3.100 |-0.40   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4946 2.77  |-0.11   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4864       |        |         |     |2016A&A...594A..43H|
+Fe_H  | 5012 3.135 |-0.09   |         |     |2016A&A...594A..43H|
+Fe_H  | 4928 2.960 |-0.007  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 5166 3.53  | 0.08   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4950 3.13  |-0.05   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4887 2.98  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4864       |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4843 3.10  |        |SUN      |     |2011ApJ...729L..10B|
+Gaia DR2 2076292159893129216|
+GAIA DR2 2076298864347823872|
+Gaia DR2 2076298142793310208|
+GAIA DR2 2076295222215553536|
+GAIA DR2 2076295119136335744|
+GAIA DR2 2076299895139967744|
+GAIA DR2 2076298761264643328|
+GAIA DR2 2076299963859445120|
+GAIA DR2 2076299895139972992|
+Gaia DR2 2076294191423402880|
+Gaia DR2 2076287663072602752|
+Gaia DR2 2076285940781083392|
+GAIA DR2 2076299895139969536|
+GAIA DR2 2076298795628342144|Fe_H  | 6215 3.92  |-0.12   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076300066934705152|
+GAIA DR2 2076295256575313536|
+GAIA DR2 2076300032574836352|
+GAIA DR2 2076298864347818624|
+Gaia DR2 2076299826416407296|
+GAIA DR2 2076298829988104832|Fe_H  | 6105 3.77  |-0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076298829988103424|
+GAIA DR2 2076299620262063104|
+Gaia DR2 2076299723341302528|
+GAIA DR2 2076299998219207808|
+GAIA DR2 2076298623829672960|
+Gaia DR2 2076287590048523264|
+GAIA DR2 2076298898707580416|
+GAIA DR2 2076299723341302272|
+GAIA DR2 2076299963859447936|Fe_H  | 7267 3.95  | 0.04   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076289685992697088|
+GAIA DR2 2076295256575314944|Fe_H  | 6360 4.27  | 0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076298898707581824|
+GAIA DR2 2076299620262064768|
+GAIA DR2 2076299925192223232|
+GAIA DR2 2076291167766296320|
+GAIA DR2 2076299001782685952|
+GAIA DR2 2076295595864999424|
+GAIA DR2 2076298589469914496|
+GAIA DR2 2076299654621826176|Fe_H  |            | 0.12   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4950 2.739 |-0.26   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4947 2.67  |-0.02   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4880 2.735 | 0.01   |         |     |2016A&A...594A..43H|
+Fe_H  | 4967 2.720 | 0.136  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4880 2.735 |        |         |     |2014ApJS..215...19P|
+Gaia DR2 2076299963859449088|
+GAIA DR2 2076295497093460352|
+GAIA DR2 2076299654621826432|
+GAIA DR2 2076298795628345088|
+GAIA DR2 2076289827736505088|
+GAIA DR2 2076298589469910784|
+GAIA DR2 2076299723341299968|
+GAIA DR2 2076299723341303936|
+GAIA DR2 2076299929499734272|Fe_H  | 6191 4.32  |-0.04   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076273678659207680|
+GAIA DR2 2076299998219211136|
+GAIA DR2 2076299620262062464|
+Gaia DR2 2076277114633176320|
+GAIA DR2 2076282023770302848|
+GAIA DR2 2076299963859451136|Fe_H  |            | 0.12   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4876 2.992 |-0.09   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4818 2.979 |-0.07   |         |     |2016A&A...594A..43H|
+Fe_H  | 4908 2.969 |-0.04   |         |     |2016A&A...594A..43H|
+Fe_H  | 4851 2.960 | 0.089  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4839 2.98  |-0.15   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4849 2.96  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4818 2.979 |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4743 2.96  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076299723341305088|
+GAIA DR2 2076299654621828480|
+GAIA DR2 2076299963859451392|
+GAIA DR2 2076298623829677824|
+GAIA DR2 2076299688981544576|
+GAIA DR2 2076299929499730304|
+GAIA DR2 2076281581399164544|
+GAIA DR2 2076298829988108672|
+GAIA DR2 2076298795628347392|
+GAIA DR2 2076298658189443840|
+Gaia DR2 2076299890832483072|
+GAIA DR2 2076290858528654336|
+GAIA DR2 2076294466301314176|
+GAIA DR2 2076298486390692864|
+GAIA DR2 2076295600172703104|
+GAIA DR2 2076299998219213440|
+GAIA DR2 2076299963859446016|Fe_H  | 5897 4.07  | 0.08   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 5882 4.03  |-0.05   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 5785 3.31  |-0.01   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 5887 3.75  |-0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299929499736960|
+GAIA DR2 2076299654621830144|
+GAIA DR2 2076298520750441856|
+Gaia DR2 2076298864347825920|
+GAIA DR2 2076299929499737600|
+GAIA DR2 2076299620262069760|
+GAIA DR2 2076299517182842880|
+GAIA DR2 2076290205693630592|
+GAIA DR2 2076294844258425984|Fe_H  | 6191 3.92  | 0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299998219214592|
+GAIA DR2 2076298829988109952|Fe_H  | 6320 4.02  |-0.04   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299620262070144|
+GAIA DR2 2076299723341307904|
+GAIA DR2 2076299620262070528|
+Gaia DR2 2076277114633177984|
+GAIA DR2 2076299723341308288|
+GAIA DR2 2076299963859454464|
+GAIA DR2 2076299620262070912|Fe_H  | 6488 4.21  |-0.12   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076298898707587584|
+Gaia DR2 2076299929499739136|
+GAIA DR2 2076295600172703872|
+GAIA DR2 2076299654621832448|
+GAIA DR2 2076291236485779584|
+GAIA DR2 2076299998219216256|Fe_H  |            | 0.14   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4568 2.147 | 0.16   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4669 2.260 | 0.229  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4519 1.56  |-0.37   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299929499739648|Fe_H  | 6475 3.77  |-0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076281684478391424|
+GAIA DR2 2076299620262071936|
+GAIA DR2 2076295600172704512|Fe_H  | 4975 3.56  | 0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299620262072064|
+GAIA DR2 2076299929499740032|
+GAIA DR2 2076299929499740288|
+GAIA DR2 2076295256575323392|
+GAIA DR2 2076299826416672384|
+GAIA DR2 2076299998219217280|
+GAIA DR2 2076299688981549440|
+Gaia DR2 2076299826416672512|
+Gaia DR2 2076280859844671744|
+GAIA DR2 2076298520750445056|
+GAIA DR2 2076299654621834112|Fe_H  | 5061 2.98  |-0.10   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076299826416673024|
+GAIA DR2 2076295698944222720|Fe_H  | 6191 4.32  |-0.08   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299688981550080|
+Gaia DR2 2076299723341310976|
+GAIA DR2 2076299929495612160|
+GAIA DR2 2076299723341311616|
+GAIA DR2 2076300101298433792|Fe_H  | 4619 2.566 | 0.11   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4623 2.60  |-0.15   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4582 2.55  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076299620262074112|
+Gaia DR2 2076299826420526976|
+GAIA DR2 2076299517182838656|
+GAIA DR2 2076299306716879744|
+GAIA DR2 2076299826420527232|Fe_H  | 7319 4.09  | 0.26   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076286872798734976|
+Gaia DR2 2076289789071896704|
+GAIA DR2 2076298967427112448|Fe_H  | 6551 4.12  |-0.09   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076300032575105152|
+GAIA DR2 2076299001786806912|
+Gaia DR2 2076299444155833856|
+GAIA DR2 2076300032578958464|Fe_H  | 4795 2.890 |-0.02   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4781 2.91  |-0.08   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4707 2.87  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076300066938740096|
+GAIA DR2 2076299757701051648|Fe_H  | 6148 3.75  | 0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299826420528512|
+GAIA DR2 2076299001786808064|
+GAIA DR2 2076299792060832640|
+GAIA DR2 2076300135658216192|
+GAIA DR2 2076299860780309120|
+GAIA DR2 2076299478515573248|
+GAIA DR2 2076299993911496320|Fe_H  |            | 0.10   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4899 2.343 | 0.05   |         |     |2018ApJS...236..42Y|
+Fe_H  | 5006 2.71  | 0.03   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4883 2.440 | 0.166  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4933 2.35  | 0.07   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4839 1.59  |-0.13   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076298344644182528|
+GAIA DR2 2076298761268680832|
+GAIA DR2 2076299512875311872|
+GAIA DR2 2076299688981553280|
+GAIA DR2 2076300101298436480|
+GAIA DR2 2076299963859460480|
+GAIA DR2 2076299001786809088|
+GAIA DR2 2076299895139983872|
+Gaia DR2 2076285326610468736|
+Gaia DR2 2076291064687092992|
+GAIA DR2 2076295187851548288|
+GAIA DR2 2076299826420530048|
+Gaia DR2 2076291270845523712|
+GAIA DR2 2076299036146587392|
+Gaia DR2 2076299826420530176|
+Gaia DR2 2076299620262077568|
+GAIA DR2 2076299688981554432|
+GAIA DR2 2076299757701053952|
+GAIA DR2 2076299826420530944|
+GAIA DR2 2076299001786810624|
+GAIA DR2 2076298486390690432|
+GAIA DR2 2076299001786810368|
+GAIA DR2 2076299792060829824|
+Gaia DR2 2076273403781293184|
+Gaia DR2 2076291060382308864|
+GAIA DR2 2076299929499724672|
+GAIA DR2 2076298898707574016|
+GAIA DR2 2076286559256449792|
+GAIA DR2 2076299001786811392|
+GAIA DR2 2076299826420532480|
+GAIA DR2 2076298864347835520|
+GAIA DR2 2076299654621818240|
+GAIA DR2 2076299719033745536|
+GAIA DR2 2076300032578962944|
+GAIA DR2 2076298761268677248|
+GAIA DR2 2076299929499725568|
+GAIA DR2 2076299723341295616|
+GAIA DR2 2076300032578963584|
+GAIA DR2 2076295703251930368|
+Gaia DR2 2076280653686215168|
+Gaia DR2 2076290270108231936|
+GAIA DR2 2076298898707574912|
+GAIA DR2 2076298967427107072|
+GAIA DR2 2076299826420533760|
+GAIA DR2 2076299890832438656|
+GAIA DR2 2076291781936719744|
+Gaia DR2 2076299929499726592|
+GAIA DR2 2076298555110191616|
+GAIA DR2 2076299001786813056|
+GAIA DR2 2076298658189429760|
+GAIA DR2 2076299929499727232|
+Gaia DR2 2076278759594984576|
+GAIA DR2 2076299998219204096|
+GAIA DR2 2076299792060826496|
+Gaia DR2 2076295703251929856|
+Gaia DR2 2076297627392720384|
+GAIA DR2 2076298898707576448|
+GAIA DR2 2076294225782929792|
+Gaia DR2 2076290304467973632|
+GAIA DR2 2076300101298442368|
+GAIA DR2 2076298933067338112|Fe_H  | 6438 4.21  |-0.04   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299723341297792|
+GAIA DR2 2076300101298442496|
+GAIA DR2 2076300135658209152|
+Gaia DR2 2076299998219205376|
+Gaia DR2 2076293396844520832|
+Gaia DR2 2076294947333255424|
+GAIA DR2 2076299001786815104|Fe_H  | 6279 3.92  | 0.00   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299723341298560|
+GAIA DR2 2076299723341298688|
+GAIA DR2 2076299826420536320|Fe_H  |            | 0.07   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4137 1.489 | 0.05   |         |     |2016A&A...594A..43H|
+Fe_H  | 4124 1.520 | 0.011  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4136 1.52  |-0.31   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4118 1.56  |        |         |     |2013AJ....146..133M|
+Gaia DR2 2076286666640306304|
+GAIA DR2 2076293641667320704|
+GAIA DR2 2076298761268673152|
+GAIA DR2 2076294603740304256|Fe_H  | 6243 3.96  | 0.12   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 6207 3.92  |-0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076297489958201600|
+GAIA DR2 2076299860780301056|
+GAIA DR2 2076299826416490240|
+GAIA DR2 2076296802759001984|
+GAIA DR2 2076299929499729792|
+GAIA DR2 2076298314591961472|
+GAIA DR2 2076300032578967680|
+GAIA DR2 2076295634532457728|
+GAIA DR2 2076300101298444672|
+GAIA DR2 2076300101298444928|
+GAIA DR2 2076295668892218112|Fe_H  | 6385 4.27  | 0.01   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076300101298445184|
+GAIA DR2 2076298967427102592|
+GAIA DR2 2076299792060823040|Fe_H  | 6295 4.02  | 0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299414103590016|Fe_H  | 6360 4.27  | 0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299139225682944|
+Gaia DR2 2076295428369938432|
+GAIA DR2 2076296764096187264|
+GAIA DR2 2076300101298445824|
+Gaia DR2 2076285326610475520|
+Gaia DR2 2076294535020829184|
+GAIA DR2 2076299757701062784|
+GAIA DR2 2076299792060821760|
+GAIA DR2 2076299826420539648|Fe_H  | 6211 3.75  | 0.00   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076294672459697536|Fe_H  | 6075 4.66  |        |         |     |2011AJ....141...83P|
+GAIA DR2 2076295016057081472|
+GAIA DR2 2076299036146588928|
+GAIA DR2 2076300135658204672|
+Gaia DR2 2076288247188495744|
+GAIA DR2 2076299036146576384|
+GAIA DR2 2076298658189435904|
+Gaia DR2 2076276491852265984|
+GAIA DR2 2076299757701064064|
+GAIA DR2 2076295703251935744|Fe_H  | 6328 4.32  |-0.11   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076299585898069632|
+Gaia DR2 2076299826420541184|
+Gaia DR2 2076300032578971648|
+GAIA DR2 2076286593616203520|
+GAIA DR2 2076299070506209408|
+Gaia DR2 2076298829983954176|
+GAIA DR2 2076299757701064960|
+GAIA DR2 2076295462733786240|
+Gaia DR2 2076300101298448768|
+GAIA DR2 2076298967427355392|
+Gaia DR2 2076291786241370880|
+GAIA DR2 2076300101298449280|Fe_H  |            | 0.12   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4785 2.567 | 0.05   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4809 2.540 | 0.154  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4714 2.48  |-0.11   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076296287367353856|
+GAIA DR2 2076300032578972800|
+Gaia DR2 2076299723337152512|
+GAIA DR2 2076300101298449792|Fe_H  | 6283 3.92  |-0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076298245872489472|
+Gaia DR2 2076300101298449920|
+Gaia DR2 2076293194990940032|
+GAIA DR2 2076300066938738176|
+GAIA DR2 2076298039714059904|
+GAIA DR2 2076299792060818048|
+GAIA DR2 2076298726908915328|
+GAIA DR2 2076298280232229120|
+Gaia DR2 2076298761268666368|
+GAIA DR2 2076300032578973952|Fe_H  | 4714 2.892 |-0.13   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4739 2.91  |-0.08   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4668 2.88  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076299757701067264|
+GAIA DR2 2076289514194347136|
+Gaia DR2 2076292061119330176|
+GAIA DR2 2076295462733781632|Fe_H  | 6320 4.12  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076299448463334144|Fe_H  |            | 0.13   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4772 2.601 | 0.12   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4780 2.585 | 0.16   |         |     |2016A&A...594A..43H|
+Fe_H  | 4852 2.732 | 0.18   |         |     |2016A&A...594A..43H|
+Fe_H  | 4833 2.582 | 0.157  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4818 2.77  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4780 2.585 |        |         |     |2014ApJS..215...19P|
+Gaia DR2 2076286701000012160|
+GAIA DR2 2076294741179177088|Fe_H  | 6426 4.02  |-0.11   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076293980959301504|
+Gaia DR2 2076297382571483776|
+Gaia DR2 2076288315907973632|
+GAIA DR2 2076298658189440768|
+GAIA DR2 2076298726908918016|
+GAIA DR2 2076299757701068800|
+GAIA DR2 2076300101298452864|
+GAIA DR2 2076298933067348736|
+GAIA DR2 2076295668892210048|Fe_H  | 6385 3.77  |-0.05   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076300101298453376|
+GAIA DR2 2076300101298453504|
+GAIA DR2 2076298417671211264|Fe_H  | 6239 4.32  |-0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076298692549186560|
+Gaia DR2 2076299826416500224|
+Gaia DR2 2076286529201326848|
+GAIA DR2 2076299792060813696|
+GAIA DR2 2076299036146569344|Fe_H  | 6247 4.32  |-0.22   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076281924991556608|
+GAIA DR2 2076294775538919680|Fe_H  | 6364 4.27  |-0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076298658189445760|
+GAIA DR2 2076299379743862528|
+GAIA DR2 2076299379743863040|
+GAIA DR2 2076298658189445376|
+GAIA DR2 2076298280232237184|
+GAIA DR2 2076300101298456320|
+GAIA DR2 2076299929495590528|
+GAIA DR2 2076298452030943360|
+GAIA DR2 2076300101298455168|
+Gaia DR2 2076299826420547584|
+GAIA DR2 2076293603002516224|
+GAIA DR2 2076280310088812032|
+GAIA DR2 2076288006670336640|
+Gaia DR2 2076287800511521024|
+GAIA DR2 2076326352135339008|
+Gaia DR2 2076387271953669248|
+GAIA DR2 2076394453138645888|
+GAIA DR2 2076389848933704832|Fe_H  | 6475 4.12  | 0.06   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076395380851714176|Fe_H  | 6459 4.21  |-0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076394521858123520|
+GAIA DR2 2076389848933704448|
+GAIA DR2 2076390055092133888|
+GAIA DR2 2076395312132237824|Fe_H  | 6409 4.27  |-0.09   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076394105234047872|
+GAIA DR2 2076390020732445312|
+GAIA DR2 2076389780214234880|
+GAIA DR2 2076393422346500224|
+GAIA DR2 2076390055092140544|
+Gaia DR2 2076392838222927616|
+GAIA DR2 2076394453138652288|
+Gaia DR2 2076381121560024320|
+GAIA DR2 2076390879725986560|
+Gaia DR2 2076386103722568320|
+Gaia DR2 2076376929672077440|
+GAIA DR2 2076381396437930880|
+GAIA DR2 2076393692914036608|Fe_H  | 4752 2.67  |-0.15   |SUN      |     |2016A&A...594A..39F|
+Gaia DR2 2076372080643940736|
+Gaia DR2 2076388886853340544|
+Gaia DR2 2076373837295357824|
+Gaia DR2 2076384454454647680|
+GAIA DR2 2076391047214180352|Fe_H  | 4751 2.55  |-0.07   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4594 2.54  | 0.04   |SUN      |     |2015RAA....15.1197Z|
+GAIA DR2 2076394178260743552|
+GAIA DR2 2076392769511459712|
+GAIA DR2 2076395518290696320|
+GAIA DR2 2076394075181517312|
+GAIA DR2 2076393658554297600|Fe_H  |            | 0.09   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4497 2.304 | 0.10   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4568 2.317 | 0.08   |         |     |2016A&A...594A..43H|
+Fe_H  | 4644 2.552 | 0.10   |         |     |2016A&A...594A..43H|
+Fe_H  | 4607 2.322 | 0.090  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4500 2.22  |-0.04   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4600 2.47  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4568 2.317 |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4443 2.30  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076393692914035456|Fe_H  |            | 0.08   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4249 1.777 | 0.11   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4477 2.21  |-0.13   |SUN      |     |2013MNRAS.434.1422M|
+Fe_H  | 4439 2.30  |-0.04   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4315 1.840 | 0.057  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4220 2.12  | 0.02   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4233 1.80  |-0.18   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4207 1.99  |-0.17   |SUN      |     |2013MNRAS.434.1422M|
+Gaia DR2 2076388371464948992|
+GAIA DR2 2076392700791982336|Fe_H  | 6559 4.21  |-0.13   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076394143900995200|
+GAIA DR2 2076395587010146432|Fe_H  | 6340 4.32  | 0.08   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393800303611776|
+GAIA DR2 2076392975669890560|
+GAIA DR2 2076392700791983104|
+GAIA DR2 2076393869023085440|
+GAIA DR2 2076393800303608576|
+GAIA DR2 2076392975669887232|
+GAIA DR2 2076393624197664768|
+GAIA DR2 2076394075181516416|
+GAIA DR2 2076381465157406336|
+GAIA DR2 2076391979237609088|
+GAIA DR2 2076393933447627776|
+GAIA DR2 2076393800303609088|
+GAIA DR2 2076396377284119936|
+GAIA DR2 2076393147468585344|
+GAIA DR2 2076389883293468416|
+Gaia DR2 2076395552650395776|
+GAIA DR2 2076391154603886336|
+GAIA DR2 2076393143158483968|
+GAIA DR2 2076389402257102976|
+Gaia DR2 2076392838224860544|
+GAIA DR2 2076392902640313088|
+GAIA DR2 2076393765944335104|Fe_H  | 6188 3.92  | 0.00   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076377887440730624|
+Gaia DR2 2076392322834989824|
+GAIA DR2 2076393933435330688|
+GAIA DR2 2076393800303612032|
+GAIA DR2 2076389745854485504|Fe_H  | 6422 4.02  |-0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076396652162025344|Fe_H  | 6446 4.27  |-0.08   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393869023088896|
+GAIA DR2 2076393147468599296|Fe_H  | 6413 4.32  | 0.04   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393933435337088|
+GAIA DR2 2076390089451891968|Fe_H  | 6191 4.32  | 0.07   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393967795083648|
+GAIA DR2 2076396544773637888|
+Gaia DR2 2076399435301023744|
+Gaia DR2 2076378918226664576|
+GAIA DR2 2076392254115516928|Fe_H  | 6426 4.02  |-0.07   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076394448828275584|Fe_H  |            | 0.12   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4650 2.508 |-0.24   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4706 2.62  |-0.01   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4686 2.501 | 0.01   |         |     |2016A&A...594A..43H|
+Fe_H  | 4817 2.677 | 0.09   |         |     |2016A&A...594A..43H|
+Fe_H  | 4769 2.453 | 0.102  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4834 2.67  | 0.07   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4710 2.45  |-0.07   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4741 2.60  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4686 2.501 |        |         |     |2014ApJS..215...19P|
+GAIA DR2 2076394556217878016|
+GAIA DR2 2076394654987600512|
+GAIA DR2 2076390089451888640|
+Gaia DR2 2076377341988691328|
+GAIA DR2 2076393967795074048|
+GAIA DR2 2076394654987600768|
+GAIA DR2 2076394178260740224|
+GAIA DR2 2076392460273969792|Fe_H  | 5959 4.02  |-0.07   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076403210564826368|
+GAIA DR2 2076393108798736384|
+GAIA DR2 2076394281339975680|Fe_H  | 6530 4.12  | 0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393899075586304|
+GAIA DR2 2076393113108871296|
+GAIA DR2 2076393899075587584|
+Gaia DR2 2076393113108873088|
+GAIA DR2 2076392284164756224|Fe_H  | 4751 2.443 | 0.07   |         |     |2018ApJS...236..42Y|
+Gaia DR2 2076396514723095936|
+GAIA DR2 2076391493891032704|
+GAIA DR2 2076373115740869248|
+GAIA DR2 2076388577623831424|
+GAIA DR2 2076389947702727296|
+GAIA DR2 2076393697224861056|
+GAIA DR2 2076394586268019328|
+GAIA DR2 2076393697224860672|
+GAIA DR2 2076393113108869248|Fe_H  | 6446 4.02  |-0.06   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393834663321344|
+GAIA DR2 2076393903383291520|
+Gaia DR2 2076403214872209408|
+Gaia DR2 2076385966283579264|
+GAIA DR2 2076397923472501504|
+GAIA DR2 2076389848933715840|
+GAIA DR2 2076393422346504192|
+GAIA DR2 2076394178260749312|
+Gaia DR2 2076382976985908864|
+GAIA DR2 2076389294867537920|
+GAIA DR2 2076379266134435456|
+GAIA DR2 2076394246980223872|
+Gaia DR2 2076386408650285440|
+GAIA DR2 2076394178260750464|
+Gaia DR2 2076379433628601728|
+GAIA DR2 2076395312132246272|Fe_H  | 6129 3.75  |-0.26   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393147468596224|
+GAIA DR2 2076395587010153856|
+GAIA DR2 2076393967795088000|
+GAIA DR2 2076394281339968256|Fe_H  | 6356 3.92  |-0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076390158171365248|Fe_H  | 6430 4.27  |-0.04   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076394105234042496|
+Gaia DR2 2076375001221678080|
+GAIA DR2 2076393559785488768|
+GAIA DR2 2076393010021661056|
+GAIA DR2 2076395312132244864|
+Gaia DR2 2076404894190717184|
+Gaia DR2 2076371427810571392|
+GAIA DR2 2076394281339966080|
+GAIA DR2 2076375555282550784|
+GAIA DR2 2076390123811623680|
+GAIA DR2 2076393181828339328|
+GAIA DR2 2076389363587022592|
+Gaia DR2 2076376001950375168|
+GAIA DR2 2076389711494726912|Fe_H  | 6377 4.27  | 0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076392868283415680|
+GAIA DR2 2076393113108862080|Fe_H  | 6430 4.02  |-0.04   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393727276899712|
+GAIA DR2 2076395690089377792|
+GAIA DR2 2076389294867531136|Fe_H  |            | 0.09   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4545 2.423 |-0.09   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4676 2.47  |-0.12   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4558 2.62  |-0.01   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4573 2.409 | 0.05   |         |     |2016A&A...594A..43H|
+Fe_H  | 4650 2.502 | 0.09   |         |     |2016A&A...594A..43H|
+Fe_H  | 4633 2.400 | 0.084  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4631 2.70  | 0.05   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4617 2.49  | 0.04   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4569 2.48  |-0.17   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4607 2.45  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4573 2.409 |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4481 2.40  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076393005719550976|
+GAIA DR2 2076390914085737984|
+GAIA DR2 2076393731584598528|
+Gaia DR2 2076393903374691712|
+Gaia DR2 2076395655729632256|
+GAIA DR2 2076393731584598016|Fe_H  | 6488 4.12  | 0.11   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393731584598400|
+Gaia DR2 2076372630400027008|
+GAIA DR2 2076393521115881984|
+Gaia DR2 2076399022984126976|
+GAIA DR2 2076394659297111552|Fe_H  |            | 0.13   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4084 1.77  |-0.07   |         |     |2017A&A...598A.100J|
+Fe_H  | 4190 1.54  | 0.01   |SUN      |     |2012A&A...543A.160T|
+Fe_H  | 4150 1.65  | 0.16   |SUN      |     |2012A&A...543A.160T|
+Fe_H  | 4125 1.91  |-0.03   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4221 1.668 | 0.22   |         |     |2016A&A...594A..43H|
+Fe_H  | 4218 1.640 | 0.077  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4137 1.86  | 0.08   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4113 1.52  |-0.28   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4196 1.75  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4281 1.81  | 0.62   |         |     |2012A&A...543A.160T|
+Fe_H  | 4190       | 0.01   |         |     |2012A&A...543A.160T|
+Fe_H  | 4150 1.65  | 0.16   |         |     |2012A&A...543A.160T|
+GAIA DR2 2076389878983213184|
+GAIA DR2 2076394384419201920|
+GAIA DR2 2076393933435342720|
+Gaia DR2 2076393284899818368|
+GAIA DR2 2076393491066003584|
+Gaia DR2 2076388818141586560|
+GAIA DR2 2076393284907575040|
+Gaia DR2 2076374730648591872|
+GAIA DR2 2076394281339980544|
+Gaia DR2 2076401595657269504|
+GAIA DR2 2076390050781911040|
+GAIA DR2 2076393903374692992|
+GAIA DR2 2076390261250597248|
+GAIA DR2 2076393559785487232|
+GAIA DR2 2076392151036340864|
+Gaia DR2 2076371913141229568|
+GAIA DR2 2076392425914248064|
+Gaia DR2 2076403833347536768|
+GAIA DR2 2076393658554571264|
+GAIA DR2 2076393967795083776|
+GAIA DR2 2076390261250603136|
+Gaia DR2 2076373459338305664|
+Gaia DR2 2076378441500320256|
+GAIA DR2 2076396549082850560|
+Gaia DR2 2076394590569880064|
+GAIA DR2 2076400088136181376|
+GAIA DR2 2076389539696509952|Fe_H  | 6509 4.21  | 0.04   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076395518290705024|
+Gaia DR2 2076402355878726528|
+GAIA DR2 2076394315699729536|Fe_H  | 5416 3.92  | 0.00   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076395857578359168|
+Gaia DR2 2076395793168613120|
+Gaia DR2 2076374009094081024|
+GAIA DR2 2076393765944335232|
+GAIA DR2 2076402974354215680|
+Gaia DR2 2076380739299020672|
+GAIA DR2 2076390364322318464|
+GAIA DR2 2076393800304073088|
+GAIA DR2 2076393624194561152|Fe_H  |            | 0.09   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4595 2.028 |-0.42   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4624 2.45  |-0.04   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4520 2.080 | 0.123  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4444 2.19  | 0.05   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4393 1.95  |-0.20   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076393662865120384|
+GAIA DR2 2076393662865120256|
+GAIA DR2 2076393383676792832|
+GAIA DR2 2076394139593796992|
+GAIA DR2 2076393692914037248|Fe_H  | 4678 2.421 | 0.02   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4677 2.34  |-0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076394040821752576|Fe_H  | 4790 2.950 | 0.10   |         |     |2018ApJS...236..42Y|
+GAIA DR2 2076393765943845504|
+GAIA DR2 2076389264818106624|
+GAIA DR2 2076393903382776576|
+GAIA DR2 2076392872590624768|
+Gaia DR2 2076402939994239616|
+GAIA DR2 2076392597712716160|
+GAIA DR2 2076395891938143488|
+GAIA DR2 2076398267069821696|
+Gaia DR2 2076402596396857088|
+GAIA DR2 2076393972102252160|
+GAIA DR2 2076393628504868736|
+Gaia DR2 2076390398681976576|
+Gaia DR2 2076398640717508608|
+GAIA DR2 2076394006454008320|
+GAIA DR2 2076393662864611840|
+GAIA DR2 2076388440184381056|
+Gaia DR2 2076395067304296064|
+GAIA DR2 2076393731584088192|
+GAIA DR2 2076392906950367488|
+Gaia DR2 2076392455964242176|
+Gaia DR2 2076392632072461696|
+GAIA DR2 2076392838230888960|
+GAIA DR2 2076393937742517120|Fe_H  | 6413 4.02  | 0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076394728016627456|
+Gaia DR2 2076371569552604800|
+Gaia DR2 2076371599607679616|
+GAIA DR2 2076392906950366976|
+Gaia DR2 2076377234605409920|
+GAIA DR2 2076393731584089856|
+Gaia DR2 2076399396638223744|
+GAIA DR2 2076392906950366848|
+Gaia DR2 2076398163990597248|
+Gaia DR2 2076402630756582144|
+GAIA DR2 2076393662864610688|
+Gaia DR2 2076385137339501312|
+Gaia DR2 2076400775330879360|
+Gaia DR2 2076390707927243520|
+GAIA DR2 2076393903382775168|
+GAIA DR2 2076392937000009216|
+GAIA DR2 2076395964959731712|
+GAIA DR2 2076393903382774016|Fe_H  | 6442 4.02  | 0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076390604848025728|Fe_H  | 6517 4.27  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076392937000006144|
+GAIA DR2 2076389947702744448|
+GAIA DR2 2076393452396342400|
+GAIA DR2 2076394006461992704|
+Gaia DR2 2076388611983092992|
+GAIA DR2 2076393834663325568|
+GAIA DR2 2076393010029604352|
+GAIA DR2 2076390639207774848|
+GAIA DR2 2076393903382776704|
+GAIA DR2 2076389574055739904|
+Gaia DR2 2076384007777999232|
+GAIA DR2 2076395930607484032|Fe_H  | 6644 4.02  |-0.02   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076397300687281280|
+GAIA DR2 2076392941310124032|Fe_H  | 6430 4.02  |-0.06   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393486756084096|
+GAIA DR2 2076393765943846656|Fe_H  |            | 0.11   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4756 2.563 |-0.08   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4806 2.580 | 0.139  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4724 2.48  |-0.11   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076390639207768832|
+Gaia DR2 2076377651227025280|
+GAIA DR2 2076389711494717824|
+Gaia DR2 2076392941310125184|
+GAIA DR2 2076390811006478592|
+GAIA DR2 2076378716378578560|
+GAIA DR2 2076393765943851904|Fe_H  | 6295 3.92  |-0.14   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393662864620672|
+GAIA DR2 2076394006453984640|
+GAIA DR2 2076388337105190144|Fe_H  | 5974 3.77  | 0.11   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076394109541235072|Fe_H  | 6418 4.02  | 0.00   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393795993633280|
+GAIA DR2 2076393010029608832|
+GAIA DR2 2076383835979312640|
+GAIA DR2 2076392735151701504|
+GAIA DR2 2076393834663325696|
+GAIA DR2 2076394212620498688|
+GAIA DR2 2076393765943850496|
+Gaia DR2 2076401084568537344|
+GAIA DR2 2076389333537590912|
+GAIA DR2 2076393761633852160|
+GAIA DR2 2076396171125625984|Fe_H  | 6426 4.02  |-0.06   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393937742523904|Fe_H  |            | 0.13   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4733 2.550 |-0.24   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4756 2.574 | 0.060  |SUN      |     |2016AJ....152....6W|
+Fe_H  | 4654 2.58  | 0.02   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4763 2.57  |-0.05   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4693 2.540 | 0.08   |         |     |2016A&A...594A..43H|
+Fe_H  | 4822 2.720 | 0.15   |         |     |2016A&A...594A..43H|
+Fe_H  | 4786 2.526 | 0.149  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4797 2.44  | 0.14   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4779 2.62  | 0.07   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4714 2.48  |-0.14   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4747 2.64  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4693 2.540 |        |         |     |2014ApJS..215...19P|
+Fe_H  |    6 2.64  |        |         |     |2013AJ....146..133M|
+GAIA DR2 2076385382167953152|
+GAIA DR2 2076393731584100736|
+GAIA DR2 2076392563352997632|
+GAIA DR2 2076393731584102272|
+GAIA DR2 2076395964967236096|Fe_H  | 6517 4.02  |-0.12   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076392838230904192|
+Gaia DR2 2076390398689581952|
+GAIA DR2 2076392872590611456|
+GAIA DR2 2076392838230896640|
+GAIA DR2 2076394728016615680|Fe_H  | 3818 1.09  |-0.30   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393662864623232|
+GAIA DR2 2076393937742530048|
+GAIA DR2 2076393903382762240|
+GAIA DR2 2076388508903866624|
+GAIA DR2 2076392838230897280|
+GAIA DR2 2076392632072471808|
+Gaia DR2 2076391738719406208|
+GAIA DR2 2076389539696014848|
+GAIA DR2 2076394693656872704|
+GAIA DR2 2076395964967226752|
+GAIA DR2 2076391532560976256|Fe_H  | 6459 4.12  |-0.11   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076391463841499392|
+GAIA DR2 2076393692921636992|Fe_H  | 4908 2.45  |-0.24   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076389844623434624|
+GAIA DR2 2076393899075929728|
+Gaia DR2 2076392838230907264|
+GAIA DR2 2076393662864627840|Fe_H  | 6913 3.73  | 0.16   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076389711494716800|
+GAIA DR2 2076394036511888128|
+GAIA DR2 2076392906950383616|
+GAIA DR2 2076393899075929472|
+GAIA DR2 2076394173950841088|Fe_H  | 6389 3.92  |-0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393074438974720|
+GAIA DR2 2076389608415501056|
+Gaia DR2 2076378196672129664|
+GAIA DR2 2076394831095848960|
+GAIA DR2 2076389333537593600|
+GAIA DR2 2076393662864626176|Fe_H  |            | 0.15   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4756 2.535 |-0.01   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4604 2.56  |-0.02   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4667 2.511 | 0.11   |         |     |2016A&A...594A..43H|
+Fe_H  | 4790 2.701 | 0.18   |         |     |2016A&A...594A..43H|
+Fe_H  | 4738 2.460 | 0.118  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4763 2.67  | 0.04   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4666 2.48  |-0.16   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4726 2.63  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4667 2.511 |        |         |     |2014ApJS..215...19P|
+Fe_H  |    5 2.63  |        |         |     |2013AJ....146..133M|
+Gaia DR2 2076403897758255744|
+Gaia DR2 2076385072930296064|
+GAIA DR2 2076389608415499392|
+Gaia DR2 2076378643348690688|
+GAIA DR2 2076393662864619648|
+GAIA DR2 2076393761633871872|
+GAIA DR2 2076392838230906368|
+GAIA DR2 2076395140333510016|
+GAIA DR2 2076393662864627072|
+GAIA DR2 2076393628504853888|
+GAIA DR2 2076393869023079296|
+GAIA DR2 2076394865455603456|Fe_H  | 6492 4.12  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076392937000024192|
+GAIA DR2 2076394006461998336|
+GAIA DR2 2076392975669881088|
+GAIA DR2 2076393903382761088|
+GAIA DR2 2076389745854474880|
+GAIA DR2 2076393903382760192|
+GAIA DR2 2076402523368356352|
+Gaia DR2 2076392906942382336|
+Gaia DR2 2076388302745462272|
+GAIA DR2 2076389883293470464|
+GAIA DR2 2076396682212563840|
+GAIA DR2 2076393869023076608|Fe_H  |            | 0.11   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4643 2.524 | 0.02   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4716 2.560 | 0.119  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4646 2.54  |-0.13   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4554 2.53  |        |SUN      |     |2011ApJ...729L..10B|
+Gaia DR2 2076388989932484736|
+Gaia DR2 2076376964031839744|
+GAIA DR2 2076389604105257600|
+Gaia DR2 2076396274204896512|
+GAIA DR2 2076392975669885568|
+GAIA DR2 2076388577623375360|Fe_H  | 6295 4.27  | 0.20   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076388405824633216|Fe_H  | 6426 4.27  | 0.16   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076385102979755776|
+GAIA DR2 2076396720881495808|Fe_H  | 6291 4.32  | 0.13   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393903382773248|
+Gaia DR2 2076403317951373184|
+GAIA DR2 2076396205485384704|
+GAIA DR2 2076393521115839232|
+GAIA DR2 2076395999326986752|Fe_H  | 6471 4.32  |-0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393869023084288|
+GAIA DR2 2076393800303606784|
+Gaia DR2 2076395174693266560|
+GAIA DR2 2076395071614004608|
+Gaia DR2 2076403485441493376|
+Gaia DR2 2076399980747704704|
+Gaia DR2 2076376723513362944|
+GAIA DR2 2076392700791976064|
+Gaia DR2 2076391223323360640|
+GAIA DR2 2076393899080066176|
+GAIA DR2 2076388886861074944|
+GAIA DR2 2076392902640278144|
+Gaia DR2 2076396927039985152|
+GAIA DR2 2076389711494729216|
+GAIA DR2 2076392322834987520|
+GAIA DR2 2076376345547506944|Fe_H  | 6397 4.21  |-0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076394040821762816|
+Gaia DR2 2076394899815362816|
+GAIA DR2 2076398022241823872|
+GAIA DR2 2076392941310135680|
+GAIA DR2 2076396445996156928|
+GAIA DR2 2076394173950855424|
+GAIA DR2 2076394109541237248|
+GAIA DR2 2076388268385715712|
+GAIA DR2 2076394178260737920|Fe_H  | 6418 4.02  |-0.06   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076392872590610560|
+GAIA DR2 2076374520186009856|
+GAIA DR2 2076392632064500992|
+GAIA DR2 2076394040821761152|Fe_H  | 6434 4.02  | 0.14   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076390570488319616|
+Gaia DR2 2076395720139703680|
+GAIA DR2 2076393010029609984|Fe_H  |            | 0.07   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4587 2.470 | 0.03   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4553 2.55  |-0.02   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4704 2.50  |-0.09   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4598 2.468 | 0.01   |         |     |2016A&A...594A..43H|
+Fe_H  | 4682 2.522 | 0.04   |         |     |2016A&A...594A..43H|
+Fe_H  | 4675 2.410 | 0.058  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4633 2.52  | 0.06   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4682 2.71  | 0.01   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4618 2.54  |-0.13   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4640 2.46  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4598 2.468 |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4521 2.46  |        |SUN      |     |2011ApJ...729L..10B|
+Gaia DR2 2076388337105190912|
+GAIA DR2 2076393044389353984|
+GAIA DR2 2076393869023075072|Fe_H  | 6129 4.32  | 0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076392769511446912|
+GAIA DR2 2076392975669876992|
+Gaia DR2 2076385931916924544|
+Gaia DR2 2076386344240729600|
+GAIA DR2 2076389470976564096|
+GAIA DR2 2076393044389355008|
+GAIA DR2 2076395174693258368|Fe_H  | 6434 4.27  |-0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393765943857664|
+GAIA DR2 2076390020732454528|Fe_H  | 6500 4.21  | 0.04   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076391841798636416|
+GAIA DR2 2076390192531131520|
+GAIA DR2 2076393040079337984|
+GAIA DR2 2076392975669876480|
+GAIA DR2 2076393044389353088|
+GAIA DR2 2076396068046462080|
+GAIA DR2 2076391944877856768|Fe_H  | 5047 3.55  |-0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076394693656866944|
+Gaia DR2 2076384832412089728|
+GAIA DR2 2076393525425762944|Fe_H  | 6446 4.02  |-0.17   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076376105038004864|Fe_H  | 6243 3.75  | 0.07   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076390089451897600|
+Gaia DR2 2076396858320489216|
+GAIA DR2 2076395002894914176|Fe_H  | 6397 4.02  |-0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393181828351232|
+Gaia DR2 2076376070678279424|
+GAIA DR2 2076394384419199616|
+GAIA DR2 2076393143158515968|
+GAIA DR2 2076392254115515392|Fe_H  | 5143 3.11  |-0.11   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 5217 4.02  |-0.04   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076395548340809216|
+Gaia DR2 2076376345556183040|
+Gaia DR2 2076378918226657280|
+Gaia DR2 2076375314764038400|
+GAIA DR2 2076392627762301312|
+Gaia DR2 2076402007972212736|
+GAIA DR2 2076392460273975552|
+GAIA DR2 2076394414469333760|
+Gaia DR2 2076401771763142656|
+GAIA DR2 2076393211877990656|
+GAIA DR2 2076392799561006720|
+Gaia DR2 2076388573313044096|
+GAIA DR2 2076392627762314624|Fe_H  | 6509 4.12  |-0.16   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393903374707072|
+Gaia DR2 2076401870533117056|
+Gaia DR2 2076374765008349568|
+Gaia DR2 2076395312124859776|
+GAIA DR2 2076389917653629056|
+Gaia DR2 2076388199665911680|
+GAIA DR2 2076389982062446080|
+GAIA DR2 2076393250547853056|Fe_H  | 6271 4.37  |-0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076389780214227584|
+GAIA DR2 2076394139593787008|
+Gaia DR2 2076388749422077312|
+GAIA DR2 2076393795993678336|
+GAIA DR2 2076391876158377984|Fe_H  | 6442 4.02  | 0.11   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076390085141667712|
+GAIA DR2 2076393521115851136|
+Gaia DR2 2076403863398425216|
+Gaia DR2 2076400358704763136|
+Gaia DR2 2076388882550713472|
+Gaia DR2 2076396171117999616|
+Gaia DR2 2076372222387621248|
+GAIA DR2 2076389569745479808|
+GAIA DR2 2076394350059484544|
+Gaia DR2 2076402935685399808|
+GAIA DR2 2076394659297118976|Fe_H  | 6295 4.32  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076376723513694976|
+Gaia DR2 2076389299169820416|
+Gaia DR2 2076393628496852992|
+GAIA DR2 2076393800303598208|
+GAIA DR2 2076390261250605824|
+GAIA DR2 2076375624002065920|
+GAIA DR2 2076392971359841152|Fe_H  | 6299 4.32  | 0.12   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393899075928960|
+GAIA DR2 2076393284907582592|
+GAIA DR2 2076394624937384448|
+GAIA DR2 2076393692917498368|Fe_H  |            | 0.14   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4585 2.495 | 0.12   |         |     |2016A&A...594A..43H|
+Fe_H  | 4659 2.576 | 0.14   |         |     |2016A&A...594A..43H|
+Fe_H  | 4632 2.450 | 0.097  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4639 2.48  |-0.15   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4623 2.53  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4585 2.495 |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4528 2.49  |        |SUN      |     |2011ApJ...729L..10B|
+Gaia DR2 2076389466666269056|
+GAIA DR2 2076392971359840768|
+Gaia DR2 2076376513050765568|
+Gaia DR2 2076371878790213376|
+Gaia DR2 2076375276099784064|
+Gaia DR2 2076379021305931776|
+GAIA DR2 2076391395122104192|
+GAIA DR2 2076393972102245120|
+Gaia DR2 2076403485441482240|
+GAIA DR2 2076393697224337792|
+GAIA DR2 2076392528993233024|Fe_H  | 4749 2.565 |-0.15   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4751 2.55  |-0.14   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4714 2.60  |-0.05   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4705       |        |         |     |2016A&A...594A..43H|
+Fe_H  | 4789 2.530 | 0.102  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4805 2.61  | 0.05   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4744 2.54  | 0.00   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4757 2.67  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4705       |        |         |     |2014ApJS..215...19P|
+GAIA DR2 2076394109541240448|
+GAIA DR2 2076384007778360576|
+Gaia DR2 2076394929865291392|
+GAIA DR2 2076390153861167360|
+GAIA DR2 2076392872590617984|Fe_H  | 6385 4.02  |-0.11   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393765943855744|
+GAIA DR2 2076392868287903872|
+GAIA DR2 2076393972102242944|
+GAIA DR2 2076390261250610048|
+GAIA DR2 2076392597712708352|
+GAIA DR2 2076393972102243200|
+GAIA DR2 2076393972102242432|
+GAIA DR2 2076393795993693952|
+GAIA DR2 2076392872590614784|
+Gaia DR2 2076393697224335744|
+GAIA DR2 2076392803871139712|
+GAIA DR2 2076393628504860288|
+GAIA DR2 2076393903382767104|
+Gaia DR2 2076390192531122688|
+GAIA DR2 2076402424598123904|
+Gaia DR2 2076378510220114432|
+GAIA DR2 2076392696481805312|
+Gaia DR2 2076371359089261056|
+GAIA DR2 2076393692921624192|
+GAIA DR2 2076392872590621184|
+GAIA DR2 2076394620627781376|
+GAIA DR2 2076393662864624384|
+Gaia DR2 2076395788859314688|
+GAIA DR2 2076392803871145600|
+GAIA DR2 2076393697224343424|
+GAIA DR2 2076393044389362176|
+GAIA DR2 2076393628504865792|
+GAIA DR2 2076391773079118080|
+GAIA DR2 2076394040821754880|Fe_H  | 6307 4.02  | 0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076396785291848064|
+GAIA DR2 2076395002894525952|Fe_H  |            | 0.18   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4837 3.101 | 0.20   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4842 3.082 | 0.04   |         |     |2016A&A...594A..43H|
+Fe_H  | 4971 3.092 | 0.13   |         |     |2016A&A...594A..43H|
+Fe_H  | 4948 3.120 | 0.168  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4882 3.13  | 0.03   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4869 3.02  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4842 3.082 |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4788 3.08  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076394036514561664|
+GAIA DR2 2076393697224339840|
+GAIA DR2 2076392975669880704|
+GAIA DR2 2076392803871143808|Fe_H  | 6426 4.21  |-0.08   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076394075181506688|
+GAIA DR2 2076394728016625024|Fe_H  | 6538 4.12  | 0.05   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076396510413844352|
+GAIA DR2 2076389230458351872|Fe_H  | 6364 4.27  |-0.19   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076392735151698304|Fe_H  | 6405 4.21  | 0.00   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393869023080192|
+Gaia DR2 2076392219755816064|
+GAIA DR2 2076392803871133440|
+GAIA DR2 2076393697224330752|Fe_H  | 6500 4.02  | 0.08   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 6525 3.75  | 0.04   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076398060911372672|
+GAIA DR2 2076393903382761344|
+GAIA DR2 2076395964967231360|
+GAIA DR2 2076393903382760576|Fe_H  | 6299 3.92  | 0.06   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076396823960759936|
+Gaia DR2 2076388195361864064|
+GAIA DR2 2076393594145246080|
+GAIA DR2 2076402630756578432|
+GAIA DR2 2076385279088727168|
+GAIA DR2 2076400740971121408|
+GAIA DR2 2076394006453986432|
+Gaia DR2 2076399572740019328|
+Gaia DR2 2076370740613781760|
+GAIA DR2 2076393903382764032|
+Gaia DR2 2076375830160145408|
+Gaia DR2 2076388298442691200|
+Gaia DR2 2076388852501350528|
+GAIA DR2 2076398507587976064|
+GAIA DR2 2076393250547860224|
+GAIA DR2 2076389367897336576|
+GAIA DR2 2076394624937394816|
+GAIA DR2 2076394350059488128|Fe_H  | 6496 4.27  | 0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393697224334848|
+GAIA DR2 2076392838230907392|
+GAIA DR2 2076392803871137152|
+GAIA DR2 2076394483188725376|Fe_H  | 6614 4.12  |-0.16   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393697224334336|
+Gaia DR2 2076392872590611328|
+GAIA DR2 2076392666432218496|
+GAIA DR2 2076390226890883456|Fe_H  | 6496 4.21  | 0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393692917498496|Fe_H  |            | 0.12   |SUN      |     |2018AJ....156..142D|
+Gaia DR2 2076401836173583232|
+Gaia DR2 2076393697224331648|
+Gaia DR2 2076398335789269760|
+GAIA DR2 2076389230458344064|
+GAIA DR2 2076389608415495552|
+GAIA DR2 2076394173957975424|
+Gaia DR2 2076393697224332800|
+GAIA DR2 2076393628504856448|
+GAIA DR2 2076395002894523136|Fe_H  | 6401 4.27  |-0.10   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393658554625536|
+GAIA DR2 2076393147460788864|
+GAIA DR2 2076392632072471296|Fe_H  | 6364 4.02  | 0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393697216288512|
+GAIA DR2 2076392906950372224|Fe_H  | 6368 4.02  | 0.00   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076392838230903936|
+GAIA DR2 2076384866771835264|Fe_H  | 4681 2.410 |-0.11   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4694 2.55  |-0.13   |SUN      |     |2016A&A...594A..39F|
+GAIA DR2 2076389604105237248|
+GAIA DR2 2076393452396303872|
+GAIA DR2 2076393731584092928|
+Gaia DR2 2076383870339055232|
+GAIA DR2 2076396171125628672|Fe_H  | 6148 3.83  | 0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393662864623872|
+Gaia DR2 2076396033686712448|
+GAIA DR2 2076392838230896384|Fe_H  | 6344 3.92  |-0.07   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076394796736091008|
+GAIA DR2 2076393662864617344|
+Gaia DR2 2076393319267340288|
+GAIA DR2 2076392730841568640|
+GAIA DR2 2076393731584093184|
+GAIA DR2 2076392838230895744|
+GAIA DR2 2076389196098736640|
+GAIA DR2 2076393662864616704|
+GAIA DR2 2076376757873443840|
+GAIA DR2 2076390020732457216|
+GAIA DR2 2076392906950369536|
+Gaia DR2 2076385657045857536|
+GAIA DR2 2076393731584090496|
+GAIA DR2 2076394070871725568|Fe_H  | 6311 3.92  | 0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076396136765909504|Fe_H  | 6231 4.10  |-0.16   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 6247 3.75  | 0.00   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076393731584091264|
+GAIA DR2 2076389608415493760|
+GAIA DR2 2076393010029607936|
+GAIA DR2 2076394762376375424|
+Gaia DR2 2076394109541236096|
+GAIA DR2 2076389608415493888|
+GAIA DR2 2076393731584096256|
+GAIA DR2 2076394109541236352|
+GAIA DR2 2076392563352993152|Fe_H  | 6418 4.27  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076376860952287104|Fe_H  | 6446 4.12  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076376414275953280|
+Gaia DR2 2076384007777998592|
+Gaia DR2 2076392906950373504|
+GAIA DR2 2076394040821753344|
+GAIA DR2 2076393731584095872|
+GAIA DR2 2076405065987406720|Fe_H  | 4625 2.467 |-0.42   |         |     |2018ApJS...236..42Y|
+Gaia DR2 2076405169068723584|
+GAIA DR2 2076487602386285568|
+GAIA DR2 2076488869389770368|
+Gaia DR2 2076491137132502528|
+GAIA DR2 2076488427020005632|Fe_H  |            | 0.12   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4718 2.632 | 0.11   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4837 2.57  |-0.16   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4632 2.613 |-0.07   |         |     |2016A&A...594A..43H|
+Fe_H  | 4771 2.788 | 0.00   |         |     |2016A&A...594A..43H|
+Fe_H  | 4727 2.630 | 0.099  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4763 2.82  |-0.23   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4688 2.66  |-0.09   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4687 2.65  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4632 2.613 |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4647 2.62  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076487258788900864|
+Gaia DR2 2076495981857323648|
+Gaia DR2 2076497291832198144|
+GAIA DR2 2076488358300532608|
+GAIA DR2 2076486670366364544|Fe_H  | 6517 4.21  |-0.05   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076482684636589824|
+GAIA DR2 2076478634494254464|
+GAIA DR2 2076487224421814656|
+Gaia DR2 2076491583809086080|
+Gaia DR2 2076478325256621056|
+Gaia DR2 2076489320373039488|
+GAIA DR2 2076487533666805376|
+GAIA DR2 2076487190069383296|
+Gaia DR2 2076504919694422656|
+GAIA DR2 2076485845732625920|
+GAIA DR2 2076487258788900608|Fe_H  | 6496 4.12  |-0.10   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487258788898944|
+GAIA DR2 2076487258788898816|
+GAIA DR2 2076487258788899456|
+GAIA DR2 2076487568026522880|
+Gaia DR2 2076507492370129536|
+Gaia DR2 2076484372570652544|
+Gaia DR2 2076479081170972544|
+GAIA DR2 2076487671105795584|
+GAIA DR2 2076487671105795712|
+GAIA DR2 2076486979604067456|
+GAIA DR2 2076489114214805760|
+GAIA DR2 2076487739825279232|
+GAIA DR2 2076485708293650944|
+GAIA DR2 2076487671105794944|
+GAIA DR2 2076488152142162560|
+Gaia DR2 2076487671105798016|
+GAIA DR2 2076492069152307712|
+Gaia DR2 2076483135620039808|
+GAIA DR2 2076487769878066048|
+GAIA DR2 2076487666798850560|
+GAIA DR2 2076478840652758272|
+Gaia DR2 2076484265188130176|
+GAIA DR2 2076487769884145408|
+GAIA DR2 2076487671105791872|Fe_H  | 6223 3.83  |-0.11   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076488014703175296|Fe_H  | 6434 4.02  |-0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487941682836224|
+GAIA DR2 2076487701164667776|
+GAIA DR2 2076488014703176704|
+Gaia DR2 2076479351741991040|
+GAIA DR2 2076492412749688320|
+GAIA DR2 2076487671105792512|
+GAIA DR2 2076488250914398976|Fe_H  | 6455 4.21  |-0.11   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076488461372222720|
+GAIA DR2 2076485330336515584|
+Gaia DR2 2076478909372229888|
+Gaia DR2 2076490278139017600|
+GAIA DR2 2076487529365974400|
+Gaia DR2 2076504095060574464|
+Gaia DR2 2076476259366137472|
+Gaia DR2 2076491210158692480|
+Gaia DR2 2076491004000263808|
+GAIA DR2 2076479562207658240|
+GAIA DR2 2076487632439087616|Fe_H  | 6442 4.02  |-0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076485162844678784|Fe_H  | 6534 4.12  |-0.38   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076488049062939648|
+GAIA DR2 2076488731950766080|
+Gaia DR2 2076481108395337472|
+Gaia DR2 2076487666798821888|
+Gaia DR2 2076478497055345792|
+GAIA DR2 2076485437722654592|
+GAIA DR2 2076487052630401408|
+GAIA DR2 2076487495000435072|
+GAIA DR2 2076487327501110912|
+Gaia DR2 2076453994254927360|
+GAIA DR2 2076486605953761024|
+Gaia DR2 2076498661916976384|
+GAIA DR2 2076486704726130944|
+GAIA DR2 2076487258781649792|
+GAIA DR2 2076487705465508992|
+GAIA DR2 2076484952379332736|
+GAIA DR2 2076485639574178560|
+GAIA DR2 2076487636746034432|
+Gaia DR2 2076497429271193088|
+Gaia DR2 2076489659663642752|
+GAIA DR2 2076503098628176640|
+GAIA DR2 2076487976036241536|Fe_H  |            | 0.09   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4901 3.010 | 0.03   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4909 2.66  |-0.22   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4841 3.000 |-0.06   |         |     |2016A&A...594A..43H|
+Fe_H  | 4949 3.058 | 0.05   |         |     |2016A&A...594A..43H|
+Fe_H  | 4860 2.840 | 0.079  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4931 3.24  | 0.07   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4865 2.98  |-0.20   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4869 2.97  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4841 3.000 |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4814 3.00  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076486945244314752|
+GAIA DR2 2076487636746028928|
+GAIA DR2 2076487911623934208|
+Gaia DR2 2076503991981342848|
+Gaia DR2 2076478531415090432|
+Gaia DR2 2076476263672214784|
+Gaia DR2 2076482482776376704|
+GAIA DR2 2076492309670447872|
+Gaia DR2 2076497807220265600|
+Gaia DR2 2076485742653395072|
+GAIA DR2 2076487636746030720|
+GAIA DR2 2076487426280944000|
+GAIA DR2 2076489526531497600|
+Gaia DR2 2076493477901552896|
+GAIA DR2 2076485128484985216|
+Gaia DR2 2076485025405765504|
+Gaia DR2 2076480691775298944|
+GAIA DR2 2076483994613471872|
+GAIA DR2 2076488804977145216|
+GAIA DR2 2076489178627442688|Fe_H  | 6584 4.12  |-0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076496020521896832|
+GAIA DR2 2076477638061746432|
+Gaia DR2 2076493855858258688|
+GAIA DR2 2076485094125243136|
+GAIA DR2 2076488186501787392|
+GAIA DR2 2076488736257664128|Fe_H  | 6463 4.02  |-0.12   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076489079855047936|
+Gaia DR2 2076488908049390208|
+GAIA DR2 2076488427020146432|
+GAIA DR2 2076485575154122112|
+GAIA DR2 2076488908056482176|Fe_H  | 6295 4.37  | 0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487877264266752|Fe_H  | 6418 4.02  | 0.00   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076488736257663872|Fe_H  | 6438 4.02  |-0.12   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076485948811870976|
+Gaia DR2 2076487018270874752|
+Gaia DR2 2076492030485721728|
+GAIA DR2 2076487980343421312|
+Gaia DR2 2076489389092822912|
+Gaia DR2 2076479046811222016|
+Gaia DR2 2076489492172037760|
+GAIA DR2 2076487185762452096|
+Gaia DR2 2076492618908039680|
+GAIA DR2 2076487391920884864|
+Gaia DR2 2076496325454757376|
+Gaia DR2 2076491656835404672|
+GAIA DR2 2076487533666801408|Fe_H  | 6397 3.92  |-0.13   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076488186501788160|
+GAIA DR2 2076487426280622208|
+Gaia DR2 2076487533666799872|
+GAIA DR2 2076488220861538432|
+GAIA DR2 2076487258788893184|
+GAIA DR2 2076487086990161024|Fe_H  | 6219 4.32  |-0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076488427020000256|
+Gaia DR2 2076497528045678208|
+Gaia DR2 2076481963083968000|
+GAIA DR2 2076488427019994880|
+GAIA DR2 2076487155709625216|
+GAIA DR2 2076487121349914624|
+GAIA DR2 2076488633178423424|Fe_H  | 6446 4.02  |-0.04   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487121349914752|
+Gaia DR2 2076496364119291904|
+GAIA DR2 2076488358300516352|Fe_H  | 6434 4.21  | 0.03   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076488427019993344|
+GAIA DR2 2076488495739451136|
+Gaia DR2 2076500349848894720|
+GAIA DR2 2076487117042952320|
+GAIA DR2 2076488358300516864|Fe_H  | 6463 4.27  |-0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487258788889216|
+GAIA DR2 2076485094125232000|
+GAIA DR2 2076487361868055552|
+GAIA DR2 2076487602386275840|
+Gaia DR2 2076506294083950976|
+GAIA DR2 2076487602386274304|Fe_H  | 6352 4.27  | 0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076488358300519040|
+GAIA DR2 2076488701897902592|
+GAIA DR2 2076487838597288320|Fe_H  |            | 0.11   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4729 2.550 | 0.00   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4664 2.543 | 0.12   |         |     |2016A&A...594A..43H|
+Fe_H  | 4821 2.725 | 0.15   |         |     |2016A&A...594A..43H|
+Fe_H  | 4768 2.540 | 0.121  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4681 2.48  |-0.02   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4723 2.59  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4664 2.543 |        |         |     |2014ApJS..215...19P|
+Fe_H  |    8 2.59  |        |         |     |2013AJ....146..133M|
+GAIA DR2 2076486880831662848|
+GAIA DR2 2076485884399290624|Fe_H  | 6168 4.37  | 0.01   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076476779068350592|
+Gaia DR2 2076486983910929920|
+Gaia DR2 2076485777013132800|
+GAIA DR2 2076492550188684544|
+Gaia DR2 2076487980336203136|
+GAIA DR2 2076487563719615744|
+Gaia DR2 2076484303851143040|
+GAIA DR2 2076490797841797888|
+GAIA DR2 2076483547936920320|
+GAIA DR2 2076487185762261888|Fe_H  | 4838 2.949 | 0.09   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4779 2.91  |-0.14   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4761 2.93  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076487636746032640|
+GAIA DR2 2076487052630405376|
+Gaia DR2 2076485845732619904|
+GAIA DR2 2076478875012515456|
+GAIA DR2 2076485678240859136|Fe_H  |            | 0.09   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4565 2.335 | 0.40   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4515 2.55  |-0.02   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4541 2.325 | 0.14   |         |     |2016A&A...594A..43H|
+Fe_H  | 4594 2.384 | 0.14   |         |     |2016A&A...594A..43H|
+Fe_H  | 4595 2.350 | 0.085  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4583 2.54  | 0.05   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4539 2.34  |-0.05   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4564 2.37  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4541 2.325 |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4512 2.33  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076490557323652864|
+Gaia DR2 2076479974524142208|
+GAIA DR2 2076479974524142336|
+GAIA DR2 2076487155709622784|Fe_H  | 6509 4.12  |-0.17   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487872957025408|Fe_H  |            | 0.13   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4746 2.568 |-0.09   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4684 2.546 | 0.05   |         |     |2016A&A...594A..43H|
+Fe_H  | 4839 2.854 | 0.11   |         |     |2016A&A...594A..43H|
+Fe_H  | 4759 2.590 | 0.092  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4709 2.48  |-0.13   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4740 2.68  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4684 2.546 |        |         |     |2014ApJS..215...19P|
+Fe_H  |    5 2.68  |        |         |     |2013AJ....146..133M|
+GAIA DR2 2076489182934308096|
+GAIA DR2 2076487082683203456|
+Gaia DR2 2076497287526994432|
+GAIA DR2 2076487877264250496|
+Gaia DR2 2076477397543552000|
+GAIA DR2 2076487705458261376|
+GAIA DR2 2076488083422682240|
+GAIA DR2 2076479321689126784|
+GAIA DR2 2076487877264252416|
+GAIA DR2 2076487052630403712|
+GAIA DR2 2076487808544774400|Fe_H  | 6247 3.74  |-0.06   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076486434155045632|
+GAIA DR2 2076485884399294976|Fe_H  | 6530 4.21  |-0.17   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076503442225579776|
+GAIA DR2 2076487808544774784|Fe_H  | 6446 4.12  |-0.13   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076483376138250240|
+GAIA DR2 2076476469830605952|Fe_H  | 4695 2.790 | 0.47   |         |     |2018ApJS...236..42Y|
+GAIA DR2 2076488117782413440|
+Gaia DR2 2076492240951018624|
+GAIA DR2 2076488117782414208|Fe_H  | 6405 3.92  |-0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487705465514624|
+GAIA DR2 2076488216554641536|Fe_H  | 6393 4.27  | 0.07   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487018270645760|
+GAIA DR2 2076487774185030272|
+GAIA DR2 2076487976036516992|
+Gaia DR2 2076490316805527552|
+Gaia DR2 2076487804237824256|
+Gaia DR2 2076494371254379008|
+Gaia DR2 2076483337471692928|
+Gaia DR2 2076481039675863552|
+GAIA DR2 2076489148574565888|
+Gaia DR2 2076484097684399232|
+Gaia DR2 2076489835769156864|
+GAIA DR2 2076483651016527232|
+GAIA DR2 2076485575161627264|
+GAIA DR2 2076488152142164736|
+GAIA DR2 2076487877264260352|
+Gaia DR2 2076487327501088256|
+Gaia DR2 2076490553016871424|
+Gaia DR2 2076506500242450560|
+Gaia DR2 2076488014703175680|
+Gaia DR2 2076483238699267456|
+GAIA DR2 2076488976775881984|
+GAIA DR2 2076485643881116416|Fe_H  | 6275 4.32  | 0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487808544777856|
+Gaia DR2 2076503167347680128|
+Gaia DR2 2076480215042291840|
+GAIA DR2 2076487877264253696|Fe_H  | 6484 4.12  | 0.17   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076492511522106240|
+GAIA DR2 2076492550188673024|
+GAIA DR2 2076487980343425920|
+GAIA DR2 2076487808544779776|
+GAIA DR2 2076488083422685440|
+Gaia DR2 2076485639574172160|
+GAIA DR2 2076488083422685568|
+GAIA DR2 2076485575161641472|
+GAIA DR2 2076487155709634688|
+Gaia DR2 2076488044756001536|
+Gaia DR2 2076492550188674944|
+Gaia DR2 2076503167347681280|
+GAIA DR2 2076488388353387392|
+Gaia DR2 2076496776436178432|
+GAIA DR2 2076487739825279616|Fe_H  | 6275 4.21  | 0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487907317010304|Fe_H  | 6385 4.27  |-0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076490041927625216|
+GAIA DR2 2076480451253676288|
+GAIA DR2 2076487774185019520|
+GAIA DR2 2076487735518335616|
+GAIA DR2 2076490213726294528|
+Gaia DR2 2076481074035617280|
+GAIA DR2 2076487945983705856|Fe_H  | 6243 4.21  | 0.11   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487666798844288|Fe_H  | 6401 4.02  | 0.03   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076480416893919488|
+GAIA DR2 2076483547936924416|
+Gaia DR2 2076504232499547264|
+GAIA DR2 2076488770617429632|Fe_H  | 6534 4.12  |-0.07   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076490106340267264|
+Gaia DR2 2076487739825277568|
+Gaia DR2 2076500830885640704|
+GAIA DR2 2076485815679780096|
+GAIA DR2 2076487774185027328|Fe_H  | 6324 3.92  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487774185027456|
+GAIA DR2 2076488049062933376|
+GAIA DR2 2076488942416130688|Fe_H  | 6239 3.83  |-0.10   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076485540801875712|
+Gaia DR2 2076502888172074112|
+GAIA DR2 2076487774185029504|Fe_H  | 5039 3.070 |-0.11   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4849 3.06  |-0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076490900921029760|
+GAIA DR2 2076488049062935040|
+GAIA DR2 2076487842904499968|
+GAIA DR2 2076487769878085504|
+Gaia DR2 2076493271743161856|
+GAIA DR2 2076486227996612224|
+Gaia DR2 2076504438657986176|
+GAIA DR2 2076488117782406144|
+Gaia DR2 2076493271743162880|
+Gaia DR2 2076486434147333376|
+Gaia DR2 2076486846471945088|
+GAIA DR2 2076488049062931328|Fe_H  |            | 0.14   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4787 2.581 |-0.14   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4794 2.600 | 0.138  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4716 2.48  |-0.07   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076488942416128640|
+GAIA DR2 2076487980343418752|
+GAIA DR2 2076487739825262592|
+GAIA DR2 2076486640313507840|
+Gaia DR2 2076480348174438784|
+GAIA DR2 2076489217294038528|
+GAIA DR2 2076486571594029440|Fe_H  | 6438 4.02  |-0.13   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487739825266304|Fe_H  | 6446 4.02  | 0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076485472082405888|
+GAIA DR2 2076487907317010560|
+GAIA DR2 2076487739825265536|
+GAIA DR2 2076487671105801984|
+Gaia DR2 2076504881027930624|
+Gaia DR2 2076490449937644288|
+GAIA DR2 2076485055458580096|Fe_H  | 6207 4.32  | 0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076488804977151104|
+GAIA DR2 2076487185762774528|
+Gaia DR2 2076496329759573760|
+GAIA DR2 2076487911623953920|Fe_H  | 6360 3.92  |-0.07   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076492344030203136|
+Gaia DR2 2076495642564686592|
+GAIA DR2 2076485643881113856|
+GAIA DR2 2076487774185021184|
+GAIA DR2 2076485850039545088|Fe_H  | 6405 4.27  |-0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487293148614656|
+GAIA DR2 2076479390408493952|
+GAIA DR2 2076503579664437888|
+Gaia DR2 2076485815679793152|
+GAIA DR2 2076487293148617600|
+Gaia DR2 2076505916126808704|
+Gaia DR2 2076486468514769280|
+Gaia DR2 2076487293148617472|
+GAIA DR2 2076486124917385472|Fe_H  | 6521 4.12  | 0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487568026524160|
+GAIA DR2 2076487293148611840|
+Gaia DR2 2076493718419250304|
+GAIA DR2 2076485197204427776|Fe_H  | 6199 3.83  |-0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487499307041664|
+Gaia DR2 2076488530091736320|
+GAIA DR2 2076488667538145792|Fe_H  | 6521 4.02  |-0.07   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487293148613760|
+Gaia DR2 2076483891534243072|
+GAIA DR2 2076488323940764032|
+Gaia DR2 2076491966073041152|
+GAIA DR2 2076487224429147264|
+GAIA DR2 2076487224429134592|Fe_H  |            | 0.13   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4707 2.605 |-0.04   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4648       |        |         |     |2016A&A...594A..43H|
+Fe_H  | 4706 2.630 | 0.082  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4646 2.60  |-0.57   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4648       |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4618 2.60  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076488323940775680|Fe_H  |            | 0.15   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4776 2.587 | 0.12   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4670 2.565 |        |         |     |2016A&A...594A..43H|
+Fe_H  | 4788 2.670 | 0.150  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4731 2.48  |-0.03   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4728 2.67  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4670 2.565 |        |         |     |2014ApJS..215...19P|
+Gaia DR2 2076481172808087168|
+GAIA DR2 2076479729699074816|
+GAIA DR2 2076492790706763008|
+GAIA DR2 2076488667538158208|Fe_H  | 5036 3.57  |-0.04   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487224429146624|
+GAIA DR2 2076491656835398016|Fe_H  | 6576 4.12  |-0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076491515089601408|Fe_H  |            | 0.15   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4860 3.025 | 0.22   |         |     |2016A&A...594A..43H|
+Fe_H  | 4971 3.112 | 0.27   |         |     |2016A&A...594A..43H|
+Fe_H  | 4920 3.020 | 0.150  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4890 3.06  | 0.00   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4884 3.05  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4860 3.025 |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4816 3.02  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076488079115765248|
+Gaia DR2 2076492825066502656|
+GAIA DR2 2076487293148626432|
+GAIA DR2 2076489767049653632|
+Gaia DR2 2076485987478395008|
+GAIA DR2 2076486395488440576|Fe_H  | 6505 4.02  | 0.06   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487499307049984|Fe_H  | 6451 3.83  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487293148618880|
+Gaia DR2 2076502480152809856|
+GAIA DR2 2076487293148619648|
+Gaia DR2 2076486227988944896|
+Gaia DR2 2076501174474590848|
+GAIA DR2 2076488323940773760|
+GAIA DR2 2076487499307052544|
+Gaia DR2 2076484922326530944|
+Gaia DR2 2076490896614324096|
+GAIA DR2 2076487499307051008|Fe_H  | 5765 3.34  |-0.10   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 6078 3.75  | 0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076500281129424128|
+Gaia DR2 2076486331075786496|
+Gaia DR2 2076486124917387264|
+GAIA DR2 2076487190069384704|
+GAIA DR2 2076487018263096576|
+GAIA DR2 2076488289581014400|Fe_H  | 6263 3.83  |-0.02   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076491583809086336|
+GAIA DR2 2076485369003144960|Fe_H  | 6451 4.02  |-0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487327508380416|Fe_H  | 6184 4.32  | 0.06   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487190069385600|
+Gaia DR2 2076503579664443520|
+GAIA DR2 2076491794274328064|Fe_H  | 6251 4.32  |-0.08   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076489870128912384|Fe_H  | 6307 4.32  | 0.09   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487121349903360|
+GAIA DR2 2076486571594030208|
+GAIA DR2 2076487396227811200|
+Gaia DR2 2076488186501779712|
+GAIA DR2 2076487155709629312|
+Gaia DR2 2076503747158465152|
+GAIA DR2 2076487086990155520|Fe_H  | 6717 4.12  |-0.07   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076477702474910208|
+GAIA DR2 2076487121349905280|
+GAIA DR2 2076488010396275328|
+Gaia DR2 2076488255221259008|
+Gaia DR2 2076501002676146944|
+GAIA DR2 2076487258788889344|
+Gaia DR2 2076478428335860480|
+GAIA DR2 2076488255221252224|Fe_H  | 6580 4.02  |-0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076488358300523392|
+GAIA DR2 2076487086990151296|Fe_H  | 6247 3.75  |-0.07   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076491553756137984|
+Gaia DR2 2076479287329395072|
+GAIA DR2 2076487464947300608|
+GAIA DR2 2076486193636864896|
+GAIA DR2 2076485609521597824|
+GAIA DR2 2076487190069388672|
+GAIA DR2 2076488495739434240|
+Gaia DR2 2076483719735643136|
+GAIA DR2 2076487258788894208|Fe_H  | 6332 3.92  |-0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076491588115888384|
+GAIA DR2 2076487533666801024|
+GAIA DR2 2076487190069377408|
+Gaia DR2 2076495603904471936|
+GAIA DR2 2076487636746037504|
+Gaia DR2 2076502651951557632|
+GAIA DR2 2076487052630612992|Fe_H  | 6555 4.02  |-0.12   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076504885334653568|
+GAIA DR2 2076488255221261696|Fe_H  | 6332 4.27  |-0.10   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487808544789504|Fe_H  | 6132 3.83  |-0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076488152142173312|
+GAIA DR2 2076488770617529088|Fe_H  | 6563 4.02  | 0.00   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076488976775894656|Fe_H  | 6496 4.21  |-0.02   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076502651951555200|
+GAIA DR2 2076488804977268096|
+GAIA DR2 2076487430587542912|
+GAIA DR2 2076502480153088000|
+Gaia DR2 2076505057133329408|
+GAIA DR2 2076487877264268416|
+Gaia DR2 2076487808544792320|
+GAIA DR2 2076487808544790784|
+Gaia DR2 2076476675989118336|
+GAIA DR2 2076485678240864000|
+GAIA DR2 2076486777752490496|Fe_H  | 6605 4.21  | 0.07   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076489251653796736|Fe_H  | 6455 4.27  |-0.08   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076487808544785024|
+GAIA DR2 2076486777752493056|Fe_H  | 5471 3.83  |-0.09   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076489182934322944|
+GAIA DR2 2076492034792541952|
+GAIA DR2 2076489732689927424|
+Gaia DR2 2076497394911441152|
+Gaia DR2 2076496428533956736|
+Gaia DR2 2076496772131400192|
+GAIA DR2 2076485128484986624|
+Gaia DR2 2076478187811403136|
+GAIA DR2 2076488044756008576|
+GAIA DR2 2076490282445801216|Fe_H  | 6393 3.92  |-0.01   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076485953118765696|
+Gaia DR2 2076493645393497472|
+GAIA DR2 2076490797841807744|
+GAIA DR2 2076482341040807680|Fe_H  | 4739 2.569 |-0.01   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4808 2.57  |-0.17   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4803 2.62  | 0.11   |SUN      |     |2015RAA....15.1197Z|
+Gaia DR2 2076510314173459968|
+GAIA DR2 2076509794472953728|
+Gaia DR2 2076509626978591360|
+GAIA DR2 2076581919866485760|
+GAIA DR2 2076586249193848448|
+GAIA DR2 2076581816787312896|Fe_H  |            | 0.12   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4643 2.548 |-0.11   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4601 2.533 |-0.07   |         |     |2016A&A...594A..43H|
+Fe_H  | 4691 2.627 |-0.02   |         |     |2016A&A...594A..43H|
+Fe_H  | 4684 2.517 | 0.082  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4645 2.60  |-0.22   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4645 2.55  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4601 2.533 |        |         |     |2014ApJS..215...19P|
+Fe_H  | 4546 2.54  |        |SUN      |     |2011ApJ...729L..10B|
+GAIA DR2 2076581675049058176|Fe_H  | 6340 3.92  | 0.00   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076588070260000640|
+GAIA DR2 2076582121721749760|
+Gaia DR2 2076600263663745024|
+Gaia DR2 2076601431894847872|
+Gaia DR2 2076594942207534720|
+Gaia DR2 2076586902028623488|
+Gaia DR2 2076586902028622848|
+GAIA DR2 2076581984282790528|
+GAIA DR2 2076590819038925952|
+Gaia DR2 2076581851147039232|
+GAIA DR2 2076583328615829888|Fe_H  | 6287 4.32  | 0.00   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076590475441541120|
+Gaia DR2 2076582297823676928|
+GAIA DR2 2076581915563311232|
+GAIA DR2 2076582813219684224|
+GAIA DR2 2076581709404880384|
+Gaia DR2 2076585385894473088|
+Gaia DR2 2076589062388621312|
+GAIA DR2 2076581644988578304|
+GAIA DR2 2076581709404879872|
+GAIA DR2 2076581713708054784|
+GAIA DR2 2076582572701582208|Fe_H  | 4971 3.58  | 0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076587211266191872|
+Gaia DR2 2076590475441540992|
+GAIA DR2 2076591574953168384|
+Gaia DR2 2076582813219680256|
+Gaia DR2 2076595972999678848|
+GAIA DR2 2076581644988574592|
+GAIA DR2 2076581713708051200|
+GAIA DR2 2076599305894098944|
+GAIA DR2 2076581713708050176|
+Gaia DR2 2076581988585956992|
+GAIA DR2 2076594014494651136|Fe_H  | 4865 2.974 | 0.11   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4568 2.53  |-0.14   |SUN      |     |2016A&A...594A..39F|
+Gaia DR2 2076600126224776448|
+GAIA DR2 2076586386632465152|Fe_H  | 6336 3.92  |-0.14   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076589479009054592|
+GAIA DR2 2076584153249606144|
+GAIA DR2 2076581644988570112|
+Gaia DR2 2076585321480707968|
+GAIA DR2 2076587932820789760|
+GAIA DR2 2076581675044794112|
+GAIA DR2 2076581679348332544|Fe_H  | 6231 3.92  | 0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076581640685053952|
+GAIA DR2 2076584084530142208|Fe_H  |            |-0.28   |SUN      |     |2018AJ....156..142D|
+Gaia DR2 2076588169035812480|
+GAIA DR2 2076582332183427072|
+GAIA DR2 2076586485408561536|
+GAIA DR2 2076600027448703104|
+Gaia DR2 2076585351534714112|
+Gaia DR2 2076581816776766080|
+GAIA DR2 2076583912731424000|Fe_H  | 6348 4.32  | 0.19   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076583844011947776|Fe_H  | 6191 4.32  | 0.16   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076584801778898688|
+GAIA DR2 2076583534763920896|Fe_H  |            | 0.06   |SUN      |     |2018AJ....156..142D|
+Gaia DR2 2076586588487772032|
+Gaia DR2 2076586730229943296|
+GAIA DR2 2076582946355770368|
+GAIA DR2 2076583225536564992|
+GAIA DR2 2076584943523569664|
+GAIA DR2 2076581644988569984|
+GAIA DR2 2076582435262665088|Fe_H  | 6324 4.32  | 0.02   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076582641421093120|Fe_H  | 6492 4.21  | 0.09   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076590574214959232|
+Gaia DR2 2076602604429348736|
+GAIA DR2 2076581709405180032|
+GAIA DR2 2076581713708596352|
+GAIA DR2 2076591265715555584|
+GAIA DR2 2076581644988576384|
+Gaia DR2 2076595491963375104|
+Gaia DR2 2076601741132508032|
+GAIA DR2 2076581919866484224|Fe_H  |            | 0.07   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4720 2.467 | 0.01   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4788 2.510 | 0.094  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4722 2.39  |-0.13   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076586902028616960|
+GAIA DR2 2076582710140560000|Fe_H  |            | 0.12   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4849 2.578 |-0.31   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4753 2.560 | 0.10   |         |     |2016A&A...594A..43H|
+Fe_H  | 4848 2.796 | 0.16   |         |     |2016A&A...594A..43H|
+Fe_H  | 4794 2.549 | 0.106  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4845 2.45  | 0.00   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4797 2.73  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4753 2.560 |        |         |     |2014ApJS..215...19P|
+Gaia DR2 2076590711653917568|
+GAIA DR2 2076583672213210496|
+Gaia DR2 2076592154763026176|
+GAIA DR2 2076582057305472128|
+Gaia DR2 2076585901290579968|
+Gaia DR2 2076590475441544960|
+GAIA DR2 2076582057305469568|
+GAIA DR2 2076581782427562368|Fe_H  | 6307 4.02  |-0.01   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076584703005456768|
+Gaia DR2 2076590264979489664|
+GAIA DR2 2076582881939188736|
+GAIA DR2 2076581782427561088|Fe_H  | 6320 4.32  | 0.03   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076582950658667264|Fe_H  |            |-0.08   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 3485 0.99  |-0.06   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 3797 1.09  |-0.75   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 3722 1.63  |-0.07   |SUN      |     |2013MNRAS.434.1422M|
+GAIA DR2 2076582057305467392|
+GAIA DR2 2076583019367387520|
+GAIA DR2 2076581782427559808|
+Gaia DR2 2076583603493739904|
+GAIA DR2 2076581851147035520|
+GAIA DR2 2076581782427558272|
+Gaia DR2 2076584045864620672|
+Gaia DR2 2076581782427556096|
+GAIA DR2 2076583049434694016|Fe_H  | 6475 4.12  |-0.10   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076581782427554816|
+Gaia DR2 2076585768157339008|
+GAIA DR2 2076581748067811584|Fe_H  | 6172 3.92  | 0.01   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076584252023054208|
+GAIA DR2 2076587069524145536|
+Gaia DR2 2076586146114322304|
+GAIA DR2 2076581851147044096|
+GAIA DR2 2076583706572966656|
+Gaia DR2 2076583431695059584|
+GAIA DR2 2076586146114319104|
+GAIA DR2 2076583500414537856|
+GAIA DR2 2076581954226237440|
+GAIA DR2 2076583431695062400|Fe_H  | 6509 4.27  | 0.26   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076587520503849728|
+GAIA DR2 2076584217663325952|
+GAIA DR2 2076582847579431168|Fe_H  | 6517 4.12  | 0.04   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076584290688576128|
+GAIA DR2 2076582022946242816|
+GAIA DR2 2076582022946242688|
+GAIA DR2 2076582121721405440|
+GAIA DR2 2076581713708061696|Fe_H  | 6405 4.02  |-0.43   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076582469622840960|
+Gaia DR2 2076583844012374656|
+Gaia DR2 2076586725927012992|
+Gaia DR2 2076583874065921664|
+GAIA DR2 2076583736629139456|
+GAIA DR2 2076581846843495680|
+Gaia DR2 2076592223482509952|
+GAIA DR2 2076581713708057088|Fe_H  | 6247 4.02  | 0.06   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076582572701580288|
+Gaia DR2 2076593018062248832|
+Gaia DR2 2076591982964339456|
+GAIA DR2 2076582229104194560|
+GAIA DR2 2076583191176842880|Fe_H  | 6251 3.92  | 0.00   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076591708086393088|
+GAIA DR2 2076582263463926656|Fe_H  | 6430 4.02  |-0.04   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076594907847780480|
+Gaia DR2 2076591540593421696|
+GAIA DR2 2076588272114617600|
+Gaia DR2 2076588443913316608|
+Gaia DR2 2076588963613036544|
+Gaia DR2 2076583637853457024|
+Gaia DR2 2076586008675533824|
+Gaia DR2 2076584840444429696|
+Gaia DR2 2076585321470413824|
+Gaia DR2 2076584634285999872|
+Gaia DR2 2076591261409789952|
+GAIA DR2 2076581885506794368|
+Gaia DR2 2076585733797625216|
+GAIA DR2 2076588237752668416|Fe_H  | 5173 2.929 |-0.14   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4963 2.720 |-0.103  |SUN      |     |2016ApJ...823..114N|
+GAIA DR2 2076581885506792704|Fe_H  | 6551 4.12  | 0.05   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076582538341832704|
+GAIA DR2 2076600886442113280|Fe_H  | 4737 2.630 |-0.73   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4758 2.63  |-0.00   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4857 2.67  | 0.08   |SUN      |     |2015RAA....15.1197Z|
+Gaia DR2 2076581816787314560|
+GAIA DR2 2076582327877683072|
+Gaia DR2 2076584737365185536|
+GAIA DR2 2076581885506788480|
+GAIA DR2 2076590780373306112|Fe_H  | 4817 2.570 |-0.31   |         |     |2018ApJS...236..42Y|
+Fe_H  | 4891 2.64  |-0.10   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4686 2.62  |-0.03   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4809 2.62  | 0.05   |SUN      |     |2015RAA....15.1197Z|
+GAIA DR2 2076582985018415872|Fe_H  | 6144 4.37  | 0.03   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076582263463923200|
+GAIA DR2 2076581816787309824|
+GAIA DR2 2076581816787307392|Fe_H  | 6434 4.12  | 0.01   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076589479009058944|
+GAIA DR2 2076589169771448576|
+Gaia DR2 2076582916298933632|
+GAIA DR2 2076582430956906240|
+GAIA DR2 2076582744500207872|
+GAIA DR2 2076581851147043328|
+GAIA DR2 2076582366543183744|
+Gaia DR2 2076599958729223680|
+GAIA DR2 2076582641421089408|Fe_H  | 6610 4.12  | 0.04   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076587932820796160|
+GAIA DR2 2076581644988584704|
+Gaia DR2 2076581679337658496|
+GAIA DR2 2076582503982579200|
+Gaia DR2 2076591433208523136|
+GAIA DR2 2076588413857178752|
+GAIA DR2 2076581748067801088|Fe_H  | 6467 4.21  |-0.06   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076583736629135616|
+GAIA DR2 2076591712392143616|
+Gaia DR2 2076590612880517760|
+GAIA DR2 2076581679348329344|
+Gaia DR2 2076584252023059456|
+Gaia DR2 2076599821290237440|
+GAIA DR2 2076583049434692736|
+Gaia DR2 2076582813209012864|
+GAIA DR2 2076582877635999872|
+GAIA DR2 2076590853398676224|
+GAIA DR2 2076587142546716416|
+GAIA DR2 2076582607061335424|Fe_H  | 6140 3.75  | 0.13   |SUN      |     |2015AJ....149..121L|
+Gaia DR2 2076582843276257920|
+GAIA DR2 2076582607061332864|Fe_H  | 6098 4.09  |-0.15   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 6168 3.92  | 0.19   |SUN      |     |2015AJ....149..121L|
+GAIA DR2 2076581713708054656|Fe_H  |            | 0.10   |SUN      |     |2018AJ....156..142D|
+Fe_H  | 4315 2.08  |-0.10   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4193 1.93  |-0.04   |SUN      |     |2016A&A...594A..39F|
+Fe_H  | 4265 1.642 | 0.26   |         |     |2016A&A...594A..43H|
+Fe_H  | 4226 1.674 | 0.29   |         |     |2016A&A...594A..43H|
+Fe_H  | 4226 1.680 | 0.045  |SUN      |     |2016ApJ...823..114N|
+Fe_H  | 4165 2.00  |-0.06   |SUN      |     |2015RAA....15.1197Z|
+Fe_H  | 4149 1.65  |-0.21   |SUN      |     |2015AJ....149..121L|
+Fe_H  | 4221 1.75  |        |         |     |2013AJ....146..133M|
+Fe_H  | 4265 1.642 |        |         |     |2014ApJS..215...19P|
+Fe_H  |    2 1.75  |        |         |     |2013AJ....146..133M|
+Gaia DR2 2076596144798380032|
+
