@@ -1296,9 +1296,21 @@ class NNmodel:
                 ax[i].set_xlim([-10*std,10*std])
         plt.show()
     
-    def manualPredict(self, inputs):
+    def getWeights(self):
+        """
+        pass self.weights the NN's weights and calculate number of hidden layers
+        """
+        weights = self.model.get_weights()
+        self.bn_weights = weights[:4]
+        self.dense_weights = weights[4:]
+        self.no_hidden_dense_layers = len(self.dense_weights)/2-1
+    
+    def manualPredict_old(self, inputs):
         """
         "Manual calculation" of a NN done with theano tensors, for pymc3 to use
+        slower version for testing purposes, now that we knew there will always only
+        be one batch norm layer, we take away the if statesements that run per layer,
+        and have the weights mapped out before hand in the HBM.
         """
         xx = T.transpose(inputs)
         for i,layer in enumerate(self.model.layers):
@@ -1311,4 +1323,16 @@ class NNmodel:
             elif 'dense' in layer.get_config()['name']:
                 weights = layer.get_weights()
                 xx=T.nnet.elu(pm.math.dot(xx,weights[0])+weights[1])
+        return xx.T
+    
+    def manualPredict(self, inputs):
+        """
+        "Manual calculation" of a NN done with theano tensors, for pymc3 to use
+        """
+        xx = T.transpose(inputs)
+        xx=T.nnet.bn.batch_normalization_test(xx,*self.bn_weights,epsilon=0.001)
+        for i in np.arange(self.no_hidden_dense_layers)*2:
+            i=int(i)
+            xx=T.nnet.elu(pm.math.dot(xx,self.dense_weights[i])+self.dense_weights[i+1])
+        xx=(T.dot(xx,self.dense_weights[-2])+self.dense_weights[-1])
         return xx.T
