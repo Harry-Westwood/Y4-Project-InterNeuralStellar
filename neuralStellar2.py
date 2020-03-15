@@ -205,6 +205,15 @@ class stellarGrid:
         ax.set_xlabel(r'$log10\;T_{eff}$')
         fig.colorbar(s1)
         plt.show()
+        
+    def longestTracks(self):
+        """Sorts the tracks by number of datapoints to return a list of track numbers in decending order"""
+        track_nos = self.data['track_no'].unique()
+        track_len = []
+        for track_no in track_nos:
+            track_len.append(len(self.data[self.data['track_no']==track_no]))
+        return track_nos[np.argsort(track_len)[::-1]]
+
 
 class NNmodel:
     """
@@ -1111,7 +1120,7 @@ class NNmodel:
             fig.savefig(savefile+'/DelnuAge'+str(trial_no)+'.png')
             print('delnu vs age plot saved as "'+savefile+'/DelnuAge'+str(trial_no)+'.png"')
     
-    def plotTrends(self, grid, track_no=20, in_between=None, savefile=None, trial_no=None):
+    def plotTrends(self, grid, track_no=20, in_between=None, nth_track=None, savefile=None, trial_no=None):
         """
         Plots the three observables vs star age, both grid data and NN predicted overlapping
         in the same plot, along with each observables' residue fraction at the bottom.
@@ -1132,7 +1141,10 @@ class NNmodel:
             only used if savefile is not None. The trial number to be tagged after
             the diagram savename, matches the excel notes.
         """
-        tracks = self.prepPlot(grid, track_no)
+        if nth_track == None:
+            tracks = self.prepPlot(grid, track_no)
+        else:
+            tracks = grid.data.loc[grid.data['track_no']==nth_track]
         [Ageg, Lg, Teffg, delnug] = [tracks['age'], tracks['L'], tracks['Teff'], tracks['delnu']]
         if in_between is None:
             x_in = self.fetchData(tracks, self.input_index)
@@ -1157,21 +1169,21 @@ class NNmodel:
         y_out, output_index = self.calOutputs(y_out)
         [Lm, Teffm, delnum] = 10**(np.array([y_out[output_index.index('L')], y_out[output_index.index('Teff')],
                                y_out[output_index.index('delnu')]]))
-        
+    
         fig, ax=plt.subplots(4,1,figsize=[12,12],sharex=True)
         fig.subplots_adjust(hspace=0)
-        ax[0].plot(Ageg,Lg,c='black',zorder=1,label='MESA data')
-        ax[0].plot(Agem,Lm,c='blue',zorder=2,label='NN predicted')
+        ax[0].scatter(Ageg,Lg,c='black',s=1,zorder=1,label='MESA data')
+        ax[0].scatter(Agem,Lm,c='blue',s=1,zorder=2,label='NN predicted')
         ax[0].set_yscale('log')
         ax[0].legend()
         ax[0].set_ylabel(r'$L/L_{\odot}$')
-        ax[1].plot(Ageg,Teffg,c='black',zorder=1,label='MESA data')
-        ax[1].plot(Agem,Teffm,c='blue',zorder=2,label='NN predicted')
+        ax[1].scatter(Ageg,Teffg,c='black',s=1,zorder=1,label='MESA data')
+        ax[1].scatter(Agem,Teffm,c='blue',s=1,zorder=2,label='NN predicted')
         ax[1].set_yscale('log')
         ax[1].legend()
         ax[1].set_ylabel(r'$T_{eff}$ (K)')
-        ax[2].plot(Ageg,delnug,c='black',zorder=1,label='MESA data')
-        ax[2].plot(Agem,delnum,c='blue',zorder=2,label='NN predicted')
+        ax[2].scatter(Ageg,delnug,c='black',s=1,zorder=1,label='MESA data')
+        ax[2].scatter(Agem,delnum,c='blue',s=1,zorder=2,label='NN predicted')
         ax[2].set_yscale('log')
         ax[2].legend()
         ax[2].set_ylabel(r'$\Delta \nu\;(\mu$Hz)')
@@ -1185,9 +1197,9 @@ class NNmodel:
         L_res = (Lm-Lg)/Lg
         Teff_res = (Teffm-Teffg)/Teffg
         delnu_res = (delnum-delnug)/delnug
-        ax[3].plot(Ageg,L_res,label='luminosity',zorder=2)
-        ax[3].plot(Ageg,Teff_res,label='Teff',zorder=2)
-        ax[3].plot(Ageg,delnu_res,label='delta nu',zorder=2)
+        ax[3].scatter(Ageg,L_res,s=1,label='luminosity',zorder=2)
+        ax[3].scatter(Ageg,Teff_res,s=1,label='Teff',zorder=2)
+        ax[3].scatter(Ageg,delnu_res,s=1,label='delta nu',zorder=2)
         x_lim = ax[3].get_xlim()
         ax[3].hlines(0,0,12,ls='--',zorder=1)
         ax[3].set_xlim(x_lim)
@@ -1301,8 +1313,12 @@ class NNmodel:
         pass self.weights the NN's weights and calculate number of hidden layers
         """
         weights = self.model.get_weights()
-        self.bn_weights = weights[:4]
-        self.dense_weights = weights[4:]
+        if 'batch_normalization' in self.model.layers[1].get_config()['name']:
+            self.bn_weights = weights[:4]
+            self.dense_weights = weights[4:]
+        else:
+            self.bn_weights = None
+            self.dense_weights = weights
         self.no_hidden_dense_layers = len(self.dense_weights)/2-1
     
     def manualPredict_old(self, inputs):
@@ -1330,9 +1346,89 @@ class NNmodel:
         "Manual calculation" of a NN done with theano tensors, for pymc3 to use
         """
         xx = T.transpose(inputs)
-        xx=T.nnet.bn.batch_normalization_test(xx,*self.bn_weights,epsilon=0.001)
+        if self.bn_weights is not None:
+            xx=T.nnet.bn.batch_normalization_test(xx,*self.bn_weights,epsilon=0.001)
         for i in np.arange(self.no_hidden_dense_layers)*2:
             i=int(i)
             xx=T.nnet.elu(pm.math.dot(xx,self.dense_weights[i])+self.dense_weights[i+1])
         xx=(T.dot(xx,self.dense_weights[-2])+self.dense_weights[-1])
         return xx.T
+
+    def predict(self, inputs):
+        inputs[2]=10**inputs[2]
+        outputs = self.model.predict(np.log10(inputs).T).T
+        outputs = self.calOutputs(outputs)[0]
+        return outputs
+        
+    def plotOffTracks(self, df, ax, moved_name, moved_index, title):
+        first = True
+        for track_no in df['track_no'].unique():
+            this_track = df[df['track_no']==track_no].copy()
+            this_track.sort_values(by='age', inplace=True)
+            on_in = np.array(this_track[['mass','age','feh','Y','MLT']]).T
+            on_out = self.predict(on_in)
+            if first == True:
+                ax.plot(on_out[1], on_out[0], c='black', zorder=3, label='tracks')
+            else:
+                ax.plot(on_out[1], on_out[0], c='black', zorder=3)
+            first = False
+        lims = [ax.get_xlim(),ax.get_ylim()]
+    
+        moved_input_names = ['mass','age','feh','Y','MLT']
+        moved_input_names[moved_index] = moved_name
+        if moved_index == 0: grid_range = df['initial_mass'].unique()
+        elif moved_index == 2: grid_range = df['initial_feh'].unique()
+        elif moved_index == 3: grid_range = df['Y'].unique()
+        elif moved_index == 4: grid_range = df['MLT'].unique()
+        grid_range = np.sort(grid_range)
+        first = True
+        for track_no in df['track_no'].unique():
+            this_track = df[df['track_no']==track_no].copy()
+            if this_track[moved_name].unique()[0]>grid_range[0] and this_track[moved_name].unique()[0]<grid_range[-1]:
+                this_track.sort_values(by='age', inplace=True)
+                off_in = np.array(this_track[moved_input_names]).T
+                off_out = self.predict(off_in)
+                if first == True:
+                    ax.plot(off_out[1], off_out[0], c='red', zorder=3, label='in betweens')
+                else:
+                    ax.plot(off_out[1], off_out[0], c='red', zorder=3)
+                first = False
+        ax.set_xlim(lims[0][::-1])
+        ax.set_ylim(lims[1])
+        ax.set_xlabel(r'$\log10 T_{eff}$')
+        ax.set_ylabel(r'$\log10(L/L_{\odot})$')
+        ax.legend()
+        ax.set_title(title)
+
+    def plotBetweenTracks(self, grid, M_init_fixed, feh_init_fixed, Y_init_fixed, MLT_init_fixed, 
+                          Mstep=0.02, fehstep=-0.1, Ystep=0.01, MLTstep=0.1):
+        fig, ax = plt.subplots(2,2, figsize=(16,16))
+        #varying mass
+        solar_df = grid.data[grid.data['MLT']==MLT_init_fixed].copy()
+        solar_df = solar_df[solar_df['Y']==Y_init_fixed]
+        solar_df = solar_df[solar_df['initial_feh']==feh_init_fixed]
+        solar_df['moved_mass'] = solar_df['mass']+Mstep
+        self.plotOffTracks(solar_df, ax[0,0], 'moved_mass', 0, 'Varying mass')
+        
+        #varying feh
+        feh_df = grid.data[grid.data['MLT']==MLT_init_fixed].copy()
+        feh_df = feh_df[feh_df['Y']==Y_init_fixed]
+        feh_df = feh_df[feh_df['initial_mass']==M_init_fixed]
+        feh_df['moved_feh'] = feh_df['feh']+fehstep
+        self.plotOffTracks(feh_df, ax[0,1], 'moved_feh', 2, 'Varying Fe/H')
+        
+        #varying Y
+        Y_df = grid.data[grid.data['MLT']==MLT_init_fixed].copy()
+        Y_df = Y_df[Y_df['initial_feh']==feh_init_fixed]
+        Y_df = Y_df[Y_df['initial_mass']==M_init_fixed]
+        Y_df['moved_Y'] = Y_df['Y']+Ystep
+        self.plotOffTracks(Y_df, ax[1,0], 'moved_Y', 3, 'Varying Y')
+        
+        #varying MLT
+        MLT_df = grid.data[grid.data['Y']==Y_init_fixed].copy()
+        MLT_df = MLT_df[MLT_df['initial_feh']==feh_init_fixed]
+        MLT_df = MLT_df[MLT_df['initial_mass']==M_init_fixed]
+        MLT_df['moved_MLT'] = MLT_df['MLT']+MLTstep
+        self.plotOffTracks(MLT_df, ax[1,1], 'moved_MLT', 4, r'Varying $\alpha_{MLT}$')
+        
+        plt.show()
