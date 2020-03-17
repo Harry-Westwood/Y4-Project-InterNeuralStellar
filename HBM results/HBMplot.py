@@ -7,6 +7,7 @@ Created on Sun Mar 15 15:46:04 2020
 
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
 def predict(model, inputs):
     inputs[2]=10**inputs[2]
@@ -115,15 +116,14 @@ def sigmaPlot(model, ax, sigma, MLT, colour, zorder, splits, label):
             plotFill(model, ax, [sigma[0][0],sigma[0][1]], iso_feh, iso_Y, MLT, colour, zorder)
 
             
-def fittedIso(summary, model, cluster_df, title, max_mass=1.7):
-    means = summary['mean']
-    ma = means['mean_age']
-    sa = means['spread_age']
-    mf = means['mean_feh']
-    sf = means['spread_feh']
-    my = means['mean_Y']
-    sy = means['spread_Y']
-    mmlt = means['mean_MLT']
+def fittedIso(trace, model, cluster_df, title, max_mass=1.7):
+    ma = np.percentile(trace['mean_age'],50)
+    sa = np.percentile(trace['spread_age'],50)
+    mf = np.percentile(trace['mean_feh'],50)
+    sf = np.percentile(trace['spread_feh'],50)
+    my = np.percentile(trace['mean_Y'],50)
+    sy = np.percentile(trace['spread_Y'],50)
+    mmlt = np.percentile(trace['mean_MLT'],50)
 
     fig, ax=plt.subplots(1,1,figsize=[10,10])
     clusterPlot(cluster_df, ax, 'blue', 'cluster data')
@@ -140,3 +140,15 @@ def fittedIso(summary, model, cluster_df, title, max_mass=1.7):
     ax.legend()
     ax.set_title(title)
     plt.show()
+
+def saveResults(trace, path):
+    result_dict={}
+    for parameter in ['mean_age','spread_age','mean_feh','spread_feh','mean_Y','spread_Y','mean_MLT']:
+        median = np.percentile(trace[parameter],50)
+        low_err = median-np.percentile(trace[parameter],15.9)
+        high_err = np.percentile(trace[parameter],84.1)-median
+        result_dict[parameter+'_est'] = median
+        result_dict[parameter+'_low_err'] = low_err
+        result_dict[parameter+'_high_err'] = high_err
+    result_df = pd.DataFrame(result_dict, index=[1])
+    result_df.to_csv(path,index=False)
