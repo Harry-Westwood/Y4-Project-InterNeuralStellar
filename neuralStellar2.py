@@ -201,9 +201,9 @@ class stellarGrid:
         #print(np.ones(10)*np.array([1,2]))
         s1=ax.scatter(np.log10(plot_tracks[0]),np.log10(plot_tracks[1]),s=5,c=plot_m,cmap='viridis')
         ax.set_xlim(ax.get_xlim()[::-1])
-        ax.set_ylabel(r'$log10(L/L_{\odot})$')
-        ax.set_xlabel(r'$log10\;T_{eff}$')
-        fig.colorbar(s1)
+        ax.set_xlabel(r'$\log_{10} T_{eff}$ / K')
+        ax.set_ylabel(r'$\log_{10}(L/L_{\odot})$')
+        fig.colorbar(s1, label=r'$M/M_\odot$')
         plt.show()
         
     def longestTracks(self):
@@ -867,13 +867,13 @@ class NNmodel:
         fig, ax=plt.subplots(1,2,figsize=[16,8])
         ax[0].scatter(Teffm,Lm,s=5,c=Mm, cmap='viridis')
         ax[0].set_xlim(ax[0].get_xlim()[::-1])
-        ax[0].set_ylabel(r'$\log10(L/L_{\odot})$')
-        ax[0].set_xlabel(r'$\log10 T_{eff}$')
+        ax[0].set_xlabel(r'$\log_{10} T_{eff}$ / K')
+        ax[0].set_ylabel(r'$\log_{10}(L/L_{\odot})$')
         ax[0].set_title('NN predicted')
         s2=ax[1].scatter(Teffg,Lg,s=5,c=Mg, cmap='viridis')
         ax[1].set_xlim(ax[1].get_xlim()[::-1])
-        ax[1].set_ylabel(r'$\log10(L/L_{\odot})$')
-        ax[1].set_xlabel(r'$\log10 T_{eff}$')
+        ax[1].set_xlabel(r'$\log_{10} T_{eff}$ / K')
+        ax[1].set_ylabel(r'$\log_{10}(L/L_{\odot})$')
         ax[1].set_title('MESA data')
         if match_axes == True:
             ax[0].set_xlim(ax[1].get_xlim())
@@ -1011,13 +1011,13 @@ class NNmodel:
         fig, ax=plt.subplots(1,2,figsize=[16,8])
         ax[0].scatter(Teffm,Lm,s=5,c=Am, cmap='viridis')
         ax[0].set_xlim(ax[0].get_xlim()[::-1])
-        ax[0].set_ylabel(r'$\log10(L/L_{\odot})$')
-        ax[0].set_xlabel(r'$\log10 T_{eff}$')
+        ax[0].set_xlabel(r'$\log_{10} T_{eff}$ / K')
+        ax[0].set_ylabel(r'$\log_{10}(L/L_{\odot})$')
         ax[0].set_title('NN predicted')
         s2=ax[1].scatter(Teffg,Lg,s=5,c=Ag, cmap='viridis')
         ax[1].set_xlim(ax[1].get_xlim()[::-1])
-        ax[1].set_ylabel(r'$\log10(L/L_{\odot})$')
-        ax[1].set_xlabel(r'$\log10 T_{eff}$')
+        ax[1].set_xlabel(r'$\log_{10} T_{eff}$ / K')
+        ax[1].set_ylabel(r'$\log_{10}(L/L_{\odot})$')
         ax[1].set_title('MESA data')
         ax[0].set_xlim(ax[1].get_xlim())
         ax[0].set_ylim(ax[1].get_ylim())
@@ -1062,11 +1062,11 @@ class NNmodel:
     
         fig, ax=plt.subplots(1,2,figsize=[16,8])
         ax[0].scatter(NNx, NNmass, s=5, c=NNage, cmap='viridis')
-        ax[0].set_xlabel(r'$\log10\;( \Delta \nu^{-4}{T_{eff}}^{3/2})$')
+        ax[0].set_xlabel(r'$\log_{10}\;( \Delta \nu^{-4}{T_{eff}}^{3/2})$')
         ax[0].set_ylabel(r'$M/M_{\odot}$')
         ax[0].set_title('NN predicted')
         s2=ax[1].scatter(SRx, mass, s=5, c=plot_data[3], cmap='viridis')
-        ax[1].set_xlabel(r'$\log10\;( \Delta \nu^{-4}{T_{eff}}^{3/2})$')
+        ax[1].set_xlabel(r'$\log_{10}\;( \Delta \nu^{-4}{T_{eff}}^{3/2})$')
         ax[1].set_ylabel(r'$M/M_{\odot}$')
         ax[1].set_title('MESA data')
         fig.subplots_adjust(right=0.83)
@@ -1104,12 +1104,12 @@ class NNmodel:
         fig, ax=plt.subplots(1,2,figsize=[16,8])
         ax[0].scatter(NNtracks[self.output_index.index('delnu')], x_in[self.input_index.index('age')],
           s=5, c=10**x_in[self.input_index.index('mass')], cmap='viridis')
-        ax[0].set_xlabel(r'$\log10\; \Delta \nu$')
-        ax[0].set_ylabel(r'$\log10 Age (Gyr)$')
+        ax[0].set_xlabel(r'$\log_{10}\; \Delta \nu$')
+        ax[0].set_ylabel(r'$\log_{10} Age$ / Gyr')
         ax[0].set_title('NN predicted')
         s2=ax[1].scatter(plot_data[1], plot_data[0], s=5, c=10**plot_data[2], cmap='viridis')
-        ax[1].set_xlabel(r'$\log10\; \Delta \nu$')
-        ax[1].set_ylabel(r'$\log10\;Age\;(Gyr)$')
+        ax[1].set_xlabel(r'$\log_{10}\; \Delta \nu$')
+        ax[1].set_ylabel(r'$\log_{10}Age$ / Gyr')
         ax[1].set_title('MESA data')
         fig.subplots_adjust(right=0.83)
         cbar_ax = fig.add_axes([0.85, ax[1].get_position().y0, 0.02, ax[1].get_position().height])
@@ -1181,12 +1181,12 @@ class NNmodel:
         ax[1].scatter(Agem,Teffm,c='blue',s=1,zorder=2,label='NN predicted')
         ax[1].set_yscale('log')
         ax[1].legend()
-        ax[1].set_ylabel(r'$T_{eff}$ (K)')
+        ax[1].set_ylabel(r'$T_{eff}$ / K')
         ax[2].scatter(Ageg,delnug,c='black',s=1,zorder=1,label='MESA data')
         ax[2].scatter(Agem,delnum,c='blue',s=1,zorder=2,label='NN predicted')
         ax[2].set_yscale('log')
         ax[2].legend()
-        ax[2].set_ylabel(r'$\Delta \nu\;(\mu$Hz)')
+        ax[2].set_ylabel(r'$\Delta \nu$ / $\mu$Hz')
         if in_between is not None:
             x_in = self.fetchData(tracks, self.input_index)
             x_in = self.normPredictInputs(x_in)
@@ -1205,7 +1205,7 @@ class NNmodel:
         ax[3].set_xlim(x_lim)
         ax[3].legend()
         ax[3].set_ylabel('residual fraction')
-        ax[3].set_xlabel('Age (Gyr)')
+        ax[3].set_xlabel('Age / Gyr')
         plt.show()
         if savefile != None:
             fig.savefig(savefile+'/Trends'+str(trial_no)+'.png')
@@ -1294,16 +1294,16 @@ class NNmodel:
         NN_tracks = self.model.predict(x_in.T,batch_size=len(x_in.T),verbose=2).T
         NN_tracks, output_index = self.calOutputs(NN_tracks)
         fig, ax = plt.subplots(1,3,figsize=[15,4])
-        x_labels = [r'luminosity ($L_\odot$)',r'$T_{eff}$ (K)',r'$\Delta \nu$ ($\mu$Hz)']
+        x_labels = [r'luminosity / $L_\odot$',r'$T_{eff}$ / K',r'$\Delta \nu$ / $\mu$Hz']
         for i,Dout in enumerate(y_out):
             Mout = 10**NN_tracks[i]
             Dout = 10**Dout
             errors = Mout-Dout
             std = np.std(errors)
-            median = np.round(np.median(abs(errors)),2)
-            sns.distplot(errors, bins=200, ax=ax[i], label='median absolute ='+str(median))
+            median = np.round(np.median(abs(errors)),3)
+            sns.distplot(errors, bins=200, ax=ax[i])
             ax[i].set_xlabel(x_labels[i])
-            ax[i].legend()
+            ax[i].legend(['median absolute='+str(median)],loc='upper right')
             if std_limit==True:
                 ax[i].set_xlim([-10*std,10*std])
         plt.show()
@@ -1360,7 +1360,7 @@ class NNmodel:
         outputs = self.calOutputs(outputs)[0]
         return outputs
         
-    def plotOffTracks(self, df, ax, moved_name, moved_index, title):
+    def plotOffTracks(self, df, ax, moved_name, moved_index, title, cutoff=False):
         first = True
         for track_no in df['track_no'].unique():
             this_track = df[df['track_no']==track_no].copy()
@@ -1388,47 +1388,56 @@ class NNmodel:
                 this_track.sort_values(by='age', inplace=True)
                 off_in = np.array(this_track[moved_input_names]).T
                 off_out = self.predict(off_in)
+                end = len(off_out[0])
+                if cutoff == True:
+                    value = 10*off_out[1]-off_out[0]-35.5
+                    for i,v in enumerate(value):
+                        if v<0:
+                            end = i+1
+                            break
+                log_lum = off_out[0,:end]
+                log_temp = off_out[1,:end]
                 if first == True:
-                    ax.plot(off_out[1], off_out[0], c='red', zorder=3, label='in betweens')
+                    ax.plot(log_temp, log_lum, c='red', zorder=3, label='in betweens')
                 else:
-                    ax.plot(off_out[1], off_out[0], c='red', zorder=3)
+                    ax.plot(log_temp, log_lum, c='red', zorder=3)
                 first = False
         ax.set_xlim(lims[0][::-1])
         ax.set_ylim(lims[1])
-        ax.set_xlabel(r'$\log10 T_{eff}$')
-        ax.set_ylabel(r'$\log10(L/L_{\odot})$')
+        ax.set_xlabel(r'$\log_{10} T_{eff}$ / K')
+        ax.set_ylabel(r'$\log_{10}(L/L_{\odot})$')
         ax.legend()
         ax.set_title(title)
-
+    
     def plotBetweenTracks(self, grid, M_init_fixed, feh_init_fixed, Y_init_fixed, MLT_init_fixed, 
-                          Mstep=0.02, fehstep=-0.1, Ystep=0.01, MLTstep=0.1):
+                          cutoff=False, Mstep=0.02, fehstep=-0.1, Ystep=0.01, MLTstep=0.1):
         fig, ax = plt.subplots(2,2, figsize=(16,16))
         #varying mass
         solar_df = grid.data[grid.data['MLT']==MLT_init_fixed].copy()
         solar_df = solar_df[solar_df['Y']==Y_init_fixed]
         solar_df = solar_df[solar_df['initial_feh']==feh_init_fixed]
         solar_df['moved_mass'] = solar_df['mass']+Mstep
-        self.plotOffTracks(solar_df, ax[0,0], 'moved_mass', 0, 'Varying mass')
-        
+        self.plotOffTracks(solar_df, ax[0,0], 'moved_mass', 0, 'Varying mass', cutoff=cutoff)
+    
         #varying feh
         feh_df = grid.data[grid.data['MLT']==MLT_init_fixed].copy()
         feh_df = feh_df[feh_df['Y']==Y_init_fixed]
         feh_df = feh_df[feh_df['initial_mass']==M_init_fixed]
         feh_df['moved_feh'] = feh_df['feh']+fehstep
-        self.plotOffTracks(feh_df, ax[0,1], 'moved_feh', 2, 'Varying Fe/H')
-        
+        self.plotOffTracks(feh_df, ax[0,1], 'moved_feh', 2, 'Varying Fe/H', cutoff=cutoff)
+    
         #varying Y
         Y_df = grid.data[grid.data['MLT']==MLT_init_fixed].copy()
         Y_df = Y_df[Y_df['initial_feh']==feh_init_fixed]
         Y_df = Y_df[Y_df['initial_mass']==M_init_fixed]
         Y_df['moved_Y'] = Y_df['Y']+Ystep
-        self.plotOffTracks(Y_df, ax[1,0], 'moved_Y', 3, 'Varying Y')
-        
+        self.plotOffTracks(Y_df, ax[1,0], 'moved_Y', 3, 'Varying Y', cutoff=cutoff)
+    
         #varying MLT
         MLT_df = grid.data[grid.data['Y']==Y_init_fixed].copy()
         MLT_df = MLT_df[MLT_df['initial_feh']==feh_init_fixed]
         MLT_df = MLT_df[MLT_df['initial_mass']==M_init_fixed]
         MLT_df['moved_MLT'] = MLT_df['MLT']+MLTstep
-        self.plotOffTracks(MLT_df, ax[1,1], 'moved_MLT', 4, r'Varying $\alpha_{MLT}$')
-        
+        self.plotOffTracks(MLT_df, ax[1,1], 'moved_MLT', 4, r'Varying $\alpha_{MLT}$', cutoff=cutoff)
+    
         plt.show()
