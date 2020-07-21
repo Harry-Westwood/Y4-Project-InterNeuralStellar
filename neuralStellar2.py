@@ -117,6 +117,17 @@ class stellarGrid:
                 self.data['track_no'] = tracks
             else: self.data['track_no'] = np.zeros(len(self.data.index))
             self.data.drop(columns=['initial_str'])
+            
+        if 'frac_track_age' not in self.data.columns:
+            self.data['track_max_age'] = np.zeros(len(self.data.index))
+            max_track_no = int(max(self.data['track_no'].unique()))
+            max_ages = np.zeros(len(self.data.index))
+            for i in range(0,max_track_no+1):
+                this_track = self.data[self.data['track_no']==i]
+                max_age = max(this_track['age'])
+                max_ages[this_track.index] = np.ones(len(this_track.index))*max_age
+            self.data['track_max_age'] = max_ages
+            self.data['frac_track_age'] = 10**(self.data['age']/self.data['track_max_age'])
     
     def getAgeRange(self, age_lb, age_ub):
         """
@@ -221,7 +232,7 @@ class NNmodel:
     grids, and helps plotting its training results.
     """
     def __init__(self, track_choice, input_index, output_index, 
-                 non_log_columns=['feh'], Teff_scaling=1, radius_coeffs=None,
+                 non_log_columns=['feh','star_feh'], Teff_scaling=1, radius_coeffs=None,
                  Teff_limit=10**3.72, delnu_limit=100, seed=53, precision='float32'):
         """
         Parameters: 
@@ -626,7 +637,7 @@ class NNmodel:
             
         Called in: many places
         """
-        if 'feh' in parameters:
+        if len(list(set(self.non_log_columns).intersection(parameters))) > 0:
             return_array=[]
             for i in parameters:
                 if i in self.non_log_columns:
@@ -652,7 +663,7 @@ class NNmodel:
                 if grid.ranged_tracks is None:
                     raise NameError('Grid has no ranged tracks!')
                 else: tracks = grid.ranged_tracks
-            nth_track = tracks['track_no'].unique()[nth_track]
+            #nth_track = tracks['track_no'].unique()[nth_track]
             selected = tracks.loc[tracks['track_no'].isin(nth_track)]
         else:
             selected = self.prepPlot(grid, track_no=track_no)
@@ -898,6 +909,8 @@ class NNmodel:
         grid: stellarGrid object
         iso_ages: list/array
             the isochronic ages to be plotted
+            if iso_ages is None, code will find the max and min ages in the grid 
+            and use a linspace of 5 values
         indices: list of strings, length = len(self.input_index)-1 (has age)
             the order of NN input parameters (stellar fundamentals) of which to
             constraint, in the form(spelling) of stellarGrid.proper_index.
@@ -942,7 +955,19 @@ class NNmodel:
         #checking for correct input lengths
         if len(indices)!=len(self.input_index)-1 or len(isos)!=len(self.input_index)-2 or len(widths)!=len(self.input_index)-1:
             raise ValueError('Two (or more) of the lengths of the inputs do not match!')
-        
+    
+        if iso_ages is None:
+            iso_ages = np.linspace(min(grid.data['age']),max(grid.data['age']),5)
+        for i,param in enumerate(indices[1:]):
+            if isos[i] is None:
+                if param=='feh':
+                    if 'initial_feh' in grid.data.columns:
+                        inits = np.sort(grid.data['initial_feh'].unique())
+                    else: inits = np.sort(grid.data['feh'].unique())
+                else:
+                    inits = np.sort(grid.data[param].unique())
+                isos[i] = inits[int(len(inits)/2)]
+    
         data = grid.data
         for i,param in enumerate(indices[1:]):
             if widths[i+1][0]=='r':
@@ -971,7 +996,7 @@ class NNmodel:
             else:
                 fetched_data = fetched_data.append(all_tracks, sort=True)
         print('found '+str(len(fetched_data.index))+' stars.')
-        
+    
         #creating new input lists for NN to predict
         fixed_inputs=[]
         for i,param in enumerate(indices[1:]):
@@ -995,14 +1020,14 @@ class NNmodel:
                 else:
                     this_ind=self.input_index.index(param)
                     x_in[this_ind] = np.append(x_in[this_ind],fixed_inputs[indices.index(param)-1])
-        
+    
         #NN prediction
         x_in = np.array(x_in)
         NN_age=10**x_in[self.input_index.index('age')]
         x_in = self.normPredictInputs(x_in)
         NN_tracks=self.model.predict(x_in.T, batch_size=len(x_in.T),verbose=2).T
         NN_tracks, output_index = self.calOutputs(NN_tracks)
-        
+    
         #plotting the isochrone
         plot_data = self.fetchData(fetched_data, ['Teff','L','age'])
         [Teffm, Lm, Am, Teffg, Lg, Ag] = [NN_tracks[output_index.index('Teff')],
@@ -1014,6 +1039,12 @@ class NNmodel:
         ax[0].set_xlabel(r'$\log_{10} T_{eff}$ / K')
         ax[0].set_ylabel(r'$\log_{10}(L/L_{\odot})$')
         ax[0].set_title('NN predicted')
+    
+        plot_ages = [np.round(iso_age,1) for iso_age in iso_ages]
+        ax[0].plot([],[],' ',label='ages = '+str(plot_ages)[1:-1])
+        for i,param in enumerate(indices[1:]):
+            ax[0].plot([],[],' ',label=param+' = '+str(isos[i]))
+        ax[0].legend()
         s2=ax[1].scatter(Teffg,Lg,s=5,c=Ag, cmap='viridis')
         ax[1].set_xlim(ax[1].get_xlim()[::-1])
         ax[1].set_xlabel(r'$\log_{10} T_{eff}$ / K')
@@ -1287,20 +1318,25 @@ class NNmodel:
             dex_values[self.output_index[i]] = np.mean(abs((Mout-Dout)/Dout)*np.log10(Dout))/np.log(10)
         return dex_values
     
-    def plotError(self, grid, std_limit=True):
+    def plotError(self, grid, std_limit=True, x_labels=[r'luminosity / $L_\odot$',r'$T_{eff}$ / K',r'$\Delta \nu$ / $\mu$Hz']):
+        if len(x_labels)!=len(self.output_index):
+            raise ValueError('Number of x labels do not match with number of outputs!')
         x_in = self.fetchData(grid.data, self.input_index)
         x_in = self.normPredictInputs(x_in)
-        y_out = self.fetchData(grid.data, ['L','Teff','delnu'])
+        out_index = self.output_index.copy()
+        for i,index in enumerate(out_index):
+            if index == 'radius':
+                out_index[i]='L' 
+        y_out = self.fetchData(grid.data, out_index)
         NN_tracks = self.model.predict(x_in.T,batch_size=len(x_in.T),verbose=2).T
         NN_tracks, output_index = self.calOutputs(NN_tracks)
-        fig, ax = plt.subplots(1,3,figsize=[15,4])
-        x_labels = [r'luminosity / $L_\odot$',r'$T_{eff}$ / K',r'$\Delta \nu$ / $\mu$Hz']
+        fig, ax = plt.subplots(1,len(self.output_index),figsize=[5*len(self.output_index),4])
         for i,Dout in enumerate(y_out):
             Mout = 10**NN_tracks[i]
             Dout = 10**Dout
             errors = Mout-Dout
             std = np.std(errors)
-            median = np.round(np.median(abs(errors)),3)
+            median = np.round(np.median(abs(errors)),5)
             sns.distplot(errors, bins=200, ax=ax[i])
             ax[i].set_xlabel(x_labels[i])
             ax[i].legend(['median absolute='+str(median)],loc='upper right')
@@ -1360,7 +1396,7 @@ class NNmodel:
         outputs = self.calOutputs(outputs)[0]
         return outputs
         
-    def plotOffTracks(self, df, ax, moved_name, moved_index, title, cutoff=False):
+    def plotOffTracks(self, df, ax, moved_name, moved_index, title, labels, cutoff=False):
         first = True
         for track_no in df['track_no'].unique():
             this_track = df[df['track_no']==track_no].copy()
@@ -1377,7 +1413,10 @@ class NNmodel:
         moved_input_names = ['mass','age','feh','Y','MLT']
         moved_input_names[moved_index] = moved_name
         if moved_index == 0: grid_range = df['initial_mass'].unique()
-        elif moved_index == 2: grid_range = df['initial_feh'].unique()
+        elif moved_index == 2: 
+            if 'initial_feh' in df.columns:
+                grid_range = df['initial_feh'].unique()
+            else: grid_range = df['feh'].unique()
         elif moved_index == 3: grid_range = df['Y'].unique()
         elif moved_index == 4: grid_range = df['MLT'].unique()
         grid_range = np.sort(grid_range)
@@ -1402,6 +1441,8 @@ class NNmodel:
                 else:
                     ax.plot(log_temp, log_lum, c='red', zorder=3)
                 first = False
+        for label in labels:
+            ax.plot([], [], ' ', label=label)
         ax.set_xlim(lims[0][::-1])
         ax.set_ylim(lims[1])
         ax.set_xlabel(r'$\log_{10} T_{eff}$ / K')
@@ -1411,33 +1452,388 @@ class NNmodel:
     
     def plotBetweenTracks(self, grid, M_init_fixed, feh_init_fixed, Y_init_fixed, MLT_init_fixed, 
                           cutoff=False, Mstep=0.02, fehstep=-0.1, Ystep=0.01, MLTstep=0.1):
+        if 'initial_feh' in grid.data.columns:
+            feh_index = 'initial_feh'
+        else: feh_index = 'feh'
+        
+        if M_init_fixed is None:
+            M_inits = np.sort(grid.data['initial_mass'].unique())
+            M_init_fixed = M_inits[int(len(M_inits)/2)]
+        if feh_init_fixed is None:
+            feh_inits = np.sort(grid.data[feh_index].unique())
+            feh_init_fixed = feh_inits[int(len(feh_inits)/2)]
+        if Y_init_fixed is None:
+            Y_inits = np.sort(grid.data['Y'].unique())
+            Y_init_fixed = Y_inits[int(len(Y_inits)/2)]
+        if MLT_init_fixed is None:
+            MLT_inits = np.sort(grid.data['MLT'].unique())
+            MLT_init_fixed = MLT_inits[int(len(MLT_inits)/2)]
+        labels = ['init mass = '+str(M_init_fixed), 'init [Fe/H] = '+str(feh_init_fixed),
+                  'init Y = '+str(Y_init_fixed), 'init MLT = '+str(MLT_init_fixed)]
+    
         fig, ax = plt.subplots(2,2, figsize=(16,16))
         #varying mass
         solar_df = grid.data[grid.data['MLT']==MLT_init_fixed].copy()
         solar_df = solar_df[solar_df['Y']==Y_init_fixed]
-        solar_df = solar_df[solar_df['initial_feh']==feh_init_fixed]
+        solar_df = solar_df[solar_df[feh_index]==feh_init_fixed]
         solar_df['moved_mass'] = solar_df['mass']+Mstep
-        self.plotOffTracks(solar_df, ax[0,0], 'moved_mass', 0, 'Varying mass', cutoff=cutoff)
+        self.plotOffTracks(solar_df, ax[0,0], 'moved_mass', 0, 'Varying mass', [labels[1],labels[2],labels[3]], cutoff=cutoff)
     
         #varying feh
         feh_df = grid.data[grid.data['MLT']==MLT_init_fixed].copy()
         feh_df = feh_df[feh_df['Y']==Y_init_fixed]
         feh_df = feh_df[feh_df['initial_mass']==M_init_fixed]
-        feh_df['moved_feh'] = feh_df['feh']+fehstep
-        self.plotOffTracks(feh_df, ax[0,1], 'moved_feh', 2, 'Varying Fe/H', cutoff=cutoff)
+        feh_df['moved_feh'] = feh_df[feh_index]+fehstep
+        self.plotOffTracks(feh_df, ax[0,1], 'moved_feh', 2, 'Varying Fe/H', [labels[0],labels[2],labels[3]], cutoff=cutoff)
     
         #varying Y
         Y_df = grid.data[grid.data['MLT']==MLT_init_fixed].copy()
-        Y_df = Y_df[Y_df['initial_feh']==feh_init_fixed]
+        Y_df = Y_df[Y_df[feh_index]==feh_init_fixed]
         Y_df = Y_df[Y_df['initial_mass']==M_init_fixed]
         Y_df['moved_Y'] = Y_df['Y']+Ystep
-        self.plotOffTracks(Y_df, ax[1,0], 'moved_Y', 3, 'Varying Y', cutoff=cutoff)
+        self.plotOffTracks(Y_df, ax[1,0], 'moved_Y', 3, 'Varying Y', [labels[0],labels[1],labels[3]], cutoff=cutoff)
     
         #varying MLT
         MLT_df = grid.data[grid.data['Y']==Y_init_fixed].copy()
-        MLT_df = MLT_df[MLT_df['initial_feh']==feh_init_fixed]
+        MLT_df = MLT_df[MLT_df[feh_index]==feh_init_fixed]
         MLT_df = MLT_df[MLT_df['initial_mass']==M_init_fixed]
         MLT_df['moved_MLT'] = MLT_df['MLT']+MLTstep
-        self.plotOffTracks(MLT_df, ax[1,1], 'moved_MLT', 4, r'Varying $\alpha_{MLT}$', cutoff=cutoff)
+        self.plotOffTracks(MLT_df, ax[1,1], 'moved_MLT', 4, r'Varying $\alpha_{MLT}$', [labels[0],labels[1],labels[2]], cutoff=cutoff)
     
         plt.show()
+        
+class Teff2colour:
+
+    def __init__(self, input_cols, output_cols, seed=53, precision='float32'):
+        self.input_cols = input_cols
+        self.output_cols = output_cols
+        self.set_seed(seed)
+        self.precision = precision
+        self.history = None
+        self.leg = {}
+        
+    def set_seed(self, seed):
+        ''' Set the seed '''
+        np.random.seed(seed)
+        tf.random.set_seed(seed)
+
+    def buildModel(self, arch, activation, reg=None, summary=True):
+        self.leg['reg'] = reg
+        if reg!=None:
+            if reg[0]=='l1':
+                regu = keras.regularizers.l1(reg[1])
+            elif reg[0]=='l2':
+                regu = keras.regularizers.l2(reg[1])
+            else: raise NameError('Wrong regularizer name!')
+        inputs = keras.Input(shape=(arch[0],))
+        if reg==None:
+            xx = keras.layers.Dense(arch[1],activation=activation)(inputs)
+        else: 
+            xx = keras.layers.Dense(arch[1],activation=activation,kernel_regularizer=regu)(inputs)
+        for i in range(2, len(arch)-1):
+            if reg==None:
+                xx = keras.layers.Dense(arch[i],activation=activation)(xx)
+            else: 
+                xx = keras.layers.Dense(arch[i],activation=activation,kernel_regularizer=regu)(xx)
+        outputs = keras.layers.Dense(arch[-1],activation='linear')(xx)
+        self.model = keras.Model(inputs=inputs, outputs=outputs, name='atmosphere2colour')
+        if summary==True:
+            self.model.summary()
+
+    def loadModel(self, filename, summary=True):
+        """
+        Loads in a pre-trained/pre-built NN to self.model, prints the summary.
+        """
+        self.model = keras.models.load_model(filename)
+        if summary==True:
+            self.model.summary()
+
+    def compileModel(self, opt, lr, loss, metrics=None, beta_1=0.9, beta_2=0.999):
+        self.leg['recompile'] = True
+        self.leg['optimizer'] = opt
+        self.leg['lr'] = lr
+        self.leg['loss_func'] = loss
+        if opt=='Nadam':
+            optimizer=keras.optimizers.Nadam(lr=lr, beta_1=beta_1, beta_2=beta_2)
+        elif opt=='SGD':
+            optimizer=keras.optimizers.SGD(learning_rate=lr)
+        else: raise NameError('No such optimizer!!')
+        if metrics!=None:
+            self.model.compile(optimizer=optimizer,loss=loss, metrics=metrics)
+        else: self.model.compile(optimizer=optimizer,loss=loss)
+
+        
+    def fitModel(self, df, epoch_no, batch_size, save_name, 
+                 vsplit=0.3, callback=[], baseline=0.0005, fractional_patience=0.1):
+        if self.history is None:
+            self.leg['leg_no']=1
+        else:
+            last_leg = self.history['legs'][-1]
+            self.leg['leg_no'] = last_leg['leg_no']+1
+            if 'recompile' not in self.leg:
+                for item in ['reg','optimizer','lr','loss_func']:
+                    self.leg[item] = last_leg[item]
+                self.leg['recompile'] = False
+        self.leg['batch_size'] = batch_size
+        self.leg['epoch_no'] = epoch_no
+        
+        x = df[self.input_cols].astype(self.precision)
+        y = df[self.output_cols].astype(self.precision)
+    
+        cb=[]
+        if 'tb' in callback:
+            logdir = "/logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+            tb = keras.callbacks.TensorBoard(log_dir=logdir)
+            cb.append(tb)
+        if 'es' in callback:
+            patience = int(fractional_patience * epoch_no)
+            es = keras.callbacks.EarlyStopping(monitor='val_loss', mode='min',
+                                            baseline=baseline, patience=patience)
+            cb.append(es)
+        if 'mc' in callback:
+            mc = keras.callbacks.ModelCheckpoint('{}_best_model.h5'.format(save_name),
+                                              monitor='val_loss',
+                                              mode='min', save_best_only=True)
+            cb.append(mc)
+    
+        start_time=datetime.now()
+        history = self.model.fit(x,y,
+                          epochs=epoch_no,
+                          batch_size=batch_size,
+                          validation_split=vsplit,
+                          verbose=0,
+                          callbacks=cb)
+        runtime = datetime.now()-start_time
+        self.leg['runtime'] = runtime
+        try: last_loss = history.history['mean_absolute_error'][-1]
+        except KeyError: last_loss = history.history['MAE'][-1]
+        self.leg['final_loss'] = last_loss
+        print('training done! now='+str(datetime.now())+' | Time elapsed='+str(runtime))
+        self.model.save('{}.h5'.format(save_name))
+        hist = history.history
+        if self.history is not None:
+            for key in hist.keys():
+                joined_key = self.history[key]+hist[key]
+                self.history[key] = joined_key
+            max_epoch = -1
+            for leg in self.history['legs']:
+                max_epoch+=leg['epoch_no']
+            self.train_epochs=[max_epoch,max_epoch+epoch_no]
+            self.leg['epoch_range'] = [max_epoch,max_epoch+epoch_no]
+            self.leg['cumulative_epochs'] = max_epoch+epoch_no+1
+            self.history['legs'] = self.history['legs']+[self.leg]
+        else:
+            self.train_epochs=[0,epoch_no-1]
+            self.leg['epoch_range'] = [0,epoch_no-1]
+            self.leg['cumulative_epochs'] = epoch_no
+            hist['legs'] = [self.leg]
+            self.history = hist
+        self.leg = {}
+    
+    def saveHist(self, filename):
+        """Saves the history dictionary into a txt file with pickle"""
+        with open(filename, 'wb') as file_pi:
+            pickle.dump(self.history, file_pi)
+    
+    def loadHist(self, filename, filetype='pickle', append=False):
+        """
+        Passes the history file name to self.history, does basically nothing
+        Note: filetype = 'pickle' or 'dill', depends on how the history file was saved
+        """
+        history = pickle.load(open( filename, "rb" ))
+        if append==True:
+            if self.history is not None:
+                for key in history.keys():
+                    joined_key = self.history[key]+history[key]
+                    self.history[key] = joined_key
+            else:
+                self.history = history
+        else: self.history = history
+    
+    def plotHist(self, plot_MSE=True, epochs=None, this_train=False, savefile=None, trial_no=None):
+        hist = self.history
+        if 'epoch' not in self.history.keys():
+            max_epoch = -1
+            for leg in self.history['legs']:
+                max_epoch+=leg['epoch_no']
+            if epochs is not None:
+                if epochs[1]=='max':
+                    epochs[1]=max_epoch
+            epoch = np.arange(max_epoch+1)
+        else:
+            epoch = hist['epoch']
+            if epochs is not None:
+                if epochs[1]=='max':
+                    epochs[1]=max(epoch)
+        if this_train==True:
+            epochs=self.train_epochs
+        keys = hist.keys()
+        if 'MAE' in keys:
+            MAE,valMAE=hist['MAE'],hist['val_MAE']
+        elif 'mae' in keys:
+            MAE,valMAE=hist['mae'],hist['val_mae']
+        elif 'mean_absolute_error' in keys:
+            MAE,valMAE=hist['mean_absolute_error'],hist['val_mean_absolute_error']
+        if type(epochs)!=type(None):
+            epoch = epoch[epochs[0]:epochs[1]+1]
+            MAE = MAE[epochs[0]:epochs[1]+1]
+            valMAE = valMAE[epochs[0]:epochs[1]+1]
+        fig, ax = plt.subplots(1, 1)
+        ax.plot(epoch,MAE,'b',label='MAE')
+        ax.plot(epoch,valMAE,'r',label='valMAE')
+        if plot_MSE==True:
+            if 'MSE' in keys:
+                MSE,valMSE=hist['MSE'],hist['val_MSE']
+            elif 'mae' in keys:
+                MSE,valMSE=hist['mse'],hist['val_mse']
+            elif 'mean_absolute_error' in keys:
+                MSE,valMSE=hist['mean_squared_error'],hist['val_mean_squared_error']
+            if type(epochs)!=type(None):
+                MSE = MSE[epochs[0]:epochs[1]+1]
+                valMSE = valMSE[epochs[0]:epochs[1]+1]
+            ax.plot(epoch,MSE,'b:',label='MSE')
+            ax.plot(epoch,valMSE,'r:',label='valMSE')
+        ax.set_yscale('log')
+        ax.set_xlabel('epoch')
+        ax.set_ylabel('metric')
+        ax.legend()
+        plt.show()
+        if savefile != None:
+            fig.savefig(savefile+'/history'+str(trial_no)+'.png')
+            print('history plot saved as "'+savefile+'/history'+str(trial_no)+'.png"')
+
+    def plotError(self, df):
+        x_in = np.array(df[self.input_cols])
+        y_out = np.array(df[self.output_cols]).T
+        NN_pred = self.model.predict(x_in,batch_size=len(x_in),verbose=2).T
+        fig, ax = plt.subplots(len(self.output_cols),1,figsize=[15,3*len(self.output_cols)])
+        #x_labels = [r'luminosity / $L_\odot$',r'$T_{eff}$ / K',r'$\Delta \nu$ / $\mu$Hz']
+        x_labels = self.output_cols
+        medians = []
+        for i,Dout in enumerate(y_out):
+            Mout = NN_pred[i]
+            errors = Mout-Dout
+            median = np.round(np.median(abs(errors)),5)
+            medians.append(median)
+            sns.distplot(errors, bins=200, ax=ax[i])
+            ax[i].set_xlabel(x_labels[i])
+            ax[i].legend(['median absolute='+str(median)],loc='upper right')
+        print(np.average(medians))
+        plt.show()
+
+    def lastLoss(self, key):
+        return self.history[key][-1]
+    
+    def runtime(self):
+        """
+        calculates the total runtime spent on this model from self.history['legs']
+        """
+        runtime=timedelta()
+        for leg in self.history['legs']:
+            try:
+                runtime+=leg['runtime']
+            except TypeError:
+                t=datetime.strptime(leg['runtime'],'%H:%M:%S.%f')
+                runtime+=timedelta(hours=t.hour, minutes=t.minute, seconds=t.second, microseconds=t.microsecond)
+        return runtime
+    
+    def saveLegs(self, savefile):
+        """
+        saves the legs into a csv
+        """
+        df = pd.DataFrame()
+        legs = self.history['legs'].copy()
+        for leg in legs:
+            leg['runtime']=str(leg['runtime'])
+            for item in ['reg','epoch_range']:
+                if item in leg.keys():
+                    leg[item] = str(leg[item])
+            df2=pd.DataFrame(leg, index=[0])
+            df=df.append(df2, ignore_index=True, sort=True)
+        cols = list(df.columns)
+        for item in ['leg_no','final_loss','runtime']:
+            cols.remove(item)
+        df = df[['leg_no']+cols+['final_loss','runtime']]
+        df.to_csv(path_or_buf=savefile, index=False)
+    
+    def getWeights(self):
+        """
+        pass self.weights the NN's weights and calculate number of hidden layers
+        """
+        weights = self.model.get_weights()
+        if 'batch_normalization' in self.model.layers[1].get_config()['name']:
+            self.bn_weights = weights[:4]
+            self.dense_weights = weights[4:]
+        else:
+            self.bn_weights = None
+            self.dense_weights = weights
+        self.no_hidden_dense_layers = len(self.dense_weights)/2-1
+    
+    def manualPredict(self, inputs):
+        """
+        "Manual calculation" of a NN done with theano tensors, for pymc3 to use
+        """
+        xx = T.transpose(inputs)
+        if self.bn_weights is not None:
+            xx=T.nnet.bn.batch_normalization_test(xx,*self.bn_weights,epsilon=0.001)
+        for i in np.arange(self.no_hidden_dense_layers)*2:
+            i=int(i)
+            xx=T.nnet.elu(pm.math.dot(xx,self.dense_weights[i])+self.dense_weights[i+1])
+        xx=(T.dot(xx,self.dense_weights[-2])+self.dense_weights[-1])
+        return xx.T
+    
+def data_divideTracks(df, initial_columns=['initial_mass', 'initial_Yinit', 'initial_feh', 'initial_MLT']):
+    """
+    Sorts data in increasing step number, identifies individual stellar tracks, and 
+    assign a unique track_no to each data in the dataframe
+    To call for a specific track from the dataframe, use
+    df.loc[df.track_no==0]      for single value, or
+    df.loc[df['track_no'].isin([0,1])] for multiple values
+    """
+    
+    if 'track_no' not in df.columns:
+        initials = np.array(df[initial_columns])
+        initial_str_list = []
+        for ini in initials:
+            initial_str=''
+            for i in ini:
+                initial_str+=str(i)
+            initial_str_list.append(initial_str)
+        df['initial_str'] = initial_str_list
+        df.sort_values(by='initial_str',inplace=True)
+        df.reset_index(inplace=True)
+        
+        initials = np.array(df[initial_columns])
+        initial_sum = np.sum(initials, axis=1)
+        diff = initial_sum[1:]-initial_sum[:-1]
+        boundaries = np.where(abs(diff)>0)[0]
+
+        if len(boundaries)>0:
+            lastb = 0
+            tracks = np.array([])
+            for i,bi in enumerate(boundaries):
+                tracks = np.concatenate((tracks,np.ones(bi+1-lastb)*i))
+                lastb = bi+1
+            tracks = np.concatenate((tracks, np.ones(len(df.index)-len(tracks))*(tracks[-1]+1)))
+            df['track_no'] = tracks
+        else: df['track_no'] = np.zeros(len(df.index))
+        df.drop(columns=['initial_str'])
+    return df
+
+def data_calFracAge(df, age_col, base=10):
+    if 'frac_track_age' not in df.columns:
+        df['track_max_age'] = np.zeros(len(df.index))
+        max_track_no = int(max(df['track_no'].unique()))
+        max_ages = np.zeros(len(df.index))
+        for i in range(0,max_track_no+1):
+            this_track = df[df['track_no']==i]
+            max_age = max(this_track[age_col])
+            max_ages[this_track.index] = np.ones(len(this_track.index))*max_age
+        df['track_max_age'] = max_ages
+        df['frac_track_age'] = base**(df[age_col]/df['track_max_age'])/base
+        df['ten_frac_track_age'] = 10**df['frac_track_age']
+    return df
+
+def data_scaleTeff(df, Teff_col, factor):
+    df['scale_T'] = df[Teff_col]/factor
+    return df
