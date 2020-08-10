@@ -208,7 +208,6 @@ class stellarGrid:
         """
         plot_tracks,plot_m=self.datatoplot(track_choice, track_no=track_no)
         fig, ax=plt.subplots(1,1,figsize=[10,10])
-        #print(np.ones(10)*np.array([1,2]))
         s1=ax.scatter(np.log10(plot_tracks[0]),np.log10(plot_tracks[1]),s=5,c=plot_m,cmap='viridis')
         ax.set_xlim(ax.get_xlim()[::-1])
         ax.set_xlabel(r'$\log_{10} T_{eff}$ / K')
@@ -231,7 +230,7 @@ class NNmodel:
     grids, and helps plotting its training results.
     """
     def __init__(self, track_choice, input_index, output_index, 
-                 non_log_columns=['feh','star_feh','frac_track_age'], Teff_scaling=1, 
+                 non_log_columns=['feh','initial_feh','star_feh','frac_track_age'], Teff_scaling=1, 
                  radius_coeffs=None, Teff_limit=10**3.72, delnu_limit=100, seed=53, 
                  precision='float32'):
         """
@@ -551,6 +550,14 @@ class NNmodel:
         print('training done! now='+str(datetime.now())+' | Time elapsed='+str(runtime))
         self.model.save('{}.h5'.format(save_name))
         hist = history.history
+        try: hist['MAE'] = hist.pop('mean_absolute_error')
+        except KeyError: pass
+        try: hist['MSE'] = hist.pop('mean_squared_error')
+        except KeyError: pass
+        try: hist['val_MAE'] = hist.pop('val_mean_absolute_error')
+        except KeyError: pass
+        try: hist['val_MSE'] = hist.pop('val_mean_squared_error')
+        except KeyError: pass
         if self.history is not None:
             for key in hist.keys():
                 joined_key = self.history[key]+hist[key]
@@ -898,8 +905,9 @@ class NNmodel:
             fig.savefig(savefile+'/HR'+str(trial_no)+'.png')
             print('HR diagram saved as "'+savefile+'/HR'+str(trial_no)+'.png"')
     
-    def plotIsochrone(self, grid, iso_ages, indices, isos, widths=None, N=5000, 
-                      one_per_track=True, extended=True, savefile=None, trial_no=None):
+    def plotIsochrone(self, grid, iso_ages, indices, isos, widths=None, N=200, 
+                      one_per_track=True, extended=True, method='bayesian', 
+                      savefile=None, trial_no=None):
         """
         Plots both grid(data) and NN predicted isochrones of specified ages in HR
         diagrams, with the colour bar showing variation in age. Can save plot.
@@ -933,6 +941,19 @@ class NNmodel:
                 for all individual isochrones.
             If False: NN side's mass input range depends on the individual groups of
                 datapoints picked from the grid for the corresponding iso-age
+        method: string, optional
+            Only used when frac track age is an input
+            'while_loop': Use function findFracAge to find the appropiate fractional 
+                age for each mass point in each iso_age through a series of while loop
+                Pro: Might take shorter time
+                Con: Less accurate and cannot do extended=True
+                Note: Repeated 'Warning: Unable to find optimal frac track age for 
+                target age.' warning suggests trying to calculate frac age of datapoints
+                that are outside the training data's boundaries or near it.
+            'bayesian': Use function isochrone_pymc3 to find the appropiate fractional
+                ages for each set of masses in each iso_age through bayesian statistic
+                Pro: More accurate and can do extended=True
+                Con: Might take longer time
     
         Note: indices, isos and widths must be in the same order in terms of stellar
         parameters, and age must always come first, for example, if 4 parameters go
@@ -1019,9 +1040,13 @@ class NNmodel:
                     x_in[this_ind] = np.append(x_in[this_ind],np.log10(np.ones(N)*iso_age))
                 elif param=='frac_track_age':
                     this_ind=self.input_index.index('frac_track_age')
-                    frac_age_guesses = []
-                    for i,massi in enumerate(10**masses):
-                        frac_age_guesses.append(self.findFracAge(iso_age,massi,isos,indices[1:],0.05))
+                    if method == 'while_loop':
+                        frac_age_guesses = []
+                        for i,massi in enumerate(10**masses):
+                            frac_age_guesses.append(self.findFracAge(iso_age,massi,isos,indices[1:],0.05))
+                    elif method == 'bayesian':
+                        frac_age_guesses = self.isochrone_pymc3(iso_age, masses, isos, indices[1:])
+                    else: raise ValueError('Incorrect frac track age method input.')
                     x_in[this_ind] = np.append(x_in[this_ind],frac_age_guesses)
                 else:
                     this_ind=self.input_index.index(param)
@@ -1105,96 +1130,34 @@ class NNmodel:
                 break
             #print(age_guess,frac_age_lims)
         return frac_age_guess
-
-    def plotSR(self, grid, track_no=20, savefile=None, trial_no=None):
-        """
-        Plots star mass vs [log10 (delta_nu^(-4)*Teff^(3/2)] for both grid(data)
-        and NN predicted (factors in the mass scaling relation). Can save plot.
     
-        Parameters:
-        ----------
-        grid: stellarGrid object
-        track_no: int, optional
-            number of tracks to be plotted. Passed to self.prepPlot
-        savefile: str, optional
-            path and filename for saving the plot. Plot is only saved if not None
-        trial_no: int, optional
-            only used if savefile is not None. The trial number to be tagged after
-            the diagram savename, matches the excel notes.
-        """
-        tracks = self.prepPlot(grid, track_no)
-        plot_data = self.fetchData(tracks, ['mass','delnu','Teff', 'age'])
-        mass=10**plot_data[0]
-        SRx=np.log10((10**plot_data[1])**-4*(10**plot_data[2])**(3/2))
+    def isochrone_pymc3(self, target_age, logmass, fixed_inputs, indices):
+        N = len(logmass)
+        prepared_fixed_inputs = []
+        for i,param in enumerate(self.input_index):
+            for j,ind in enumerate(indices):
+                if param==ind:
+                    if param in self.non_log_columns:
+                        prepared_fixed_inputs.append(T.ones(N)*fixed_inputs[j])
+                    else:
+                        prepared_fixed_inputs.append(T.ones(N)*T.log10(fixed_inputs[j]))
         
-        x_in = self.fetchData(tracks, self.input_index)
-        NNmass=10**x_in[self.input_index.index('mass')]
-        NNage=x_in[1]
-        x_in = self.normPredictInputs(x_in)
-        NNtracks = self.model.predict(x_in.T,batch_size=len(x_in.T),verbose=2).T
-        NNtracks, output_index = self.calOutputs(NNtracks)
-        NNx=np.log10((10**NNtracks[output_index.index('delnu')])**-4*
-                     (10**NNtracks[output_index.index('Teff')])**(3/2))
-    
-        fig, ax=plt.subplots(1,2,figsize=[16,8])
-        ax[0].scatter(NNx, NNmass, s=5, c=NNage, cmap='viridis')
-        ax[0].set_xlabel(r'$\log_{10}\;( \Delta \nu^{-4}{T_{eff}}^{3/2})$')
-        ax[0].set_ylabel(r'$M/M_{\odot}$')
-        ax[0].set_title('NN predicted')
-        s2=ax[1].scatter(SRx, mass, s=5, c=plot_data[3], cmap='viridis')
-        ax[1].set_xlabel(r'$\log_{10}\;( \Delta \nu^{-4}{T_{eff}}^{3/2})$')
-        ax[1].set_ylabel(r'$M/M_{\odot}$')
-        ax[1].set_title('MESA data')
-        fig.subplots_adjust(right=0.83)
-        cbar_ax = fig.add_axes([0.85, ax[1].get_position().y0, 0.02, ax[1].get_position().height])
-        cbar_ax.text(0.5,1.015,'log10 Age\n(Gyr)',fontsize=13,horizontalalignment='center',transform=cbar_ax.transAxes)
-        fig.colorbar(s2, cax=cbar_ax)
-        plt.show()
-        if savefile != None:
-            fig.savefig(savefile+'/SR'+str(trial_no)+'.png')
-            print('SR plot saved as "'+savefile+'/SR'+str(trial_no)+'.png"')
-    
-    def plotDelnuAge(self, grid, track_no=20, savefile=None, trial_no=None):
-        """
-        Plots star age vs log10 delta_nu for both grid(data) and NN predicted.
-        Can save plot.
-    
-        Parameters:
-        ----------
-        grid: stellarGrid object
-            grid object with track data stored
-        track_no: int, optional
-            number of tracks to be plotted. Passed to self.prepPlot
-        savefile: str, optional
-            path and filename for saving the plot. Plot is only saved if not None
-        trial_no: int, optional
-            only used if savefile is not None. The trial number to be tagged after
-            the diagram savename, matches the excel notes.
-        """
-        tracks = self.prepPlot(grid, track_no)
-        plot_data = self.fetchData(tracks, ['age','delnu', 'mass'])
-        x_in = self.fetchData(tracks, self.input_index)
-        x_in_norm = self.normPredictInputs(x_in)
-        NNtracks = self.model.predict(x_in_norm.T,batch_size=len(x_in_norm.T),verbose=2).T
-    
-        fig, ax=plt.subplots(1,2,figsize=[16,8])
-        ax[0].scatter(NNtracks[self.output_index.index('delnu')], x_in[self.input_index.index('age')],
-          s=5, c=10**x_in[self.input_index.index('mass')], cmap='viridis')
-        ax[0].set_xlabel(r'$\log_{10}\; \Delta \nu$')
-        ax[0].set_ylabel(r'$\log_{10} Age$ / Gyr')
-        ax[0].set_title('NN predicted')
-        s2=ax[1].scatter(plot_data[1], plot_data[0], s=5, c=10**plot_data[2], cmap='viridis')
-        ax[1].set_xlabel(r'$\log_{10}\; \Delta \nu$')
-        ax[1].set_ylabel(r'$\log_{10}Age$ / Gyr')
-        ax[1].set_title('MESA data')
-        fig.subplots_adjust(right=0.83)
-        cbar_ax = fig.add_axes([0.85, ax[1].get_position().y0, 0.02, ax[1].get_position().height])
-        cbar_ax.text(0.5,1.015,r'$M/M_{\odot}$',fontsize=13,horizontalalignment='center',transform=cbar_ax.transAxes)
-        fig.colorbar(s2, cax=cbar_ax)
-        plt.show()
-        if savefile != None:
-            fig.savefig(savefile+'/DelnuAge'+str(trial_no)+'.png')
-            print('delnu vs age plot saved as "'+savefile+'/DelnuAge'+str(trial_no)+'.png"')
+        self.getWeights()
+        model = pm.Model()
+        with model:
+            frac_track_age = pm.Uniform('frac_track_age',lower=0,upper=1,shape=N)
+            obs = self.manualPredict(T.as_tensor_variable([logmass, frac_track_age, *prepared_fixed_inputs]))
+            true_age = 10**obs[self.output_index.index('age')]
+            obs_age = pm.Normal('obs_age', true_age, 0.1, observed=target_age)
+            
+        with model:
+            trace = pm.sample(50,tune=50, init='adapt_diag', target_accept=0.999, cores=1, chains=2)
+        
+        Rhat = pm.rhat(trace,var_names=['frac_track_age']).mean().to_dict()['data_vars']['frac_track_age']['data']
+        if Rhat>1.5:
+            print('Warning: Average Rhat>1.5')
+        peak_frac_age_values = np.median(trace['frac_track_age'],axis=0)
+        return peak_frac_age_values
     
     def plotTrends(self, grid, track_no=20, in_between=None, nth_track=None, savefile=None, trial_no=None):
         """
@@ -1291,14 +1254,6 @@ class NNmodel:
         if savefile != None:
             fig.savefig(savefile+'/Trends'+str(trial_no)+'.png')
             print('Trends plot saved as "'+savefile+'/Trends'+str(trial_no)+'.png"')
-    
-    def plotAll(self, grid, track_no=100, savefile=None, trial_no=None):
-        """
-        Plotting the three plots HR, SR and DelnuAge in one go
-        """
-        self.plotHR(grid, track_no=track_no, savefile=savefile, trial_no=trial_no)
-        self.plotSR(grid, track_no=track_no, savefile=savefile, trial_no=trial_no)
-        self.plotDelnuAge(grid, track_no=track_no, savefile=savefile, trial_no=trial_no)
     
     def lastLoss(self, key):
         """
@@ -1444,9 +1399,9 @@ class NNmodel:
         return xx.T
 
     def predict(self, inputs):
-        inputs[self.input_index.index('feh')]=10**inputs[self.input_index.index('feh')]
-        if 'frac_track_age' in self.input_index:
-            inputs[self.input_index.index('frac_track_age')]=10**inputs[self.input_index.index('frac_track_age')]
+        for i,param in enumerate(self.input_index):
+            if param in self.non_log_columns:
+                inputs[i] = 10**inputs[i]
         outputs = self.model.predict(np.log10(inputs).T).T
         outputs = self.calOutputs(outputs)[0]
         return outputs
